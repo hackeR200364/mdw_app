@@ -22,4 +22,13 @@ class AppColors {
   static const individualAddBtnColor = Color(0xffE1E1E1);
   static const exploreCardGreenColor = Color(0xff53B175);
   static const exploreCardOrangeColor = Color(0xffF8A44C);
+  static const addContainerColor = Color(0xff7644A8);
+  static const medicineDetailsContainerColor = Color(0xffEEEEF5);
+  static List<BoxShadow> customBoxShadow = [
+    BoxShadow(
+      color: Colors.black.withOpacity(0.5),
+      offset: Offset(2, 2),
+      blurRadius: 5,
+    ),
+  ];
 }
