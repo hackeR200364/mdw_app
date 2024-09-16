@@ -47,6 +47,7 @@ dependencies:
   google_fonts:
   email_validator:
   carousel_slider:
+  expandable:
 
 dev_dependencies:
   flutter_test:

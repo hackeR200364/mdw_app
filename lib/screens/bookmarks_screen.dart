@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mdw_app/screens/product_details_screen.dart';
 
 import '../styles.dart';
 import 'explore_screen.dart';
@@ -87,6 +88,14 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
             delegate: SliverChildBuilderDelegate(
               (ctx, idx) {
                 return GestureDetector(
+                  onTap: (() {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (ctx) => ProductDetailsScreen(),
+                      ),
+                    );
+                  }),
                   child: Container(
                     height: 180,
                     width: MediaQuery.of(context).size.width,
