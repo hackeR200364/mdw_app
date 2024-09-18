@@ -48,6 +48,9 @@ dependencies:
   email_validator:
   carousel_slider:
   expandable:
+  provider:
+  geocoding:
+  permission_handler:
 
 dev_dependencies:
   flutter_test:

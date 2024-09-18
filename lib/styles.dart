@@ -24,6 +24,9 @@ class AppColors {
   static const exploreCardOrangeColor = Color(0xffF8A44C);
   static const addContainerColor = Color(0xff7644A8);
   static const medicineDetailsContainerColor = Color(0xffEEEEF5);
+  static const cartTotalTextColor = Color(0xff908D8D);
+  static const cartPayBtnColor = Color(0xffFFB800);
+  static const profileColor = Color(0xffCCDE00);
   static List<BoxShadow> customBoxShadow = [
     BoxShadow(
       color: Colors.black.withOpacity(0.5),

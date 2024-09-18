@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mdw_app/providers/main_screen_index_provider.dart';
 import 'package:mdw_app/screens/code_verification_screen.dart';
 import 'package:mdw_app/screens/main_screen.dart';
 import 'package:mdw_app/screens/onboarding_screen.dart';
 import 'package:mdw_app/services/app_function_services.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (ctx) => MainScreenIndexProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatefulWidget {

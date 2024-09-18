@@ -88,13 +88,15 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
             delegate: SliverChildBuilderDelegate(
               (ctx, idx) {
                 return GestureDetector(
-                  onTap: (() {
-                    Navigator.push(
+                  onTap: (() async {
+                    final index = await Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (ctx) => ProductDetailsScreen(),
                       ),
                     );
+
+                    if (index == 1) {}
                   }),
                   child: Container(
                     height: 180,
