@@ -8,7 +8,9 @@ import 'package:intl/intl.dart';
 import 'package:mdw_app/services/storage_services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../models/cart_product_model.dart';
 import '../models/feedback_model.dart';
+import '../models/total_cost_model.dart';
 
 class AppFunctions {
   static String? passwordValidator(String? value) {
@@ -243,4 +245,47 @@ class AppFunctions {
     final formatter = NumberFormat('#,##0');
     return formatter.format(amount);
   }
+
+  static double calculateTotalCost(List<CartProductModel> cartItems) {
+    double totalCost = 0;
+    for (var item in cartItems) {
+      totalCost += item.qnt * item.extractMRP();
+    }
+    return totalCost;
+  }
+
+  static double calculateTax(double price, String categoryCode) {
+    double taxRate;
+
+    switch (categoryCode) {
+      case 'ES': // Essential medicines
+        taxRate = 0.05;
+        break;
+      case 'NES': // Non-essential medicines
+        taxRate = 0.12;
+        break;
+      case 'AY': // Ayurvedic medicines
+        taxRate = 0.12;
+        break;
+      default:
+        throw Exception('Unknown category code');
+    }
+
+    return price * taxRate;
+  }
+
+  static double calculateTotalTax(List<CartProductModel> cartItems) {
+    double totalTax = 0;
+
+    for (var item in cartItems) {
+      double price = item.qnt * item.extractMRP();
+      double itemTax = calculateTax(price, item.category);
+      totalTax += itemTax;
+    }
+
+    return totalTax;
+  }
+
+  static int totalPayment(TotalCostModel costs) =>
+      costs.tCost + costs.taxes + costs.hCharges + costs.rCharges;
 }

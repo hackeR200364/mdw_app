@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mdw_app/providers/main_screen_index_provider.dart';
+import 'package:mdw_app/screens/cart_screen.dart';
 import 'package:mdw_app/styles.dart';
+import 'package:provider/provider.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   const ProductDetailsScreen({super.key});
@@ -26,11 +29,22 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: (() {}),
+            onPressed: (() {
+              Provider.of<MainScreenIndexProvider>(context, listen: false)
+                  .changeIndex(newIndex: 1);
+              Navigator.pop(context);
+            }),
             icon: Icon(Icons.search),
           ),
           IconButton(
-            onPressed: (() {}),
+            onPressed: (() {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (ctx) => CartScreen(searchEnabled: false),
+                ),
+              );
+            }),
             icon: Icon(Icons.shopping_cart_outlined),
           ),
           SizedBox(width: 10),
@@ -196,7 +210,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             ),
                           ],
                         ),
-                      )
+                      ),
                     ],
                   ),
                   SizedBox(
