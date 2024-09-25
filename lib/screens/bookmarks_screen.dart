@@ -28,7 +28,7 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
         slivers: [
           SliverAppBar(
             floating: true,
-            pinned: false,
+            pinned: true,
             backgroundColor: AppColors.white,
             expandedHeight: 40.0,
             flexibleSpace: TextFormField(
@@ -57,11 +57,6 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
               height: 10,
             ),
           ),
-          const SliverToBoxAdapter(
-            child: SizedBox(
-              height: 10,
-            ),
-          ),
           SliverAppBar(
             backgroundColor: AppColors.white,
             flexibleSpace: Row(
@@ -77,11 +72,6 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                   text: "Filter",
                 ),
               ],
-            ),
-          ),
-          const SliverToBoxAdapter(
-            child: SizedBox(
-              height: 10,
             ),
           ),
           SliverList(

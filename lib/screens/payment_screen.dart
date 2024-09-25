@@ -417,7 +417,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           TextEditingController(text: addressModel!.pin);
                       TextEditingController cityController =
                           TextEditingController(text: addressModel!.city);
-                      final AddressModel newAddress =
+                      final AddressModel? newAddress =
                           await showModalBottomSheet(
                               context: context,
                               isDismissible: false,
@@ -621,8 +621,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                 );
                               }));
 
-                      StorageServices.setAddress(newAddress);
-                      await getData();
+                      if (newAddress != null) {
+                        StorageServices.setAddress(newAddress);
+                        await getData();
+                      }
                     }),
                   ),
                 UserDetailsRow(
@@ -737,53 +739,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                GestureDetector(
+                CustomCheckBoxContainer(
+                  isChecked: isChecked,
                   onTap: (() {
                     setState(() {
                       isChecked = !isChecked;
                     });
                   }),
-                  child: Container(
-                    height: 60,
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: AppColors.white,
-                      boxShadow: AppColors.customBoxShadow,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Row(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color:
-                                isChecked ? AppColors.green : AppColors.white,
-                            border: isChecked
-                                ? null
-                                : Border.all(
-                                    width: 1.2,
-                                    color: AppColors.black,
-                                  ),
-                          ),
-                          child: Center(
-                            child: Icon(
-                              Icons.check_rounded,
-                              color: AppColors.white,
-                              size: 20,
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 15),
-                        Text(
-                          "Pay on arrival",
-                          style: TextStyle(
-                            color: AppColors.black,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                 ),
                 SizedBox(height: 15),
                 Padding(
@@ -845,12 +807,26 @@ class _PaymentScreenState extends State<PaymentScreen> {
             SizedBox(height: 20),
             GestureDetector(
               onTap: (() async {
-                final res = await Navigator.pushReplacement(
+                await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (ctx) => SuccessScreen(),
+                    builder: (ctx) => SuccessScreen(
+                      showAppBar: false,
+                      image: "assets/order-success.png",
+                      head: "Your order has been successfully placed",
+                      des:
+                          "Sit and relax while your orders is being worked on . It’ll take 5min before you get it",
+                      btnOnPressed: (() {
+                        Navigator.pop(context, 1);
+                      }),
+                      btnText: "Go back to home",
+                    ),
                   ),
-                );
+                ).then((res) {
+                  if (res != null && res == 1) {
+                    Navigator.pop(context, 1);
+                  }
+                });
               }),
               child: Container(
                 width: MediaQuery.of(context).size.width,
@@ -871,6 +847,80 @@ class _PaymentScreenState extends State<PaymentScreen> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class CustomCheckBoxContainer extends StatelessWidget {
+  const CustomCheckBoxContainer({
+    super.key,
+    required this.isChecked,
+    required this.onTap,
+  });
+
+  final bool isChecked;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 60,
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          boxShadow: AppColors.customBoxShadow,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Row(
+          children: [
+            CustomCheckBox(isChecked: isChecked),
+            SizedBox(width: 15),
+            Text(
+              "Pay on arrival",
+              style: TextStyle(
+                color: AppColors.black,
+                fontSize: 15,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class CustomCheckBox extends StatelessWidget {
+  const CustomCheckBox({
+    super.key,
+    required this.isChecked,
+  });
+
+  final bool isChecked;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 200),
+      padding: isChecked ? EdgeInsets.all(1.5) : null,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: isChecked ? AppColors.green : AppColors.white,
+        border: isChecked
+            ? null
+            : Border.all(
+                width: 1.2,
+                color: AppColors.black,
+              ),
+      ),
+      child: Center(
+        child: Icon(
+          Icons.check_rounded,
+          color: AppColors.white,
+          size: 20,
         ),
       ),
     );

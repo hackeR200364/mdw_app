@@ -26,7 +26,9 @@ class AppColors {
   static const medicineDetailsContainerColor = Color(0xffEEEEF5);
   static const cartTotalTextColor = Color(0xff908D8D);
   static const cartPayBtnColor = Color(0xffFFB800);
+  static const profileSpacerColor = Color(0xffE8DEF8);
   static const profileColor = Color(0xffCCDE00);
+  static const selectedIconColor = Color(0xffFF7322);
   static List<BoxShadow> customBoxShadow = [
     BoxShadow(
       color: Colors.black.withOpacity(0.5),
