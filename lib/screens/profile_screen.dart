@@ -1,5 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:mdw_app/screens/orders_screen.dart';
+import 'package:mdw_app/screens/settings_screen.dart';
+import 'package:mdw_app/screens/success_screen.dart';
 import 'package:mdw_app/styles.dart';
+import 'package:share_plus/share_plus.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -82,7 +88,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         GestureDetector(
-                          onTap: (() {}),
+                          onTap: (() {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: ((ctx) => SuccessScreen(
+                                      showAppBar: true,
+                                      appBarTitle: "Refer and Earn",
+                                      image: "assets/refer-earn-image.png",
+                                      head: "Share with your Friends",
+                                      headTextColor: AppColors.green,
+                                      des:
+                                          "Get FitAahar with your friends, tell them how much you love living a healthier life.",
+                                      btnOnPressed: (() async {
+                                        final res = await Share.share(
+                                            "Referring to others https://achivie.com",
+                                            subject: "MDW");
+
+                                        if (res.status ==
+                                            ShareResultStatus.success) {
+                                          log("shared");
+                                        }
+                                      }),
+                                      btnText: "Share with your Friends",
+                                    )),
+                              ),
+                            );
+                          }),
                           child: Row(
                             children: [
                               Icon(
@@ -120,6 +152,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   Expanded(
                     child: CustomProfileContainer(
+                      onTap: (() {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: ((ctx) => OrdersScreen()),
+                          ),
+                        );
+                      }),
                       icon: Icons.shopping_bag_outlined,
                       head: "Orders",
                     ),
@@ -127,6 +167,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   SizedBox(width: 10),
                   Expanded(
                     child: CustomProfileContainer(
+                      onTap: (() {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: ((ctx) => SettingsScreen()),
+                          ),
+                        );
+                      }),
                       icon: Icons.settings,
                       head: "Settings",
                     ),
@@ -251,36 +299,41 @@ class CustomProfileContainer extends StatelessWidget {
     super.key,
     required this.icon,
     required this.head,
+    required this.onTap,
   });
 
   final IconData icon;
   final String head;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
-        color: AppColors.white,
-        boxShadow: AppColors.customBoxShadow,
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            icon,
-            color: AppColors.black,
-            size: 55,
-          ),
-          SizedBox(height: 10),
-          Text(
-            head,
-            style: TextStyle(
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          color: AppColors.white,
+          boxShadow: AppColors.customBoxShadow,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
               color: AppColors.black,
-              fontSize: 20,
+              size: 55,
             ),
-          )
-        ],
+            SizedBox(height: 10),
+            Text(
+              head,
+              style: TextStyle(
+                color: AppColors.black,
+                fontSize: 20,
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

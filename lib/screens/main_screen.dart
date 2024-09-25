@@ -34,7 +34,7 @@ class _MainScreenState extends State<MainScreen> {
     return Consumer<MainScreenIndexProvider>(builder: (ctx, provider, child) {
       return Scaffold(
         backgroundColor: AppColors.white,
-        appBar: provider.index == 3
+        appBar: provider.index == 3 || provider.index == 0
             ? null
             : AppBar(
                 backgroundColor: AppColors.white,
@@ -97,69 +97,79 @@ class _MainScreenState extends State<MainScreen> {
                 ],
               ),
         bottomNavigationBar: Container(
-          padding: EdgeInsets.only(top: 15, bottom: 15),
+          padding: EdgeInsets.only(top: 15, bottom: 15, left: 10, right: 10),
           height: 80,
           width: MediaQuery.of(context).size.width,
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              BottomNavBarIcon(
-                onTap: (() {
-                  setState(() {
-                    provider.changeIndex(newIndex: 0);
-                  });
-                }),
-                icon: provider.index == 0
-                    ? "assets/bottom-bar-icons/coloured/icon-1.png"
-                    : "assets/bottom-bar-icons/non-coloured/icon-1.png",
-                text: "Shop",
-                textColor: provider.index == 0
-                    ? AppColors.selectedNavTextColor
-                    : AppColors.black,
+              Expanded(
+                child: BottomNavBarIcon(
+                  onTap: (() {
+                    setState(() {
+                      provider.changeIndex(newIndex: 0);
+                    });
+                  }),
+                  icon: Icons.storefront,
+                  text: "Shop",
+                  iconColor: provider.index == 0
+                      ? AppColors.selectedIconColor
+                      : AppColors.black,
+                  textColor: provider.index == 0
+                      ? AppColors.selectedNavTextColor
+                      : AppColors.black,
+                ),
               ),
-              BottomNavBarIcon(
-                onTap: (() {
-                  setState(() {
-                    provider.changeIndex(newIndex: 1);
-                  });
-                }),
-                icon: provider.index == 1
-                    ? "assets/bottom-bar-icons/coloured/icon-2.png"
-                    : "assets/bottom-bar-icons/non-coloured/icon-2.png",
-                text: "Explore",
-                spaceHeight: 8,
-                upperExtraSpaceHeight: 2,
-                textColor: provider.index == 1
-                    ? AppColors.selectedNavTextColor
-                    : AppColors.black,
+              Expanded(
+                child: BottomNavBarIcon(
+                  onTap: (() {
+                    setState(() {
+                      provider.changeIndex(newIndex: 1);
+                    });
+                  }),
+                  icon: Icons.search_outlined,
+                  iconColor: provider.index == 1
+                      ? AppColors.selectedIconColor
+                      : AppColors.black,
+                  text: "Explore",
+                  textColor: provider.index == 1
+                      ? AppColors.selectedNavTextColor
+                      : AppColors.black,
+                ),
               ),
-              BottomNavBarIcon(
-                onTap: (() {
-                  setState(() {
-                    provider.changeIndex(newIndex: 2);
-                  });
-                }),
-                icon: provider.index == 2
-                    ? "assets/bottom-bar-icons/coloured/icon-3.png"
-                    : "assets/bottom-bar-icons/non-coloured/icon-3.png",
-                text: "Bookmarks",
-                textColor: provider.index == 2
-                    ? AppColors.selectedNavTextColor
-                    : AppColors.black,
+              Expanded(
+                child: BottomNavBarIcon(
+                  onTap: (() {
+                    setState(() {
+                      provider.changeIndex(newIndex: 2);
+                    });
+                  }),
+                  icon: Icons.bookmark_border_rounded,
+                  text: "Bookmarks",
+                  iconColor: provider.index == 2
+                      ? AppColors.selectedIconColor
+                      : AppColors.black,
+                  textColor: provider.index == 2
+                      ? AppColors.selectedNavTextColor
+                      : AppColors.black,
+                ),
               ),
-              BottomNavBarIcon(
-                onTap: (() {
-                  setState(() {
-                    provider.changeIndex(newIndex: 3);
-                  });
-                }),
-                icon: provider.index == 3
-                    ? "assets/bottom-bar-icons/coloured/icon-4.png"
-                    : "assets/bottom-bar-icons/non-coloured/icon-4.png",
-                text: "Account",
-                textColor: provider.index == 3
-                    ? AppColors.selectedNavTextColor
-                    : AppColors.black,
+              Expanded(
+                child: BottomNavBarIcon(
+                  onTap: (() {
+                    setState(() {
+                      provider.changeIndex(newIndex: 3);
+                    });
+                  }),
+                  icon: Icons.person_outline_rounded,
+                  text: "Account",
+                  iconColor: provider.index == 3
+                      ? AppColors.selectedIconColor
+                      : AppColors.black,
+                  textColor: provider.index == 3
+                      ? AppColors.selectedNavTextColor
+                      : AppColors.black,
+                ),
               ),
             ],
           ),
@@ -201,11 +211,14 @@ class BottomNavBarIcon extends StatelessWidget {
     this.upperExtraSpaceHeight,
     required this.textColor,
     required this.onTap,
+    this.iconSize,
+    required this.iconColor,
   });
 
-  final String icon, text;
-  final double? spaceHeight, upperExtraSpaceHeight;
-  final Color textColor;
+  final String text;
+  final IconData icon;
+  final double? spaceHeight, upperExtraSpaceHeight, iconSize;
+  final Color textColor, iconColor;
   final VoidCallback onTap;
 
   @override
@@ -217,7 +230,11 @@ class BottomNavBarIcon extends StatelessWidget {
           SizedBox(
             height: upperExtraSpaceHeight,
           ),
-          Image.asset(icon),
+          Icon(
+            icon,
+            size: iconSize ?? 27,
+            color: iconColor,
+          ),
           SizedBox(
             height: spaceHeight ?? 5,
           ),

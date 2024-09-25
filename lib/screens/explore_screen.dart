@@ -27,7 +27,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
         slivers: [
           SliverAppBar(
             floating: true,
-            pinned: false,
+            pinned: true,
             backgroundColor: AppColors.white,
             expandedHeight: 40.0,
             flexibleSpace: TextFormField(
