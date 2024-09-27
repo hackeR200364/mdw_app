@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mdw_app/screens/product_details_screen.dart';
 import 'package:mdw_app/screens/shop_screen.dart';
 
 import '../styles.dart';
@@ -136,7 +137,16 @@ class _ExploreScreenState extends State<ExploreScreen> {
               delegate: SliverChildBuilderDelegate(
                 (ctx, idx) {
                   return CustomProductContainer(
-                    onTap: () {},
+                    onTap: (() async {
+                      final index = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (ctx) => ProductDetailsScreen(),
+                        ),
+                      );
+
+                      if (index == 1) {}
+                    }),
                     btnHeight: 40,
                     image: "assets/medicine-small.png",
                     name: "Liveasy",

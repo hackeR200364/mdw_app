@@ -16,7 +16,7 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  bool obscure = true, loading = false;
+  bool obscure = false, loading = false;
 
   late TextEditingController _emailTextController,
       _passwordTextController,
@@ -41,20 +41,44 @@ class _SignUpScreenState extends State<SignUpScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.white,
         centerTitle: true,
-        title: Text(
-          "Create an account",
-          style: TextStyle(
-            color: AppColors.black,
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
+        actions: [
+          TextButton(
+            onPressed: (() {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: ((ctx) => MainScreen()),
+                ),
+              );
+            }),
+            child: Text(
+              "Skip",
+              style: TextStyle(
+                color: AppColors.green,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
           ),
-        ),
+          SizedBox(width: 10),
+        ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.only(top: 15, left: 20, right: 20, bottom: 30),
           child: Column(
             children: [
+              Center(
+                child: Text(
+                  "Create an account",
+                  style: TextStyle(
+                    color: AppColors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+              SizedBox(height: 10),
               Center(
                 child: Text(
                   "Welcome to My DawaiWala. Create an account and start ordering medicines!",

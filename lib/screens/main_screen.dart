@@ -6,8 +6,10 @@ import 'package:mdw_app/screens/cart_screen.dart';
 import 'package:mdw_app/screens/explore_screen.dart';
 import 'package:mdw_app/screens/profile_screen.dart';
 import 'package:mdw_app/screens/shop_screen.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 
+import '../services/app_function_services.dart';
 import '../styles.dart';
 import 'code_verification_screen.dart';
 
@@ -96,79 +98,147 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                 ],
               ),
-        bottomNavigationBar: Container(
-          padding: EdgeInsets.only(top: 15, bottom: 15, left: 10, right: 10),
-          height: 80,
-          width: MediaQuery.of(context).size.width,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        bottomNavigationBar: SizedBox(
+          height: (provider.index == 0) ? 150 : 80,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Expanded(
-                child: BottomNavBarIcon(
-                  onTap: (() {
-                    setState(() {
-                      provider.changeIndex(newIndex: 0);
-                    });
-                  }),
-                  icon: Icons.storefront,
-                  text: "Shop",
-                  iconColor: provider.index == 0
-                      ? AppColors.selectedIconColor
-                      : AppColors.black,
-                  textColor: provider.index == 0
-                      ? AppColors.selectedNavTextColor
-                      : AppColors.black,
+              if (provider.index == 0)
+                Container(
+                  height: 55,
+                  width: MediaQuery.of(context).size.width,
+                  margin: EdgeInsets.only(left: 10, right: 10, top: 10),
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    gradient: LinearGradient(
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                      colors: [
+                        AppColors.lightGreen,
+                        AppColors.green.withOpacity(0.9),
+                        AppColors.green.withOpacity(0.85),
+                        AppColors.lightGreen,
+                        AppColors.lightGreen,
+                      ],
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "TEXT US ORDER",
+                        style: TextStyle(
+                          color: AppColors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: (() async {
+                          if (await Permission.phone.serviceStatus.isEnabled) {
+                            await AppFunctions.callNumber("+919230976362");
+                          } else {
+                            Permission.phone.request();
+                          }
+                        }),
+                        child: Container(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                          decoration: BoxDecoration(
+                            color: AppColors.black,
+                            borderRadius: BorderRadius.circular(40),
+                          ),
+                          child: Text(
+                            "CALL US",
+                            style: TextStyle(
+                              color: AppColors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              Expanded(
-                child: BottomNavBarIcon(
-                  onTap: (() {
-                    setState(() {
-                      provider.changeIndex(newIndex: 1);
-                    });
-                  }),
-                  icon: Icons.search_outlined,
-                  iconColor: provider.index == 1
-                      ? AppColors.selectedIconColor
-                      : AppColors.black,
-                  text: "Explore",
-                  textColor: provider.index == 1
-                      ? AppColors.selectedNavTextColor
-                      : AppColors.black,
-                ),
-              ),
-              Expanded(
-                child: BottomNavBarIcon(
-                  onTap: (() {
-                    setState(() {
-                      provider.changeIndex(newIndex: 2);
-                    });
-                  }),
-                  icon: Icons.bookmark_border_rounded,
-                  text: "Bookmarks",
-                  iconColor: provider.index == 2
-                      ? AppColors.selectedIconColor
-                      : AppColors.black,
-                  textColor: provider.index == 2
-                      ? AppColors.selectedNavTextColor
-                      : AppColors.black,
-                ),
-              ),
-              Expanded(
-                child: BottomNavBarIcon(
-                  onTap: (() {
-                    setState(() {
-                      provider.changeIndex(newIndex: 3);
-                    });
-                  }),
-                  icon: Icons.person_outline_rounded,
-                  text: "Account",
-                  iconColor: provider.index == 3
-                      ? AppColors.selectedIconColor
-                      : AppColors.black,
-                  textColor: provider.index == 3
-                      ? AppColors.selectedNavTextColor
-                      : AppColors.black,
+              Container(
+                padding:
+                    EdgeInsets.only(top: 15, bottom: 15, left: 10, right: 10),
+                height: 80,
+                width: MediaQuery.of(context).size.width,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: BottomNavBarIcon(
+                        onTap: (() {
+                          setState(() {
+                            provider.changeIndex(newIndex: 0);
+                          });
+                        }),
+                        icon: Icons.storefront,
+                        text: "Shop",
+                        iconColor: provider.index == 0
+                            ? AppColors.selectedIconColor
+                            : AppColors.black,
+                        textColor: provider.index == 0
+                            ? AppColors.selectedNavTextColor
+                            : AppColors.black,
+                      ),
+                    ),
+                    Expanded(
+                      child: BottomNavBarIcon(
+                        onTap: (() {
+                          setState(() {
+                            provider.changeIndex(newIndex: 1);
+                          });
+                        }),
+                        icon: Icons.search_outlined,
+                        iconColor: provider.index == 1
+                            ? AppColors.selectedIconColor
+                            : AppColors.black,
+                        text: "Explore",
+                        textColor: provider.index == 1
+                            ? AppColors.selectedNavTextColor
+                            : AppColors.black,
+                      ),
+                    ),
+                    Expanded(
+                      child: BottomNavBarIcon(
+                        onTap: (() {
+                          setState(() {
+                            provider.changeIndex(newIndex: 2);
+                          });
+                        }),
+                        icon: Icons.bookmark_border_rounded,
+                        text: "Bookmarks",
+                        iconColor: provider.index == 2
+                            ? AppColors.selectedIconColor
+                            : AppColors.black,
+                        textColor: provider.index == 2
+                            ? AppColors.selectedNavTextColor
+                            : AppColors.black,
+                      ),
+                    ),
+                    Expanded(
+                      child: BottomNavBarIcon(
+                        onTap: (() {
+                          setState(() {
+                            provider.changeIndex(newIndex: 3);
+                          });
+                        }),
+                        icon: Icons.person_outline_rounded,
+                        text: "Account",
+                        iconColor: provider.index == 3
+                            ? AppColors.selectedIconColor
+                            : AppColors.black,
+                        textColor: provider.index == 3
+                            ? AppColors.selectedNavTextColor
+                            : AppColors.black,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
