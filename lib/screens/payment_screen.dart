@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -11,8 +9,6 @@ import 'package:mdw_app/services/storage_services.dart';
 import 'package:mdw_app/styles.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:sim_card_info/sim_card_info.dart';
-import 'package:sim_card_info/sim_info.dart';
 
 import '../providers/main_screen_index_provider.dart';
 import 'cart_screen.dart';
@@ -33,9 +29,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
   Position? position;
   List<Placemark>? placemarks;
   AddressModel? addressModel;
-
-  final _simCardInfoPlugin = SimCardInfo();
-  List<SimInfo>? _simCardInfo;
 
   @override
   void initState() {
@@ -87,24 +80,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   Future<AddressModel?> getStoredAddress() async =>
       await StorageServices.getAddress();
-
-  Future<List<SimInfo>?> getSimInfo() async {
-    final status = await Permission.phone.status;
-    if (status.isDenied) {
-      Permission.phone.request();
-    } else if (status.isPermanentlyDenied) {
-      openAppSettings();
-    } else if (status.isGranted) {
-      try {
-        final simInfo = await _simCardInfoPlugin.getSimInfo();
-        log(simInfo?.first.number.toString() ?? "NULL");
-        return simInfo;
-      } catch (e) {
-        log(e.toString());
-      }
-    }
-    return null;
-  }
 
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
