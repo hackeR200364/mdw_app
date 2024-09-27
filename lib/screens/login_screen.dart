@@ -34,14 +34,27 @@ class _LoginScreenState extends State<LoginScreen> {
       appBar: AppBar(
         backgroundColor: AppColors.white,
         centerTitle: true,
-        title: Text(
-          "Login to your account",
-          style: TextStyle(
-            color: AppColors.black,
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
+        actions: [
+          TextButton(
+            onPressed: (() {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: ((ctx) => MainScreen()),
+                ),
+              );
+            }),
+            child: Text(
+              "Skip",
+              style: TextStyle(
+                color: AppColors.green,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
           ),
-        ),
+          SizedBox(width: 10),
+        ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
@@ -49,6 +62,17 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              Center(
+                child: Text(
+                  "Login to your account",
+                  style: TextStyle(
+                    color: AppColors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+              SizedBox(height: 10),
               Center(
                 child: Text(
                   "Good to see you again, enter your details\nbelow to continue.",

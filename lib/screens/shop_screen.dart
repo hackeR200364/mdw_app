@@ -1,7 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mdw_app/models/orders_type_model.dart';
 import 'package:mdw_app/screens/cart_screen.dart';
+import 'package:mdw_app/screens/product_details_screen.dart';
 import 'package:mdw_app/styles.dart';
 import 'package:provider/provider.dart';
 
@@ -17,6 +19,18 @@ class ShopScreen extends StatefulWidget {
 class _ShopScreenState extends State<ShopScreen> {
   int selectedIdx = 0;
   bool _isExpanded = true;
+  List<OrdersTypeModel> category = [];
+
+  @override
+  void initState() {
+    category = [
+      OrdersTypeModel(type: "Fitness", index: 0),
+      OrdersTypeModel(type: "Essentials", index: 1),
+      OrdersTypeModel(type: "Home", index: 2),
+      OrdersTypeModel(type: "Skin", index: 3),
+    ];
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -140,9 +154,18 @@ class _ShopScreenState extends State<ShopScreen> {
                 ),
               ),
               SliverToBoxAdapter(
-                child: CarouselSlider(
-                  items: [
-                    Container(
+                child: CarouselSlider.builder(
+                  options: CarouselOptions(
+                    autoPlay: false,
+                    autoPlayInterval: Duration(seconds: 2),
+                    viewportFraction: 0.98,
+                    enlargeCenterPage: true,
+                    aspectRatio: 2.1,
+                  ),
+                  itemCount: 10,
+                  itemBuilder:
+                      (BuildContext context, int index, int realIndex) {
+                    return Container(
                       padding: EdgeInsets.only(
                           left: 15, top: 15, bottom: 15, right: 45),
                       decoration: BoxDecoration(
@@ -209,15 +232,8 @@ class _ShopScreenState extends State<ShopScreen> {
                           ),
                         ],
                       ),
-                    )
-                  ],
-                  options: CarouselOptions(
-                    autoPlay: true,
-                    autoPlayInterval: Duration(seconds: 2),
-                    viewportFraction: 0.98,
-                    enlargeCenterPage: true,
-                    aspectRatio: 2.1,
-                  ),
+                    );
+                  },
                 ),
               ),
               SliverToBoxAdapter(
@@ -263,7 +279,7 @@ class _ShopScreenState extends State<ShopScreen> {
                           ),
                           child: Center(
                             child: Text(
-                              "Fitness",
+                              category[idx].type,
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: selectedIdx == idx
@@ -279,7 +295,7 @@ class _ShopScreenState extends State<ShopScreen> {
                     separatorBuilder: (BuildContext context, int index) {
                       return SizedBox(width: 20);
                     },
-                    itemCount: 10,
+                    itemCount: category.length,
                   ),
                 ),
               ),
@@ -295,7 +311,16 @@ class _ShopScreenState extends State<ShopScreen> {
                   child: ListView.separated(
                     itemBuilder: ((ctx, idx) {
                       return CustomProductContainer(
-                        onTap: () {},
+                        onTap: (() async {
+                          final index = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (ctx) => ProductDetailsScreen(),
+                            ),
+                          );
+
+                          if (index == 1) {}
+                        }),
                         image: "assets/medicine-small.png",
                         name: "Liveasy",
                         mrp: "250",
@@ -335,7 +360,16 @@ class _ShopScreenState extends State<ShopScreen> {
                   child: ListView.separated(
                     itemBuilder: ((ctx, idx) {
                       return CustomProductContainer(
-                        onTap: () {},
+                        onTap: (() async {
+                          final index = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (ctx) => ProductDetailsScreen(),
+                            ),
+                          );
+
+                          if (index == 1) {}
+                        }),
                         image: "assets/medicine-small.png",
                         name: "Liveasy",
                         mrp: "250",
@@ -381,19 +415,22 @@ class _ShopScreenState extends State<ShopScreen> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Container(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 15, vertical: 5),
-                                  decoration: BoxDecoration(
-                                    color: AppColors.homeAdLinkBtnColor,
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  child: Text(
-                                    "UPLOAD",
-                                    style: TextStyle(
-                                      color: AppColors.white,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12,
+                                GestureDetector(
+                                  onTap: (() {}),
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 15, vertical: 5),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.homeAdLinkBtnColor,
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child: Text(
+                                      "UPLOAD",
+                                      style: TextStyle(
+                                        color: AppColors.white,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -446,7 +483,16 @@ class _ShopScreenState extends State<ShopScreen> {
                   child: ListView.separated(
                     itemBuilder: ((ctx, idx) {
                       return CustomProductContainer(
-                        onTap: () {},
+                        onTap: (() async {
+                          final index = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (ctx) => ProductDetailsScreen(),
+                            ),
+                          );
+
+                          if (index == 1) {}
+                        }),
                         image: "assets/medicine-small.png",
                         name: "Liveasy",
                         mrp: "250",
