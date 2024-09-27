@@ -416,7 +416,15 @@ class _ShopScreenState extends State<ShopScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 GestureDetector(
-                                  onTap: (() {}),
+                                  onTap: (() {
+                                    // Navigator.push(
+                                    //   context,
+                                    //   MaterialPageRoute(
+                                    //     builder: ((ctx) =>
+                                    //         UploadPrescriptionScreen()),
+                                    //   ),
+                                    // );
+                                  }),
                                   child: Container(
                                     padding: EdgeInsets.symmetric(
                                         horizontal: 15, vertical: 5),

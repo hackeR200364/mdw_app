@@ -52,6 +52,7 @@ dependencies:
   geocoding:
   permission_handler:
   share_plus:
+  sim_card_info:
 
 dev_dependencies:
   flutter_test:

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -9,6 +11,8 @@ import 'package:mdw_app/services/storage_services.dart';
 import 'package:mdw_app/styles.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:sim_card_info/sim_card_info.dart';
+import 'package:sim_card_info/sim_info.dart';
 
 import '../providers/main_screen_index_provider.dart';
 import 'cart_screen.dart';
@@ -25,10 +29,13 @@ class PaymentScreen extends StatefulWidget {
 
 class _PaymentScreenState extends State<PaymentScreen> {
   String address = "", phone = "";
-  bool addressLoading = false, isChecked = false;
+  bool addressLoading = false, isChecked = false, phoneLoading = false;
   Position? position;
   List<Placemark>? placemarks;
   AddressModel? addressModel;
+
+  final _simCardInfoPlugin = SimCardInfo();
+  List<SimInfo>? _simCardInfo;
 
   @override
   void initState() {
@@ -36,26 +43,27 @@ class _PaymentScreenState extends State<PaymentScreen> {
     super.initState();
   }
 
-  String formatPhone(AddressModel address) {
-    if (address.country == "India") {
-      return "+91 ${address.phone}";
-    }
+  String formatPhone(String country, String phoneNum) {
+    // if (country == "India") {
+    //   return "+91 $phone";
+    // }
 
-    switch (address.country) {
+    switch (country) {
       case "India":
-        return "+91 ${address.phone}";
+        return "+91 $phoneNum";
       default:
-        return address.phone;
+        return phoneNum;
     }
   }
 
   getData() async {
     setState(() {
       addressLoading = true;
+      phoneLoading = true;
     });
     addressModel = await getStoredAddress();
     if (addressModel != null) {
-      phone = formatPhone(addressModel!);
+      phone = formatPhone(addressModel!.country, addressModel!.phone);
     }
     if (addressModel == null) {
       position = await _determinePosition();
@@ -65,11 +73,38 @@ class _PaymentScreenState extends State<PaymentScreen> {
     }
     setState(() {
       addressLoading = false;
+      phoneLoading = false;
     });
+
+    // try {
+    //   _simCardInfo = await getSimInfo();
+    //   phoneLoading = false;
+    // } catch (e) {
+    //   phoneLoading = false;
+    //   log(e.toString());
+    // }
   }
 
   Future<AddressModel?> getStoredAddress() async =>
       await StorageServices.getAddress();
+
+  Future<List<SimInfo>?> getSimInfo() async {
+    final status = await Permission.phone.status;
+    if (status.isDenied) {
+      Permission.phone.request();
+    } else if (status.isPermanentlyDenied) {
+      openAppSettings();
+    } else if (status.isGranted) {
+      try {
+        final simInfo = await _simCardInfoPlugin.getSimInfo();
+        log(simInfo?.first.number.toString() ?? "NULL");
+        return simInfo;
+      } catch (e) {
+        log(e.toString());
+      }
+    }
+    return null;
+  }
 
   Future<Position> _determinePosition() async {
     bool serviceEnabled;
@@ -171,32 +206,48 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       }
                     }),
                   ),
-                if (placemarks != null)
+                if (placemarks != null && addressModel == null)
                   UserDetailsRow(
                     data:
-                        "Rupam Karmakar\n${placemarks!.first.street},\n${placemarks!.first.locality}, ${placemarks!.first.administrativeArea}-${placemarks!.first.postalCode}\n${placemarks!.first.country}",
+                        "Please enter your name\n\n${placemarks!.first.name}, ${placemarks!.first.street}, ${placemarks!.first.subAdministrativeArea},\n${placemarks!.first.administrativeArea}, ${placemarks!.first.locality}-${placemarks!.first.postalCode}\n${placemarks!.first.country}",
                     onPressed: (() async {
                       bool check = true;
                       String country = "India";
                       TextEditingController nameController =
                           TextEditingController();
                       TextEditingController phoneController =
-                          TextEditingController();
+                          TextEditingController(
+                              text: phone.isNotEmpty
+                                  ? phone.replaceAll(RegExp(r'^\+\d+\s'), '')
+                                  : "");
                       TextEditingController addressController =
-                          TextEditingController();
+                          TextEditingController(
+                              text:
+                                  "${placemarks!.first.street}, ${placemarks!.first.subAdministrativeArea},\n${placemarks!.first.administrativeArea}, ${placemarks!.first.locality}-${placemarks!.first.postalCode}\n${placemarks!.first.country}");
                       TextEditingController aaddressController =
                           TextEditingController();
                       TextEditingController pinController =
-                          TextEditingController();
+                          TextEditingController(
+                              text: placemarks!.first.postalCode);
                       TextEditingController cityController =
-                          TextEditingController();
+                          TextEditingController(
+                              text: placemarks!.first.locality);
                       final AddressModel newAddress =
                           await showModalBottomSheet(
                               context: context,
                               isDismissible: false,
+                              isScrollControlled: true,
+                              useSafeArea: true,
                               builder: ((ctx) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(15),
+                                return Container(
+                                  margin: EdgeInsets.only(
+                                    left: 15,
+                                    right: 15,
+                                    top: 15,
+                                    bottom: MediaQuery.of(context)
+                                        .viewInsets
+                                        .bottom,
+                                  ),
                                   child: CustomScrollView(
                                     slivers: [
                                       SliverAppBar(
@@ -272,7 +323,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                         ],
                                       ),
                                       SliverToBoxAdapter(
-                                          child: SizedBox(height: 20)),
+                                        child: SizedBox(height: 20),
+                                      ),
                                       SliverToBoxAdapter(
                                         child: Container(
                                           padding: EdgeInsets.symmetric(
@@ -329,10 +381,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                       SliverToBoxAdapter(
                                           child: SizedBox(height: 20)),
                                       SliverToBoxAdapter(
-                                        child: CustomTextField(
+                                        child: CustomMultilineTextField(
                                           head: "Address",
                                           hint: "Enter your address",
-                                          keyboard: TextInputType.text,
+                                          maxLines: 5,
+                                          keyboard: TextInputType.multiline,
                                           textEditingController:
                                               addressController,
                                         ),
@@ -340,10 +393,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                       SliverToBoxAdapter(
                                           child: SizedBox(height: 20)),
                                       SliverToBoxAdapter(
-                                        child: CustomTextField(
+                                        child: CustomMultilineTextField(
                                           head: "Address (additional)",
                                           hint: "Enter your address",
-                                          keyboard: TextInputType.text,
+                                          maxLines: 5,
+                                          keyboard: TextInputType.multiline,
                                           textEditingController:
                                               aaddressController,
                                         ),
@@ -403,7 +457,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     data:
                         "${addressModel!.name}\n${addressModel!.address}\n${addressModel!.aaddress}\n${addressModel!.pin}\n${addressModel!.city}, ${addressModel!.country}",
                     onPressed: (() async {
-                      bool check = true;
+                      bool check = addressModel!.isDefault;
                       String country = addressModel!.country;
                       TextEditingController nameController =
                           TextEditingController(text: addressModel!.name);
@@ -421,9 +475,18 @@ class _PaymentScreenState extends State<PaymentScreen> {
                           await showModalBottomSheet(
                               context: context,
                               isDismissible: false,
+                              isScrollControlled: true,
+                              useSafeArea: true,
                               builder: ((ctx) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(15),
+                                return Container(
+                                  margin: EdgeInsets.only(
+                                    left: 15,
+                                    right: 15,
+                                    top: 15,
+                                    bottom: MediaQuery.of(context)
+                                        .viewInsets
+                                        .bottom,
+                                  ),
                                   child: CustomScrollView(
                                     slivers: [
                                       SliverAppBar(
@@ -556,10 +619,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                       SliverToBoxAdapter(
                                           child: SizedBox(height: 20)),
                                       SliverToBoxAdapter(
-                                        child: CustomTextField(
+                                        child: CustomMultilineTextField(
                                           head: "Address",
                                           hint: "Enter your address",
-                                          keyboard: TextInputType.text,
+                                          maxLines: 5,
+                                          keyboard: TextInputType.multiline,
                                           textEditingController:
                                               addressController,
                                         ),
@@ -567,10 +631,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                       SliverToBoxAdapter(
                                           child: SizedBox(height: 20)),
                                       SliverToBoxAdapter(
-                                        child: CustomTextField(
+                                        child: CustomMultilineTextField(
                                           head: "Address (additional)",
                                           hint: "Enter your address",
-                                          keyboard: TextInputType.text,
+                                          maxLines: 5,
+                                          keyboard: TextInputType.multiline,
                                           textEditingController:
                                               aaddressController,
                                         ),
@@ -627,113 +692,253 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       }
                     }),
                   ),
-                UserDetailsRow(
-                  data: phone,
-                  onPressed: (() async {
-                    String country = "India";
-                    TextEditingController phoneController =
-                        TextEditingController();
-                    final String newPhone = await showModalBottomSheet(
-                        context: context,
-                        isDismissible: false,
-                        builder: ((ctx) {
-                          return Padding(
-                            padding: const EdgeInsets.all(15),
-                            child: CustomScrollView(
-                              slivers: [
-                                SliverAppBar(
-                                  centerTitle: true,
-                                  backgroundColor: AppColors.transparent,
-                                  toolbarHeight: 40,
-                                  leading: IconButton(
-                                    onPressed: (() {
-                                      Navigator.pop(context);
-                                    }),
-                                    icon: Icon(
-                                      Icons.close,
-                                      size: 20,
-                                      color: AppColors.black,
-                                    ),
-                                  ),
-                                  title: Text(
-                                    "Update Phone Number",
-                                    style: TextStyle(
-                                      color: AppColors.black,
-                                      fontSize: 15,
-                                    ),
-                                  ),
-                                  actions: [
-                                    IconButton(
+                if (phoneLoading == true && phone.isEmpty)
+                  Text(
+                    "Loading your phone number...",
+                    style: TextStyle(
+                      color: AppColors.black,
+                    ),
+                  ),
+                if (phoneLoading == false && phone.isEmpty)
+                  UserDetailsRow(
+                    data: "Please give a phone number",
+                    onPressed: (() async {
+                      String country = "India";
+                      TextEditingController phoneController =
+                          TextEditingController();
+                      final String newPhone = await showModalBottomSheet(
+                          context: context,
+                          isDismissible: false,
+                          isScrollControlled: true,
+                          useSafeArea: true,
+                          builder: ((ctx) {
+                            return Container(
+                              margin: EdgeInsets.only(
+                                left: 15,
+                                right: 15,
+                                top: 15,
+                                bottom:
+                                    MediaQuery.of(context).viewInsets.bottom,
+                              ),
+                              child: CustomScrollView(
+                                slivers: [
+                                  SliverAppBar(
+                                    centerTitle: true,
+                                    backgroundColor: AppColors.transparent,
+                                    toolbarHeight: 40,
+                                    leading: IconButton(
                                       onPressed: (() {
-                                        if (phoneController.text
-                                            .trim()
-                                            .isNotEmpty) {
-                                          Navigator.pop(
-                                            context,
-                                            phoneController.text.trim(),
-                                          );
-                                        }
+                                        Navigator.pop(context);
                                       }),
                                       icon: Icon(
-                                        Icons.check,
-                                        color: AppColors.green,
+                                        Icons.close,
                                         size: 20,
+                                        color: AppColors.black,
                                       ),
                                     ),
-                                    SizedBox(width: 10),
-                                  ],
-                                ),
-                                SliverToBoxAdapter(child: SizedBox(height: 20)),
-                                SliverToBoxAdapter(
-                                  child: Container(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 10),
-                                    decoration: BoxDecoration(
-                                      color: AppColors.white,
-                                      borderRadius: BorderRadius.circular(15),
-                                      // boxShadow: AppColors.customBoxShadow,
-                                    ),
-                                    child: DropdownButtonFormField(
-                                      value: country,
-                                      decoration: InputDecoration(
-                                        border: InputBorder.none,
+                                    title: Text(
+                                      "Update Phone Number",
+                                      style: TextStyle(
+                                        color: AppColors.black,
+                                        fontSize: 15,
                                       ),
-                                      items: const [
-                                        DropdownMenuItem(
-                                          child: Text("India"),
-                                          value: "India",
+                                    ),
+                                    actions: [
+                                      IconButton(
+                                        onPressed: (() {
+                                          if (phoneController.text
+                                              .trim()
+                                              .isNotEmpty) {
+                                            Navigator.pop(
+                                              context,
+                                              phoneController.text.trim(),
+                                            );
+                                          }
+                                        }),
+                                        icon: Icon(
+                                          Icons.check,
+                                          color: AppColors.green,
+                                          size: 20,
                                         ),
-                                      ],
-                                      onChanged: ((val) {
-                                        if (val != null) {
-                                          setState(() {
-                                            country = val;
-                                          });
-                                        }
-                                      }),
+                                      ),
+                                      SizedBox(width: 10),
+                                    ],
+                                  ),
+                                  SliverToBoxAdapter(
+                                      child: SizedBox(height: 20)),
+                                  SliverToBoxAdapter(
+                                    child: Container(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 10),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.white,
+                                        borderRadius: BorderRadius.circular(15),
+                                        // boxShadow: AppColors.customBoxShadow,
+                                      ),
+                                      child: DropdownButtonFormField(
+                                        value: country,
+                                        decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                        ),
+                                        items: const [
+                                          DropdownMenuItem(
+                                            child: Text("India"),
+                                            value: "India",
+                                          ),
+                                        ],
+                                        onChanged: ((val) {
+                                          if (val != null) {
+                                            setState(() {
+                                              country = val;
+                                            });
+                                          }
+                                        }),
+                                      ),
                                     ),
                                   ),
-                                ),
-                                SliverToBoxAdapter(child: SizedBox(height: 20)),
-                                SliverToBoxAdapter(
-                                  child: CustomTextField(
-                                    head: "Phone Number",
-                                    hint: "e.g 0123456789",
-                                    keyboard: TextInputType.phone,
-                                    textEditingController: phoneController,
+                                  SliverToBoxAdapter(
+                                      child: SizedBox(height: 20)),
+                                  SliverToBoxAdapter(
+                                    child: CustomTextField(
+                                      head: "Phone Number",
+                                      hint: "e.g 0123456789",
+                                      keyboard: TextInputType.phone,
+                                      textEditingController: phoneController,
+                                    ),
                                   ),
-                                ),
-                                SliverToBoxAdapter(child: SizedBox(height: 20)),
-                              ],
-                            ),
-                          );
-                        }));
+                                  SliverToBoxAdapter(
+                                      child: SizedBox(height: 20)),
+                                ],
+                              ),
+                            );
+                          }));
 
-                    StorageServices.updatePhoneNumber(newPhone, country);
-                    await getData();
-                    setState(() {});
-                  }),
-                ),
+                      StorageServices.updatePhoneNumber(newPhone, country);
+
+                      phone = formatPhone(country, newPhone);
+                      setState(() {});
+                    }),
+                  ),
+                if (phone.isNotEmpty)
+                  UserDetailsRow(
+                    data: phone,
+                    onPressed: (() async {
+                      String country = "India";
+                      TextEditingController phoneController =
+                          TextEditingController();
+                      final String newPhone = await showModalBottomSheet(
+                          context: context,
+                          isDismissible: false,
+                          isScrollControlled: true,
+                          useSafeArea: true,
+                          builder: ((ctx) {
+                            return Container(
+                              margin: EdgeInsets.only(
+                                left: 15,
+                                right: 15,
+                                top: 15,
+                                bottom:
+                                    MediaQuery.of(context).viewInsets.bottom,
+                              ),
+                              child: CustomScrollView(
+                                slivers: [
+                                  SliverAppBar(
+                                    centerTitle: true,
+                                    backgroundColor: AppColors.transparent,
+                                    toolbarHeight: 40,
+                                    leading: IconButton(
+                                      onPressed: (() {
+                                        Navigator.pop(context);
+                                      }),
+                                      icon: Icon(
+                                        Icons.close,
+                                        size: 20,
+                                        color: AppColors.black,
+                                      ),
+                                    ),
+                                    title: Text(
+                                      "Update Phone Number",
+                                      style: TextStyle(
+                                        color: AppColors.black,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    actions: [
+                                      IconButton(
+                                        onPressed: (() {
+                                          if (phoneController.text
+                                              .trim()
+                                              .isNotEmpty) {
+                                            Navigator.pop(
+                                              context,
+                                              phoneController.text.trim(),
+                                            );
+                                          }
+                                        }),
+                                        icon: Icon(
+                                          Icons.check,
+                                          color: AppColors.green,
+                                          size: 20,
+                                        ),
+                                      ),
+                                      SizedBox(width: 10),
+                                    ],
+                                  ),
+                                  SliverToBoxAdapter(
+                                      child: SizedBox(height: 20)),
+                                  SliverToBoxAdapter(
+                                    child: Container(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 10),
+                                      decoration: BoxDecoration(
+                                        color: AppColors.white,
+                                        borderRadius: BorderRadius.circular(15),
+                                        // boxShadow: AppColors.customBoxShadow,
+                                      ),
+                                      child: DropdownButtonFormField(
+                                        value: country,
+                                        decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                        ),
+                                        items: const [
+                                          DropdownMenuItem(
+                                            child: Text("India"),
+                                            value: "India",
+                                          ),
+                                        ],
+                                        onChanged: ((val) {
+                                          if (val != null) {
+                                            setState(() {
+                                              country = val;
+                                            });
+                                          }
+                                        }),
+                                      ),
+                                    ),
+                                  ),
+                                  SliverToBoxAdapter(
+                                      child: SizedBox(height: 20)),
+                                  SliverToBoxAdapter(
+                                    child: CustomTextField(
+                                      head: "Phone Number",
+                                      hint: "e.g 0123456789",
+                                      keyboard: TextInputType.phone,
+                                      textEditingController: phoneController,
+                                    ),
+                                  ),
+                                  SliverToBoxAdapter(
+                                      child: SizedBox(height: 20)),
+                                ],
+                              ),
+                            );
+                          }));
+
+                      StorageServices.updatePhoneNumber(newPhone, country);
+                      await getData();
+                      setState(() {});
+                    }),
+                  ),
+                SizedBox(height: 15),
               ],
             ),
             Column(
