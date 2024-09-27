@@ -102,6 +102,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     hint: "Enter password",
                     keyboard: TextInputType.visiblePassword,
                     obscure: obscure,
+                    maxLines: null,
                     suffix: GestureDetector(
                       onTap: (() {
                         setState(() {
@@ -277,6 +278,7 @@ class CustomTextField extends StatefulWidget {
     this.obscure,
     this.suffix,
     this.prefix,
+    this.maxLines,
   });
 
   final String head, hint;
@@ -285,6 +287,7 @@ class CustomTextField extends StatefulWidget {
   final TextEditingController textEditingController;
   final bool? obscure;
   final Widget? suffix, prefix;
+  final int? maxLines;
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
@@ -322,6 +325,105 @@ class _CustomTextFieldState extends State<CustomTextField> {
           validator: widget.validator,
           keyboardType: widget.keyboard,
           cursorColor: AppColors.green,
+          // maxLines: widget.maxLines,
+          decoration: InputDecoration(
+            hintStyle: TextStyle(
+              color: AppColors.grey,
+              fontSize: 14,
+            ),
+            suffixIcon: widget.suffix,
+            prefixIcon: widget.prefix,
+            contentPadding: EdgeInsets.all(15),
+            hintText: widget.hint,
+            border: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: AppColors.black.withOpacity(0.1),
+              ),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: AppColors.black.withOpacity(0.2),
+              ),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: AppColors.green.withOpacity(0.7),
+              ),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: AppColors.red,
+              ),
+              borderRadius: BorderRadius.circular(15),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class CustomMultilineTextField extends StatefulWidget {
+  const CustomMultilineTextField({
+    super.key,
+    required this.head,
+    required this.hint,
+    required this.keyboard,
+    this.validator,
+    required this.textEditingController,
+    this.suffix,
+    this.prefix,
+    this.maxLines,
+  });
+
+  final String head, hint;
+  final TextInputType keyboard;
+  final String? Function(String?)? validator;
+  final TextEditingController textEditingController;
+  final Widget? suffix, prefix;
+  final int? maxLines;
+
+  @override
+  State<CustomMultilineTextField> createState() =>
+      _CustomMultilineTextFieldState();
+}
+
+class _CustomMultilineTextFieldState extends State<CustomMultilineTextField> {
+  final GlobalKey<FormFieldState> formFieldKey = GlobalKey();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 14),
+          child: Text(
+            widget.head,
+            style: TextStyle(
+              color: AppColors.black,
+              fontSize: 13,
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        TextFormField(
+          key: formFieldKey,
+          onChanged: ((value) {
+            formFieldKey.currentState!.validate();
+          }),
+          controller: widget.textEditingController,
+          style: TextStyle(color: AppColors.black, fontSize: 15),
+          validator: widget.validator,
+          keyboardType: widget.keyboard,
+          cursorColor: AppColors.green,
+          maxLines: widget.maxLines ?? 1,
+          // Default is 1 if not specified
           decoration: InputDecoration(
             hintStyle: TextStyle(
               color: AppColors.grey,

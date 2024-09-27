@@ -288,4 +288,18 @@ class AppFunctions {
 
   static int totalPayment(TotalCostModel costs) =>
       costs.tCost + costs.taxes + costs.hCharges + costs.rCharges;
+
+  static List<XFile> filterDuplicates({
+    required List<XFile> selected,
+    required List<XFile> newSelected,
+  }) {
+    // Create a set of paths from newSelected for quick lookup
+    final Set<String> newSelectedPaths =
+        newSelected.map((file) => file.path).toSet();
+
+    // Remove files from selected if their paths exist in newSelectedPaths
+    selected.removeWhere((file) => newSelectedPaths.contains(file.path));
+
+    return selected;
+  }
 }
