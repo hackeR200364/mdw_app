@@ -51,7 +51,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                             SizedBox(height: 5),
                             Text(
-                              "{phone number}",
+                              "+91 9230976362",
                               style: TextStyle(
                                 color: AppColors.black,
                                 fontSize: 15,
@@ -59,7 +59,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                             SizedBox(height: 5),
                             Text(
-                              "{age} {gender}",
+                              "21 Male",
                               style: TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
@@ -102,7 +102,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           "Get FitAahar with your friends, tell them how much you love living a healthier life.",
                                       btnOnPressed: (() async {
                                         final res = await Share.share(
-                                            "Referring to others https://achivie.com",
+                                            "Referring to others www.google.co.in",
                                             subject: "MDW");
 
                                         if (res.status ==
@@ -322,7 +322,7 @@ class CustomProfileContainer extends StatelessWidget {
             Icon(
               icon,
               color: AppColors.black,
-              size: 55,
+              size: 40,
             ),
             SizedBox(height: 10),
             Text(

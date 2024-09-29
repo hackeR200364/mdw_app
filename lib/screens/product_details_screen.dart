@@ -124,14 +124,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     ],
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 15,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Container(
                         padding:
-                            EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                            EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                         decoration: BoxDecoration(
                           color: AppColors.white,
                           boxShadow: AppColors.customBoxShadow,
@@ -151,7 +151,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     ],
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 15,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -159,57 +159,25 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       Text(
                         "MRP ₹250",
                         style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 17,
                         ),
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: AppColors.addContainerColor,
-                          borderRadius: BorderRadius.circular(40),
-                        ),
-                        child: Row(
-                          children: [
-                            IconButton(
-                              onPressed: (() {
-                                if (qnt >= 1) {
-                                  setState(() {
-                                    qnt--;
-                                  });
-                                }
-                              }),
-                              icon: Icon(
-                                Icons.remove,
-                                color: AppColors.white,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              qnt == 0 ? "ADD" : qnt.toString(),
-                              style: TextStyle(
-                                color: AppColors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            IconButton(
-                              onPressed: (() {
-                                if (qnt <= 9) {
-                                  setState(() {
-                                    qnt++;
-                                  });
-                                }
-                              }),
-                              icon: Icon(
-                                Icons.add,
-                                color: AppColors.white,
-                              ),
-                            ),
-                          ],
-                        ),
+                      CustomAddQntBtn(
+                        qnt: qnt,
+                        onTapMinus: (() {
+                          if (qnt >= 1) {
+                            setState(() {
+                              qnt--;
+                            });
+                          }
+                        }),
+                        onTapPlus: (() {
+                          if (qnt <= 9) {
+                            setState(() {
+                              qnt++;
+                            });
+                          }
+                        }),
                       ),
                     ],
                   ),
@@ -283,7 +251,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       ),
                     if (recomExpanded)
                       Text(
-                          "The error you're encountering is due to a Kotlin version mismatch between the project and the Kotlin dependencies being used. To resolve this issue, you need to update the Kotlin Gradle plugin version in your project's configuration files."),
+                        "Medicines are prescribed to treat, prevent, or manage various health conditions. They should be taken as directed by a healthcare professional, with careful adherence to the prescribed dosage, timing, and method of administration to ensure effectiveness and minimize risks.",
+                      ),
                   ],
                 ),
               ),
@@ -332,7 +301,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       ),
                     if (sideEffExpanded)
                       Text(
-                        "The error you're encountering is due to a Kotlin version mismatch between the project and the Kotlin dependencies being used. To resolve this issue, you need to update the Kotlin Gradle plugin version in your project's configuration files.",
+                        "While medicines can be beneficial, they may cause side effects ranging from mild issues like nausea, dizziness, or drowsiness to more serious reactions such as allergic responses, liver problems, or cardiovascular complications. It's important to consult a doctor if any side effects are experienced.",
                       ),
                   ],
                 ),
@@ -340,6 +309,65 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class CustomAddQntBtn extends StatelessWidget {
+  const CustomAddQntBtn({
+    super.key,
+    required this.qnt,
+    required this.onTapMinus,
+    required this.onTapPlus,
+    this.width,
+  });
+
+  final int qnt;
+  final VoidCallback onTapMinus, onTapPlus;
+  final double? width;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: width ?? 105,
+      height: 35,
+      padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+      decoration: BoxDecoration(
+        color: AppColors.addContainerColor,
+        borderRadius: BorderRadius.circular(40),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          GestureDetector(
+            onTap: onTapMinus,
+            child: Icon(
+              Icons.remove,
+              color: AppColors.white,
+            ),
+          ),
+          SizedBox(
+            width: 5,
+          ),
+          Text(
+            qnt == 0 ? "ADD" : qnt.toString(),
+            style: TextStyle(
+              color: AppColors.white,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(
+            width: 5,
+          ),
+          GestureDetector(
+            onTap: onTapPlus,
+            child: Icon(
+              Icons.add,
+              color: AppColors.white,
+            ),
+          ),
+        ],
       ),
     );
   }

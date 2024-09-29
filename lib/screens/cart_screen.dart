@@ -33,7 +33,7 @@ class _CartScreenState extends State<CartScreen> {
         '₹500',
         'https://images.pexels.com/photos/2565761/pexels-photo-2565761.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
         2,
-        'ES', // Essential
+        MedicineCategory.es,
       ),
       CartProductModel(
         'P002',
@@ -41,7 +41,7 @@ class _CartScreenState extends State<CartScreen> {
         '₹1000',
         'https://images.pexels.com/photos/3786154/pexels-photo-3786154.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
         1,
-        'NES', // Non-essential
+        MedicineCategory.nes,
       ),
       CartProductModel(
         'P003',
@@ -49,7 +49,7 @@ class _CartScreenState extends State<CartScreen> {
         '₹1500',
         'https://images.pexels.com/photos/208518/pexels-photo-208518.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
         3,
-        'AY', // Ayurvedic
+        MedicineCategory.ay,
       ),
     ];
     updateTotalCostModel(cartItems!);

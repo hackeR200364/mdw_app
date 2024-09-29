@@ -59,9 +59,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
       phone = formatPhone(addressModel!.country, addressModel!.phone);
     }
     if (addressModel == null) {
-      position = await _determinePosition();
+      position = await AppFunctions.determinePosition();
       if (position != null) {
-        placemarks = await _determineAddress(position!);
+        placemarks = await AppFunctions.determineAddress(position!);
       }
     }
     setState(() {
@@ -80,34 +80,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
 
   Future<AddressModel?> getStoredAddress() async =>
       await StorageServices.getAddress();
-
-  Future<Position> _determinePosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-
-    return await Geolocator.getCurrentPosition();
-  }
-
-  Future<List<Placemark>> _determineAddress(Position pos) async =>
-      await placemarkFromCoordinates(pos.latitude, pos.longitude);
 
   @override
   Widget build(BuildContext context) {
@@ -173,9 +145,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     onPressed: (() async {
                       final permission = await openAppSettings();
                       if (permission) {
-                        position = await _determinePosition();
+                        position = await AppFunctions.determinePosition();
                         if (position != null) {
-                          placemarks = await _determineAddress(position!);
+                          placemarks =
+                              await AppFunctions.determineAddress(position!);
                           setState(() {});
                         }
                       }

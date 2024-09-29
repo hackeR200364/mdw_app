@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:mdw_app/services/storage_services.dart';
@@ -254,17 +256,17 @@ class AppFunctions {
     return totalCost;
   }
 
-  static double calculateTax(double price, String categoryCode) {
+  static double calculateTax(double price, MedicineCategory categoryCode) {
     double taxRate;
 
     switch (categoryCode) {
-      case 'ES': // Essential medicines
+      case MedicineCategory.es: // Essential medicines
         taxRate = 0.05;
         break;
-      case 'NES': // Non-essential medicines
+      case MedicineCategory.nes: // Non-essential medicines
         taxRate = 0.12;
         break;
-      case 'AY': // Ayurvedic medicines
+      case MedicineCategory.ay: // Ayurvedic medicines
         taxRate = 0.12;
         break;
       default:
@@ -301,5 +303,39 @@ class AppFunctions {
     selected.removeWhere((file) => newSelectedPaths.contains(file.path));
 
     return selected;
+  }
+
+  static Future<Position> determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    return await Geolocator.getCurrentPosition();
+  }
+
+  static Future<List<Placemark>> determineAddress(Position pos) async =>
+      await placemarkFromCoordinates(pos.latitude, pos.longitude);
+
+  static Map<String, dynamic> findProductInCart(
+      String productId, List<CartProductModel> cartProducts) {
+    int index = cartProducts.indexWhere((product) => product.pid == productId);
+    return {'exists': index != -1, 'index': index};
   }
 }

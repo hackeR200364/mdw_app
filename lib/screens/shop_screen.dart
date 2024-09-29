@@ -1,12 +1,16 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:mdw_app/models/orders_type_model.dart';
 import 'package:mdw_app/screens/cart_screen.dart';
 import 'package:mdw_app/screens/product_details_screen.dart';
+import 'package:mdw_app/services/app_function_services.dart';
 import 'package:mdw_app/styles.dart';
 import 'package:provider/provider.dart';
 
+import '../models/cart_product_model.dart';
 import '../providers/main_screen_index_provider.dart';
 
 class ShopScreen extends StatefulWidget {
@@ -20,6 +24,22 @@ class _ShopScreenState extends State<ShopScreen> {
   int selectedIdx = 0;
   bool _isExpanded = true;
   List<OrdersTypeModel> category = [];
+  Position? position;
+  List<Placemark> placemarks = [];
+  final LocationSettings locationSettings = LocationSettings(
+    accuracy: LocationAccuracy.high,
+    distanceFilter: 100,
+  );
+  List<CartProductModel> newArrivalCartModel = [];
+  List<CartProductModel> topSellingCartModel = [];
+  List<CartProductModel> cartModel = [];
+
+  getData() async {
+    position = await AppFunctions.determinePosition();
+    if (position != null) {
+      placemarks = await AppFunctions.determineAddress(position!);
+    }
+  }
 
   @override
   void initState() {
@@ -29,6 +49,19 @@ class _ShopScreenState extends State<ShopScreen> {
       OrdersTypeModel(type: "Home", index: 2),
       OrdersTypeModel(type: "Skin", index: 3),
     ];
+    newArrivalCartModel = [
+      CartProductModel("2", "Medicine Name of 2", "1000", "assets/dettol.png",
+          2, MedicineCategory.es),
+    ];
+    topSellingCartModel = [
+      CartProductModel("0", "Medicine Name of 2", "1000", "assets/dettol.png",
+          1, MedicineCategory.es),
+    ];
+    cartModel = [
+      CartProductModel("1", "Medicine Name of 2", "1000", "assets/dettol.png",
+          3, MedicineCategory.es),
+    ];
+    getData();
     super.initState();
   }
 
@@ -90,18 +123,29 @@ class _ShopScreenState extends State<ShopScreen> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Text(
-                            "Hello",
-                            style: TextStyle(
-                              color: AppColors.black,
-                            ),
-                          ),
-                          Text(
-                            "Rupam",
+                            "Prasenjit",
                             style: TextStyle(
                               color: AppColors.black,
                               fontSize: 25,
                               fontWeight: FontWeight.bold,
                             ),
+                          ),
+                          Row(
+                            children: [
+                              Icon(
+                                CupertinoIcons.location,
+                                size: 15,
+                              ),
+                              SizedBox(width: 5),
+                              Text(
+                                placemarks.isEmpty
+                                    ? "Loading..."
+                                    : "${placemarks.first.name}, ${placemarks.first.locality}",
+                                style: TextStyle(
+                                    color: AppColors.black,
+                                    overflow: TextOverflow.ellipsis),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -310,21 +354,69 @@ class _ShopScreenState extends State<ShopScreen> {
                   width: MediaQuery.of(context).size.width,
                   child: ListView.separated(
                     itemBuilder: ((ctx, idx) {
-                      return CustomProductContainer(
-                        onTap: (() async {
-                          final index = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (ctx) => ProductDetailsScreen(),
-                            ),
-                          );
+                      final res =
+                          AppFunctions.findProductInCart("$idx", cartModel);
+                      if (res["exists"]) {
+                        CartProductModel product = cartModel[res["index"]];
+                        return CustomProductContainer(
+                          onTapProduct: (() async {
+                            final index = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (ctx) => ProductDetailsScreen(),
+                              ),
+                            );
+                            if (index == 1) {}
+                          }),
+                          btnHeight: 40,
+                          image: product.img,
+                          name: product.pname,
+                          mrp: product.pmrp,
+                          child: CustomAddQntBtn(
+                            qnt: product.qnt,
+                            onTapMinus: (() {
+                              if (product.qnt >= 1) {
+                                setState(() {
+                                  product.qnt--;
+                                });
+                              }
+                            }),
+                            onTapPlus: (() {
+                              if (product.qnt <= 9) {
+                                setState(() {
+                                  product.qnt++;
+                                });
+                              }
+                            }),
+                          ),
+                        );
+                      } else {
+                        return CustomProductContainer(
+                          onTapAdd: (() {
+                            newArrivalCartModel.add(CartProductModel(
+                                "$idx",
+                                "Medicine Name of $idx",
+                                "2600",
+                                "assets/dettol.png",
+                                1,
+                                MedicineCategory.ay));
+                          }),
+                          onTapProduct: (() async {
+                            final index = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (ctx) => ProductDetailsScreen(),
+                              ),
+                            );
 
-                          if (index == 1) {}
-                        }),
-                        image: "assets/medicine-small.png",
-                        name: "Liveasy",
-                        mrp: "250",
-                      );
+                            if (index == 1) {}
+                          }),
+                          btnHeight: 40,
+                          image: "assets/medicine-small.png",
+                          name: "Liveasy",
+                          mrp: "250",
+                        );
+                      }
                     }),
                     scrollDirection: Axis.horizontal,
                     separatorBuilder: (BuildContext context, int index) {
@@ -359,21 +451,72 @@ class _ShopScreenState extends State<ShopScreen> {
                   width: MediaQuery.of(context).size.width,
                   child: ListView.separated(
                     itemBuilder: ((ctx, idx) {
-                      return CustomProductContainer(
-                        onTap: (() async {
-                          final index = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (ctx) => ProductDetailsScreen(),
-                            ),
-                          );
+                      final res = AppFunctions.findProductInCart(
+                          "$idx", topSellingCartModel);
+                      // log(res["exists"].toString());
+                      if (res["exists"]) {
+                        CartProductModel product =
+                            topSellingCartModel[res["index"]];
+                        return CustomProductContainer(
+                          onTapProduct: (() async {
+                            final index = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (ctx) => ProductDetailsScreen(),
+                              ),
+                            );
 
-                          if (index == 1) {}
-                        }),
-                        image: "assets/medicine-small.png",
-                        name: "Liveasy",
-                        mrp: "250",
-                      );
+                            if (index == 1) {}
+                          }),
+                          btnHeight: 40,
+                          image: product.img,
+                          name: product.pname,
+                          mrp: product.pmrp,
+                          child: CustomAddQntBtn(
+                            qnt: product.qnt,
+                            onTapMinus: (() {
+                              if (product.qnt >= 1) {
+                                setState(() {
+                                  product.qnt--;
+                                });
+                              }
+                            }),
+                            onTapPlus: (() {
+                              if (product.qnt <= 9) {
+                                setState(() {
+                                  product.qnt++;
+                                });
+                              }
+                            }),
+                          ),
+                        );
+                      } else {
+                        return CustomProductContainer(
+                          onTapAdd: (() {
+                            newArrivalCartModel.add(CartProductModel(
+                                "$idx",
+                                "Medicine Name of $idx",
+                                "2600",
+                                "assets/dettol.png",
+                                1,
+                                MedicineCategory.ay));
+                          }),
+                          onTapProduct: (() async {
+                            final index = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (ctx) => ProductDetailsScreen(),
+                              ),
+                            );
+
+                            if (index == 1) {}
+                          }),
+                          btnHeight: 40,
+                          image: "assets/medicine-small.png",
+                          name: "Liveasy",
+                          mrp: "250",
+                        );
+                      }
                     }),
                     scrollDirection: Axis.horizontal,
                     separatorBuilder: (BuildContext context, int index) {
@@ -490,21 +633,72 @@ class _ShopScreenState extends State<ShopScreen> {
                   width: MediaQuery.of(context).size.width,
                   child: ListView.separated(
                     itemBuilder: ((ctx, idx) {
-                      return CustomProductContainer(
-                        onTap: (() async {
-                          final index = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (ctx) => ProductDetailsScreen(),
-                            ),
-                          );
+                      final res = AppFunctions.findProductInCart(
+                          "$idx", newArrivalCartModel);
+                      // log(res["exists"].toString());
+                      if (res["exists"]) {
+                        CartProductModel product =
+                            newArrivalCartModel[res["index"]];
+                        return CustomProductContainer(
+                          onTapProduct: (() async {
+                            final index = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (ctx) => ProductDetailsScreen(),
+                              ),
+                            );
 
-                          if (index == 1) {}
-                        }),
-                        image: "assets/medicine-small.png",
-                        name: "Liveasy",
-                        mrp: "250",
-                      );
+                            if (index == 1) {}
+                          }),
+                          btnHeight: 40,
+                          image: product.img,
+                          name: product.pname,
+                          mrp: product.pmrp,
+                          child: CustomAddQntBtn(
+                            qnt: product.qnt,
+                            onTapMinus: (() {
+                              if (product.qnt >= 1) {
+                                setState(() {
+                                  product.qnt--;
+                                });
+                              }
+                            }),
+                            onTapPlus: (() {
+                              if (product.qnt <= 9) {
+                                setState(() {
+                                  product.qnt++;
+                                });
+                              }
+                            }),
+                          ),
+                        );
+                      } else {
+                        return CustomProductContainer(
+                          onTapAdd: (() {
+                            newArrivalCartModel.add(CartProductModel(
+                                "$idx",
+                                "Medicine Name of $idx",
+                                "2600",
+                                "assets/dettol.png",
+                                1,
+                                MedicineCategory.ay));
+                          }),
+                          onTapProduct: (() async {
+                            final index = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (ctx) => ProductDetailsScreen(),
+                              ),
+                            );
+
+                            if (index == 1) {}
+                          }),
+                          btnHeight: 40,
+                          image: "assets/medicine-small.png",
+                          name: "Liveasy",
+                          mrp: "250",
+                        );
+                      }
                     }),
                     scrollDirection: Axis.horizontal,
                     separatorBuilder: (BuildContext context, int index) {
@@ -530,21 +724,24 @@ class _ShopScreenState extends State<ShopScreen> {
 class CustomProductContainer extends StatelessWidget {
   const CustomProductContainer({
     super.key,
-    required this.onTap,
+    required this.onTapProduct,
     required this.image,
     required this.name,
     required this.mrp,
     this.btnHeight,
+    this.onTapAdd,
+    this.child,
   });
 
-  final VoidCallback onTap;
+  final VoidCallback? onTapProduct, onTapAdd;
   final String image, name, mrp;
   final double? btnHeight;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: onTapProduct,
       child: AnimatedContainer(
         width: 150,
         duration: Duration(milliseconds: 300),
@@ -595,19 +792,24 @@ class CustomProductContainer extends StatelessWidget {
                 SizedBox(
                   height: 10,
                 ),
-                Container(
-                  height: btnHeight ?? 30,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: AppColors.individualAddBtnColor,
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  child: Center(
-                    child: Text(
-                      "ADD",
+                if (child == null)
+                  GestureDetector(
+                    onTap: onTapAdd,
+                    child: Container(
+                      height: btnHeight ?? 30,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        color: AppColors.individualAddBtnColor,
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "ADD",
+                        ),
+                      ),
                     ),
                   ),
-                )
+                if (child != null) SizedBox(child: child),
               ],
             ),
           ],

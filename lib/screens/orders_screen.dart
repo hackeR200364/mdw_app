@@ -74,6 +74,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                 child: Container(
                   height: typesOpened ? 120 : 0,
                   width: MediaQuery.of(context).size.width,
+                  margin: EdgeInsets.symmetric(horizontal: 5),
                   decoration: BoxDecoration(
                     color: AppColors.white,
                     border: Border.all(
@@ -163,12 +164,15 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                     );
                                   }).toList(),
                                 ),
-                                Text("+13 more"),
+                                Padding(
+                                  padding: EdgeInsets.only(right: 15),
+                                  child: Text("+13\nmore"),
+                                ),
                               ],
                             ),
                           ),
                           Container(
-                            height: 4,
+                            height: 2,
                             margin: EdgeInsets.only(top: 15),
                             width: MediaQuery.of(context).size.width,
                             decoration: BoxDecoration(
@@ -186,7 +190,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                   onTap: (() {}),
                                 ),
                                 Container(
-                                  width: 4,
+                                  width: 2,
                                   decoration: BoxDecoration(
                                     color: AppColors.profileSpacerColor,
                                   ),

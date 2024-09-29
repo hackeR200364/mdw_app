@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mdw_app/models/cart_product_model.dart';
 import 'package:mdw_app/screens/product_details_screen.dart';
 import 'package:mdw_app/screens/shop_screen.dart';
+import 'package:mdw_app/services/app_function_services.dart';
 
 import '../styles.dart';
 
@@ -13,9 +15,14 @@ class ExploreScreen extends StatefulWidget {
 
 class _ExploreScreenState extends State<ExploreScreen> {
   late TextEditingController _searchController;
+  List<CartProductModel> cartModel = [];
 
   @override
   void initState() {
+    cartModel = [
+      CartProductModel("2", "Medicine Name of 2", "1000", "assets/dettol.png",
+          2, MedicineCategory.es),
+    ];
     _searchController = TextEditingController();
     super.initState();
   }
@@ -136,22 +143,69 @@ class _ExploreScreenState extends State<ExploreScreen> {
             SliverGrid(
               delegate: SliverChildBuilderDelegate(
                 (ctx, idx) {
-                  return CustomProductContainer(
-                    onTap: (() async {
-                      final index = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (ctx) => ProductDetailsScreen(),
-                        ),
-                      );
+                  final res = AppFunctions.findProductInCart("$idx", cartModel);
+                  if (res["exists"]) {
+                    CartProductModel product = cartModel[res["index"]];
+                    return CustomProductContainer(
+                      onTapProduct: (() async {
+                        final index = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (ctx) => ProductDetailsScreen(),
+                          ),
+                        );
 
-                      if (index == 1) {}
-                    }),
-                    btnHeight: 40,
-                    image: "assets/medicine-small.png",
-                    name: "Liveasy",
-                    mrp: "250",
-                  );
+                        if (index == 1) {}
+                      }),
+                      btnHeight: 40,
+                      image: product.img,
+                      name: product.pname,
+                      mrp: product.pmrp,
+                      child: CustomAddQntBtn(
+                        qnt: product.qnt,
+                        onTapMinus: (() {
+                          if (product.qnt >= 1) {
+                            setState(() {
+                              product.qnt--;
+                            });
+                          }
+                        }),
+                        onTapPlus: (() {
+                          if (product.qnt <= 9) {
+                            setState(() {
+                              product.qnt++;
+                            });
+                          }
+                        }),
+                      ),
+                    );
+                  } else {
+                    return CustomProductContainer(
+                      onTapAdd: (() {
+                        cartModel.add(CartProductModel(
+                            "$idx",
+                            "Medicine Name of $idx",
+                            "2600",
+                            "assets/dettol.png",
+                            1,
+                            MedicineCategory.ay));
+                      }),
+                      onTapProduct: (() async {
+                        final index = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (ctx) => ProductDetailsScreen(),
+                          ),
+                        );
+
+                        if (index == 1) {}
+                      }),
+                      btnHeight: 40,
+                      image: "assets/medicine-small.png",
+                      name: "Liveasy",
+                      mrp: "250",
+                    );
+                  }
                 },
                 childCount: 10,
               ),
