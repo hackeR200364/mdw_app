@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mdw_app/providers/location_provider.dart';
 import 'package:mdw_app/providers/main_screen_index_provider.dart';
 import 'package:mdw_app/screens/code_verification_screen.dart';
 import 'package:mdw_app/screens/main_screen.dart';
@@ -12,6 +13,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (ctx) => MainScreenIndexProvider()),
+        ChangeNotifierProvider(create: (ctx) => LocationProvider()),
       ],
       child: const MyApp(),
     ),

@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mdw_app/providers/main_screen_index_provider.dart';
-import 'package:mdw_app/screens/bookmarks_screen.dart';
 import 'package:mdw_app/screens/cart_screen.dart';
 import 'package:mdw_app/screens/explore_screen.dart';
+import 'package:mdw_app/screens/medlist_screen.dart';
 import 'package:mdw_app/screens/profile_screen.dart';
 import 'package:mdw_app/screens/shop_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -42,24 +42,7 @@ class _MainScreenState extends State<MainScreen> {
                 backgroundColor: AppColors.white,
                 centerTitle: provider.index == 0 ? false : true,
                 title: provider.index == 0
-                    ? Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Hello",
-                            style: TextStyle(
-                              fontSize: 16,
-                            ),
-                          ),
-                          Text(
-                            "Rupam",
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      )
+                    ? null
                     : CustomAppBarTitle(
                         fontSize: 14,
                         title: provider.index == 0
@@ -67,7 +50,7 @@ class _MainScreenState extends State<MainScreen> {
                             : provider.index == 1
                                 ? "BROWSE BY CATEGORIES"
                                 : provider.index == 2
-                                    ? "BOOKMARKS"
+                                    ? "MedList"
                                     : "ACCOUNT",
                       ),
                 actions: [
@@ -127,7 +110,7 @@ class _MainScreenState extends State<MainScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "TEXT US ORDER",
+                        "CALL US TO ORDER",
                         style: TextStyle(
                           color: AppColors.black,
                           fontWeight: FontWeight.bold,
@@ -212,7 +195,7 @@ class _MainScreenState extends State<MainScreen> {
                           });
                         }),
                         icon: Icons.bookmark_border_rounded,
-                        text: "Bookmarks",
+                        text: "MedList",
                         iconColor: provider.index == 2
                             ? AppColors.selectedIconColor
                             : AppColors.black,
