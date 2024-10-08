@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:mdw_app/screens/orders_screen.dart';
 import 'package:mdw_app/screens/settings_screen.dart';
 import 'package:mdw_app/screens/success_screen.dart';
+import 'package:mdw_app/screens/text_page.dart';
+import 'package:mdw_app/services/app_constants.dart';
 import 'package:mdw_app/styles.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -186,31 +188,70 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ProfileSmallContainer(
               head: "Health Records",
               des:
-                  "About Us\nContact Us\nFAQs\nTerms & Conditions\nReturn Policy\nPrivacy Policy",
+                  "Health Records are organized collections of a person's medical and health-related information, including details like medical history, diagnoses, treatments, test results, medications, and immunizations. These records help healthcare providers monitor patient progress, ensure accurate diagnoses, and deliver personalized care. Health records can be in paper form or digital, such as Electronic Health Records (EHR), providing quick access for both patients and doctors to manage health effectively.",
             ),
             SizedBox(height: 15),
             ProfileSmallContainer(
               head: "Help",
-              des:
-                  "About Us\nContact Us\nFAQs\nTerms & Conditions\nReturn Policy\nPrivacy Policy",
+              des: "Sure! What do you need help with?",
             ),
             SizedBox(height: 15),
             ProfileSmallContainer(
               head: "Patient Records",
               des:
-                  "About Us\nContact Us\nFAQs\nTerms & Conditions\nReturn Policy\nPrivacy Policy",
+                  "Patient Records are comprehensive documents that contain detailed information about a patient's medical history, diagnoses, treatments, and ongoing health conditions. These records typically include personal details, physician notes, lab results, medications, and treatment plans. Maintaining accurate patient records is essential for effective healthcare management, allowing doctors to track patient progress, make informed decisions, and provide continuity of care. In modern healthcare systems, digital formats like Electronic Health Records (EHR) are widely used for better accessibility, security, and organization of patient data.",
             ),
             SizedBox(height: 15),
             ProfileSmallContainer(
-              head: "Address Bool",
+              head: "Address Book",
               des:
-                  "About Us\nContact Us\nFAQs\nTerms & Conditions\nReturn Policy\nPrivacy Policy",
+                  "An Address Book is a digital or physical tool used to store and manage contact information for individuals or organizations. It typically includes details such as names, phone numbers, email addresses, and physical addresses. Address books help users keep track of important contacts, making it easy to access and organize personal or professional connections. Digital versions often offer advanced features like search, grouping, and integration with other apps for seamless communication and contact management.",
             ),
             SizedBox(height: 15),
             ProfileSmallContainer(
               head: "About",
-              des:
-                  "About Us\nContact Us\nFAQs\nTerms & Conditions\nReturn Policy\nPrivacy Policy",
+              child: Column(
+                children: [
+                  ListTile(
+                    title: Text(
+                      "About Us",
+                      style: TextStyle(
+                        color: AppColors.black,
+                      ),
+                    ),
+                    onTap: (() {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (ctx) => TextPage(
+                            title: "About",
+                            des: AppConstants.myDawaiWalaDescription,
+                          ),
+                        ),
+                      );
+                    }),
+                  ),
+                  ListTile(
+                    title: Text(
+                      "Return Policy",
+                      style: TextStyle(
+                        color: AppColors.black,
+                      ),
+                    ),
+                    onTap: (() {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (ctx) => TextPage(
+                            title: "Return Policy",
+                            des: AppConstants.returnPolicyDescription,
+                          ),
+                        ),
+                      );
+                    }),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
@@ -223,10 +264,13 @@ class ProfileSmallContainer extends StatefulWidget {
   const ProfileSmallContainer({
     super.key,
     required this.head,
-    required this.des,
+    this.des,
+    this.child,
   });
 
-  final String head, des;
+  final String head;
+  final String? des;
+  final Widget? child;
 
   @override
   State<ProfileSmallContainer> createState() => _ProfileSmallContainerState();
@@ -241,7 +285,7 @@ class _ProfileSmallContainerState extends State<ProfileSmallContainer> {
       children: [
         if (expanded)
           Container(
-            padding: EdgeInsets.only(left: 15, right: 15, top: 70, bottom: 5),
+            padding: EdgeInsets.only(left: 15, right: 15, top: 70, bottom: 10),
             alignment: Alignment.centerLeft,
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
@@ -249,12 +293,14 @@ class _ProfileSmallContainerState extends State<ProfileSmallContainer> {
               borderRadius: BorderRadius.circular(15),
               color: AppColors.white,
             ),
-            child: Text(
-              widget.des,
-              style: TextStyle(
-                color: AppColors.black,
-              ),
-            ),
+            child: (widget.child == null && widget.des != null)
+                ? Text(
+                    widget.des!,
+                    style: TextStyle(
+                      color: AppColors.black,
+                    ),
+                  )
+                : widget.child,
           ),
         GestureDetector(
           onTap: (() {

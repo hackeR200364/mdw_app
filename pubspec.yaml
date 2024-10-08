@@ -52,6 +52,17 @@ dependencies:
   geocoding:
   permission_handler:
   share_plus:
+  flutter_native_splash:
+
+flutter_native_splash:
+  android: true
+  ios: true
+  web: false
+  color: "#ff8da1"
+  image: "assets/splash-screen.png"
+  android_12:
+    color: "#ff8da1"
+    image: "assets/splash-screen.png"
 
 dev_dependencies:
   flutter_test:
@@ -69,6 +80,9 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
+
+
+
 flutter:
 
   # The following line ensures that the Material Icons font is

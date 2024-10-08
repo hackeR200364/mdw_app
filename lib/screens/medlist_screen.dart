@@ -161,11 +161,13 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                                     width:
                                         MediaQuery.of(context).size.width / 2,
                                     qnt: product.qnt,
-                                    onTapMinus: (() {
-                                      if (product.qnt >= 1) {
+                                    onTapMinu: (() {
+                                      if (product.qnt > 1) {
                                         setState(() {
                                           product.qnt--;
                                         });
+                                      } else if (product.qnt == 1) {
+                                        cartModel.removeAt(res["index"]);
                                       }
                                     }),
                                     onTapPlus: (() {
