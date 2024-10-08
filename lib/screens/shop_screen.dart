@@ -50,16 +50,16 @@ class _ShopScreenState extends State<ShopScreen> {
       OrdersTypeModel(type: "Skin", index: 3),
     ];
     newArrivalCartModel = [
-      CartProductModel("2", "Medicine Name of 2", "1000", "assets/dettol.png",
-          2, MedicineCategory.es),
+      CartProductModel("2", "Medicine Name of 2", "1000",
+          "assets/medicine-small.png", 2, MedicineCategory.es),
     ];
     topSellingCartModel = [
-      CartProductModel("0", "Medicine Name of 2", "1000", "assets/dettol.png",
-          1, MedicineCategory.es),
+      CartProductModel("0", "Medicine Name of 2", "1000",
+          "assets/medicine-small.png", 1, MedicineCategory.es),
     ];
     cartModel = [
-      CartProductModel("1", "Medicine Name of 2", "1000", "assets/dettol.png",
-          3, MedicineCategory.es),
+      CartProductModel("1", "Medicine Name of 2", "1000",
+          "assets/medicine-small.png", 3, MedicineCategory.es),
     ];
     getData();
     super.initState();
@@ -374,11 +374,13 @@ class _ShopScreenState extends State<ShopScreen> {
                           mrp: product.pmrp,
                           child: CustomAddQntBtn(
                             qnt: product.qnt,
-                            onTapMinus: (() {
-                              if (product.qnt >= 1) {
+                            onTapMinu: (() {
+                              if (product.qnt > 1) {
                                 setState(() {
                                   product.qnt--;
                                 });
+                              } else if (product.qnt == 1) {
+                                cartModel.removeAt(res["index"]);
                               }
                             }),
                             onTapPlus: (() {
@@ -393,11 +395,11 @@ class _ShopScreenState extends State<ShopScreen> {
                       } else {
                         return CustomProductContainer(
                           onTapAdd: (() {
-                            newArrivalCartModel.add(CartProductModel(
+                            cartModel.add(CartProductModel(
                                 "$idx",
                                 "Medicine Name of $idx",
                                 "2600",
-                                "assets/dettol.png",
+                                "assets/medicine-small.png",
                                 1,
                                 MedicineCategory.ay));
                           }),
@@ -474,11 +476,13 @@ class _ShopScreenState extends State<ShopScreen> {
                           mrp: product.pmrp,
                           child: CustomAddQntBtn(
                             qnt: product.qnt,
-                            onTapMinus: (() {
-                              if (product.qnt >= 1) {
+                            onTapMinu: (() {
+                              if (product.qnt > 1) {
                                 setState(() {
                                   product.qnt--;
                                 });
+                              } else if (product.qnt == 1) {
+                                topSellingCartModel.removeAt(res["index"]);
                               }
                             }),
                             onTapPlus: (() {
@@ -493,11 +497,11 @@ class _ShopScreenState extends State<ShopScreen> {
                       } else {
                         return CustomProductContainer(
                           onTapAdd: (() {
-                            newArrivalCartModel.add(CartProductModel(
+                            topSellingCartModel.add(CartProductModel(
                                 "$idx",
                                 "Medicine Name of $idx",
                                 "2600",
-                                "assets/dettol.png",
+                                "assets/medicine-small.png",
                                 1,
                                 MedicineCategory.ay));
                           }),
@@ -656,11 +660,13 @@ class _ShopScreenState extends State<ShopScreen> {
                           mrp: product.pmrp,
                           child: CustomAddQntBtn(
                             qnt: product.qnt,
-                            onTapMinus: (() {
-                              if (product.qnt >= 1) {
+                            onTapMinu: (() {
+                              if (product.qnt > 1) {
                                 setState(() {
                                   product.qnt--;
                                 });
+                              } else if (product.qnt == 1) {
+                                newArrivalCartModel.removeAt(res["index"]);
                               }
                             }),
                             onTapPlus: (() {
@@ -679,7 +685,7 @@ class _ShopScreenState extends State<ShopScreen> {
                                 "$idx",
                                 "Medicine Name of $idx",
                                 "2600",
-                                "assets/dettol.png",
+                                "assets/medicine-small.png",
                                 1,
                                 MedicineCategory.ay));
                           }),

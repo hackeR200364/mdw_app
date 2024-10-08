@@ -163,11 +163,13 @@ class _ExploreScreenState extends State<ExploreScreen> {
                       mrp: product.pmrp,
                       child: CustomAddQntBtn(
                         qnt: product.qnt,
-                        onTapMinus: (() {
-                          if (product.qnt >= 1) {
+                        onTapMinu: (() {
+                          if (product.qnt > 1) {
                             setState(() {
                               product.qnt--;
                             });
+                          } else if (product.qnt == 1) {
+                            cartModel.removeAt(res["index"]);
                           }
                         }),
                         onTapPlus: (() {

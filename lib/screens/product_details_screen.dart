@@ -164,7 +164,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       ),
                       CustomAddQntBtn(
                         qnt: qnt,
-                        onTapMinus: (() {
+                        onTapMinu: (() {
                           if (qnt >= 1) {
                             setState(() {
                               qnt--;
@@ -318,13 +318,13 @@ class CustomAddQntBtn extends StatelessWidget {
   const CustomAddQntBtn({
     super.key,
     required this.qnt,
-    required this.onTapMinus,
+    required this.onTapMinu,
     required this.onTapPlus,
     this.width,
   });
 
   final int qnt;
-  final VoidCallback onTapMinus, onTapPlus;
+  final VoidCallback onTapMinu, onTapPlus;
   final double? width;
 
   @override
@@ -341,7 +341,7 @@ class CustomAddQntBtn extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           GestureDetector(
-            onTap: onTapMinus,
+            onTap: onTapMinu,
             child: Icon(
               Icons.remove,
               color: AppColors.white,
