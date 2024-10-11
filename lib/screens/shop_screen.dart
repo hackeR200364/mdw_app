@@ -62,7 +62,9 @@ class _ShopScreenState extends State<ShopScreen> {
       CartProductModel("1", "Medicine Name of 2", "1000",
           "assets/medicine-small.png", 3, MedicineCategory.es),
     ];
-    getData();
+    Future.delayed(Duration(seconds: 3), (() {
+      getData();
+    }));
     super.initState();
   }
 
@@ -383,6 +385,7 @@ class _ShopScreenState extends State<ShopScreen> {
                                 });
                               } else if (product.qnt == 1) {
                                 cartModel.removeAt(res["index"]);
+                                setState(() {});
                               }
                             }),
                             onTapPlus: (() {
@@ -404,6 +407,7 @@ class _ShopScreenState extends State<ShopScreen> {
                                 "assets/medicine-small.png",
                                 1,
                                 MedicineCategory.ay));
+                            setState(() {});
                           }),
                           onTapProduct: (() async {
                             final index = await Navigator.push(
@@ -485,6 +489,7 @@ class _ShopScreenState extends State<ShopScreen> {
                                 });
                               } else if (product.qnt == 1) {
                                 topSellingCartModel.removeAt(res["index"]);
+                                setState(() {});
                               }
                             }),
                             onTapPlus: (() {
@@ -506,6 +511,7 @@ class _ShopScreenState extends State<ShopScreen> {
                                 "assets/medicine-small.png",
                                 1,
                                 MedicineCategory.ay));
+                            setState(() {});
                           }),
                           onTapProduct: (() async {
                             final index = await Navigator.push(
@@ -669,6 +675,7 @@ class _ShopScreenState extends State<ShopScreen> {
                                 });
                               } else if (product.qnt == 1) {
                                 newArrivalCartModel.removeAt(res["index"]);
+                                setState(() {});
                               }
                             }),
                             onTapPlus: (() {
@@ -690,6 +697,7 @@ class _ShopScreenState extends State<ShopScreen> {
                                 "assets/medicine-small.png",
                                 1,
                                 MedicineCategory.ay));
+                            setState(() {});
                           }),
                           onTapProduct: (() async {
                             final index = await Navigator.push(
