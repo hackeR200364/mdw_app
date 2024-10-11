@@ -31,13 +31,13 @@ class _UploadPrescriptionScreenState extends State<UploadPrescriptionScreen> {
               onPressed: (() {
                 Navigator.pop(context);
               }),
-              icon: Icon(
+              icon: const Icon(
                 Icons.arrow_back_ios_new_rounded,
                 size: 20,
               ),
             ),
             centerTitle: false,
-            title: Text(
+            title: const Text(
               "Upload Prescription",
               style: TextStyle(
                 color: AppColors.black,
@@ -47,7 +47,7 @@ class _UploadPrescriptionScreenState extends State<UploadPrescriptionScreen> {
             actions: [
               TextButton(
                 onPressed: (() {}),
-                child: Text(
+                child: const Text(
                   "SEND",
                   style: TextStyle(
                     color: AppColors.green,
@@ -56,7 +56,7 @@ class _UploadPrescriptionScreenState extends State<UploadPrescriptionScreen> {
                   ),
                 ),
               ),
-              SizedBox(width: 10),
+              const SizedBox(width: 10),
             ],
           ),
           SliverToBoxAdapter(
@@ -69,7 +69,7 @@ class _UploadPrescriptionScreenState extends State<UploadPrescriptionScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: ((ctx) => CameraScreen()),
+                          builder: ((ctx) => const CameraScreen()),
                         ),
                       );
                     }),
@@ -98,7 +98,8 @@ class _UploadPrescriptionScreenState extends State<UploadPrescriptionScreen> {
                 return Stack(
                   children: [
                     Container(
-                      margin: EdgeInsets.only(top: 10, left: 10, right: 10),
+                      margin:
+                          const EdgeInsets.only(top: 10, left: 10, right: 10),
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height / 2,
                       decoration: BoxDecoration(
@@ -114,12 +115,13 @@ class _UploadPrescriptionScreenState extends State<UploadPrescriptionScreen> {
                     Align(
                       alignment: Alignment.topRight,
                       child: Container(
-                        margin: EdgeInsets.only(top: 10, left: 10, right: 10),
+                        margin:
+                            const EdgeInsets.only(top: 10, left: 10, right: 10),
                         height: 50,
                         width: 50,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15),
-                          gradient: LinearGradient(
+                          gradient: const LinearGradient(
                             begin: Alignment.topLeft,
                             end: Alignment.bottomRight,
                             colors: [
@@ -134,7 +136,7 @@ class _UploadPrescriptionScreenState extends State<UploadPrescriptionScreen> {
                           onPressed: (() {
                             selectedImages.removeAt(idx);
                           }),
-                          icon: Icon(
+                          icon: const Icon(
                             Icons.delete_rounded,
                             color: AppColors.white,
                           ),

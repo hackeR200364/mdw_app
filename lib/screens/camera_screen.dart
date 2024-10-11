@@ -19,7 +19,7 @@ class _CameraScreenState extends State<CameraScreen> {
           onPressed: (() {
             Navigator.pop(context);
           }),
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_ios_new_rounded,
             size: 20,
             color: AppColors.white,

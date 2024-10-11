@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mdw_app/providers/location_provider.dart';
 import 'package:mdw_app/providers/main_screen_index_provider.dart';
@@ -10,7 +11,7 @@ import 'package:provider/provider.dart';
 
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   runApp(
     MultiProvider(
       providers: [
@@ -19,6 +20,12 @@ void main() {
       ],
       child: const MyApp(),
     ),
+  );
+  Future.delayed(
+    const Duration(seconds: 3),
+    (() {
+      FlutterNativeSplash.remove();
+    }),
   );
 }
 
@@ -57,9 +64,9 @@ class _MyAppState extends State<MyApp> {
         builder: ((ctx, snapshot) {
           if (signInStatus == true) {
             if (attendStatus) {
-              return MainScreen();
+              return const MainScreen();
             } else {
-              return CodeVerificationScreen(
+              return const CodeVerificationScreen(
                 head: "Attendance",
                 upperText:
                     "Ask your admin to enter his code to confirm your attendance.",
@@ -68,7 +75,7 @@ class _MyAppState extends State<MyApp> {
               );
             }
           } else {
-            return OnboardingScreen();
+            return const OnboardingScreen();
           }
         }),
       ),

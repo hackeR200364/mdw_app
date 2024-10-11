@@ -36,12 +36,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
           onPressed: (() {
             Navigator.pop(context);
           }),
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_ios_new_rounded,
             size: 20,
           ),
         ),
-        title: Text(
+        title: const Text(
           "Update Profile",
           style: TextStyle(
             color: AppColors.black,
@@ -49,7 +49,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         child: SafeArea(
           child: Column(
             children: [
@@ -59,35 +59,35 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 keyboard: TextInputType.name,
                 textEditingController: _nameController,
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               CustomTextField(
                 head: "Email Address",
                 hint: "Enter email",
                 keyboard: TextInputType.emailAddress,
                 textEditingController: _emailController,
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               CustomTextField(
                 head: "Phone Number",
                 hint: "Enter number",
                 keyboard: TextInputType.phone,
                 textEditingController: _phoneController,
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               CustomTextField(
                 head: "Password",
                 hint: "Enter password",
                 keyboard: TextInputType.visiblePassword,
                 textEditingController: _passController,
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               CustomTextField(
                 head: "Confirm Password",
                 hint: "Confirm Password",
                 keyboard: TextInputType.visiblePassword,
                 textEditingController: _confirmPassController,
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               CustomBtn(
                 onTap: (() {}),
                 text: "UPDATE",

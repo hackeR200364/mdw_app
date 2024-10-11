@@ -47,11 +47,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: ((ctx) => MainScreen()),
+                  builder: ((ctx) => const MainScreen()),
                 ),
               );
             }),
-            child: Text(
+            child: const Text(
               "Skip",
               style: TextStyle(
                 color: AppColors.green,
@@ -60,15 +60,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
               ),
             ),
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
         ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.only(top: 15, left: 20, right: 20, bottom: 30),
+          padding:
+              const EdgeInsets.only(top: 15, left: 20, right: 20, bottom: 30),
           child: Column(
             children: [
-              Center(
+              const Center(
                 child: Text(
                   "Create an account",
                   style: TextStyle(
@@ -78,8 +79,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 10),
-              Center(
+              const SizedBox(height: 10),
+              const Center(
                 child: Text(
                   "Welcome to My DawaiWala. Create an account and start ordering medicines!",
                   textAlign: TextAlign.center,
@@ -88,7 +89,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               Column(
@@ -100,7 +101,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     keyboard: TextInputType.name,
                     validator: ((value) => AppFunctions.nameValidator(value)),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   CustomTextField(
@@ -110,7 +111,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     keyboard: TextInputType.emailAddress,
                     validator: ((value) => AppFunctions.emailValidator(value)),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   CustomTextField(
@@ -119,7 +120,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     hint: "Enter number",
                     keyboard: TextInputType.phone,
                     prefix: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 10),
+                      margin: const EdgeInsets.symmetric(horizontal: 10),
                       width: 15,
                       height: 15,
                       child: Image.asset("assets/indian-flag.png"),
@@ -127,7 +128,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     validator: ((value) =>
                         AppFunctions.phoneNumberValidator(value)),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   CustomTextField(
@@ -139,7 +140,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     validator: ((value) =>
                         AppFunctions.passwordValidator(value)),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   CustomTextField(
@@ -153,7 +154,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             _passwordTextController.text.trim(),
                             _confirmPasswordController.text.trim())),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   Row(
@@ -161,14 +162,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       Checkbox(
                         value: obscure,
                         activeColor: AppColors.green,
-                        side: BorderSide(color: AppColors.grey),
+                        side: const BorderSide(color: AppColors.grey),
                         onChanged: ((val) {
                           setState(() {
                             obscure = val!;
                           });
                         }),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 10,
                       ),
                       Text(
@@ -181,7 +182,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   )
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               if (!loading)
@@ -221,7 +222,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (ctx) => MainScreen(),
+                            builder: (ctx) => const MainScreen(),
                           ),
                         );
                       });
@@ -277,10 +278,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   }),
                   text: "Create my account",
                 ),
-              if (loading) CustomLoadingIndicator(),
+              if (loading) const CustomLoadingIndicator(),
               if (!loading)
                 Container(
-                  margin: EdgeInsets.symmetric(horizontal: 45),
+                  margin: const EdgeInsets.symmetric(horizontal: 45),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
                   ),
@@ -293,7 +294,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         ),
                       );
                     }),
-                    child: Text(
+                    child: const Text(
                       "Login to my account",
                       style: TextStyle(
                         color: AppColors.green,

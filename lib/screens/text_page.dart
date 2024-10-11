@@ -19,7 +19,7 @@ class TextPage extends StatelessWidget {
         title: Text(title),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
         child: Text(des),
       ),
     );

@@ -31,7 +31,7 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(left: 15, right: 15, bottom: 10),
+      padding: const EdgeInsets.only(left: 15, right: 15, bottom: 10),
       child: CustomScrollView(
         slivers: [
           SliverAppBar(
@@ -47,12 +47,12 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                 fillColor: Colors.grey.shade200,
                 // Background color
                 hintText: 'Search',
-                prefixIcon: Icon(
+                prefixIcon: const Icon(
                   Icons.search,
                   color: Colors.black,
                 ),
                 contentPadding:
-                    EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+                    const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30), // Rounded corners
                   borderSide: BorderSide.none, // No visible border
@@ -74,7 +74,7 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                   onTap: (() {}),
                   text: "Sort",
                 ),
-                SizedBox(width: 15),
+                const SizedBox(width: 15),
                 SearchingFilter(
                   onTap: (() {}),
                   text: "Filter",
@@ -85,176 +85,111 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (ctx, idx) {
-                return GestureDetector(
-                  onTap: (() async {
-                    final index = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (ctx) => ProductDetailsScreen(),
-                      ),
-                    );
+                final res = AppFunctions.findProductInCart("$idx", cartModel);
+                if (!res["exists"]) {
+                  return GestureDetector(
+                    onTap: (() async {
+                      final index = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (ctx) => const ProductDetailsScreen(),
+                        ),
+                      );
 
-                    if (index == 1) {}
-                  }),
-                  child: Container(
-                    height: 180,
-                    width: MediaQuery.of(context).size.width,
-                    margin: EdgeInsets.only(
-                        top: idx != 0 ? 10 : 0, bottom: 10, left: 5, right: 5),
-                    padding: EdgeInsets.only(
-                        left: 20, right: 20, top: 10, bottom: 10),
-                    decoration: BoxDecoration(
-                      color: AppColors.black.withOpacity(0.04),
-                      borderRadius: BorderRadius.circular(15),
-                      // boxShadow: [
-                      //   BoxShadow(
-                      //     color: AppColors.black.withOpacity(0.5),
-                      //     // Shadow color
-                      //     offset: Offset(1, 2),
-                      //     // Horizontal and vertical offset (right and bottom)
-                      //     blurRadius: 5, // Blur effect
-                      //   ),
-                      // ],
-                    ),
-                    child: Builder(
-                      builder: (context) {
-                        final res =
-                            AppFunctions.findProductInCart("$idx", cartModel);
-                        if (res["exists"]) {
-                          CartProductModel product = cartModel[res["index"]];
-                          return Row(
+                      if (index == 1) {}
+                    }),
+                    child: Container(
+                      height: 180,
+                      width: MediaQuery.of(context).size.width,
+                      margin: EdgeInsets.only(
+                          top: idx != 0 ? 10 : 0,
+                          bottom: 10,
+                          left: 5,
+                          right: 5),
+                      padding: const EdgeInsets.only(
+                          left: 20, right: 20, top: 10, bottom: 10),
+                      decoration: BoxDecoration(
+                        color: AppColors.black.withOpacity(0.04),
+                        borderRadius: BorderRadius.circular(15),
+                        // boxShadow: [
+                        //   BoxShadow(
+                        //     color: AppColors.black.withOpacity(0.5),
+                        //     // Shadow color
+                        //     offset: Offset(1, 2),
+                        //     // Horizontal and vertical offset (right and bottom)
+                        //     blurRadius: 5, // Blur effect
+                        //   ),
+                        // ],
+                      ),
+                      child: Row(
+                        children: [
+                          Image.asset("assets/medicine-medium.png"),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Image.asset(product.img),
-                              SizedBox(
-                                width: 20,
-                              ),
-                              Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
+                              const Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        product.pname,
-                                        style: TextStyle(
-                                          color: AppColors.black,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        "MRP ₹${product.pmrp}",
-                                        style: TextStyle(
-                                          color: AppColors.grey,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  CustomAddQntBtn(
-                                    width:
-                                        MediaQuery.of(context).size.width / 2,
-                                    qnt: product.qnt,
-                                    onTapMinu: (() {
-                                      if (product.qnt > 1) {
-                                        setState(() {
-                                          product.qnt--;
-                                        });
-                                      } else if (product.qnt == 1) {
-                                        cartModel.removeAt(res["index"]);
-                                      }
-                                    }),
-                                    onTapPlus: (() {
-                                      if (product.qnt <= 9) {
-                                        setState(() {
-                                          product.qnt++;
-                                        });
-                                      }
-                                    }),
-                                  )
-                                ],
-                              )
-                            ],
-                          );
-                        } else {
-                          return Row(
-                            children: [
-                              Image.asset("assets/medicine-medium.png"),
-                              SizedBox(
-                                width: 20,
-                              ),
-                              Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "Demo Medicine Name",
-                                        style: TextStyle(
-                                          color: AppColors.black,
-                                          fontWeight: FontWeight.w600,
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: 5,
-                                      ),
-                                      Text(
-                                        "MRP ₹200",
-                                        style: TextStyle(
-                                          color: AppColors.grey,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  GestureDetector(
-                                    onTap: (() {
-                                      cartModel.add(CartProductModel(
-                                          "$idx",
-                                          "Medicine Name of $idx",
-                                          "2600",
-                                          "assets/dettol.png",
-                                          1,
-                                          MedicineCategory.ay));
-                                    }),
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 10,
-                                          horizontal: MediaQuery.of(context)
-                                                  .size
-                                                  .width /
-                                              8),
-                                      decoration: BoxDecoration(
-                                        color: AppColors.individualAddBtnColor,
-                                        borderRadius: BorderRadius.circular(14),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          "MOVE TO CART",
-                                        ),
-                                      ),
+                                  Text(
+                                    "Demo Medicine Name",
+                                    style: TextStyle(
+                                      color: AppColors.black,
+                                      fontWeight: FontWeight.w600,
                                     ),
-                                  )
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    "MRP ₹200",
+                                    style: TextStyle(
+                                      color: AppColors.grey,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 12,
+                                    ),
+                                  ),
                                 ],
+                              ),
+                              GestureDetector(
+                                onTap: (() {
+                                  cartModel.add(CartProductModel(
+                                      "$idx",
+                                      "Medicine Name of $idx",
+                                      "2600",
+                                      "assets/dettol.png",
+                                      1,
+                                      MedicineCategory.ay));
+                                }),
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 10,
+                                      horizontal:
+                                          MediaQuery.of(context).size.width /
+                                              8),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.individualAddBtnColor,
+                                    borderRadius: BorderRadius.circular(14),
+                                  ),
+                                  child: const Center(
+                                    child: Text(
+                                      "MOVE TO CART",
+                                    ),
+                                  ),
+                                ),
                               )
                             ],
-                          );
-                        }
-                      },
+                          )
+                        ],
+                      ),
                     ),
-                  ),
-                );
+                  );
+                } else {
+                  return Container();
+                }
               },
               childCount: 10,
             ),

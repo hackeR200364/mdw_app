@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mdw_app/screens/orders_screen.dart';
 import 'package:mdw_app/screens/settings_screen.dart';
 import 'package:mdw_app/screens/success_screen.dart';
@@ -21,7 +22,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: SingleChildScrollView(
-        padding: EdgeInsets.only(top: 20, left: 15, right: 15, bottom: 10),
+        padding:
+            const EdgeInsets.only(top: 20, left: 15, right: 15, bottom: 10),
         child: Column(
           children: [
             Container(
@@ -32,15 +34,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
               child: Column(
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 15),
                     child: Row(
                       children: [
                         CircleAvatar(
                           radius: 45,
                           backgroundColor: AppColors.grey.shade100,
                         ),
-                        SizedBox(width: 20),
-                        Column(
+                        const SizedBox(width: 20),
+                        const Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
@@ -51,7 +54,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 color: AppColors.black,
                               ),
                             ),
-                            SizedBox(height: 5),
+                            SizedBox(height: 2),
                             Text(
                               "+91 9230976362",
                               style: TextStyle(
@@ -59,7 +62,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 fontSize: 15,
                               ),
                             ),
-                            SizedBox(height: 5),
+                            SizedBox(height: 3),
                             Text(
                               "21 Male",
                               style: TextStyle(
@@ -82,7 +85,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(
+                    padding: const EdgeInsets.symmetric(
                       horizontal: 15,
                       vertical: 10,
                     ),
@@ -117,7 +120,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             );
                           }),
-                          child: Row(
+                          child: const Row(
                             children: [
                               Icon(
                                 Icons.person_add_alt_outlined,
@@ -134,12 +137,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ],
                           ),
                         ),
-                        Text(
-                          "Saved ₹90.23",
-                          style: TextStyle(
-                            color: AppColors.black,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        Row(
+                          children: [
+                            const Text(
+                              "Saved ",
+                              style: TextStyle(
+                                color: AppColors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              "₹",
+                              style: GoogleFonts.inter(
+                                color: AppColors.black,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            const Text(
+                              "90.23",
+                              style: TextStyle(
+                                color: AppColors.black,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -147,7 +168,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             SizedBox(
               height: MediaQuery.of(context).size.width / 2.35,
               child: Row(
@@ -158,7 +179,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: ((ctx) => OrdersScreen()),
+                            builder: ((ctx) => const OrdersScreen()),
                           ),
                         );
                       }),
@@ -166,14 +187,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       head: "Orders",
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: CustomProfileContainer(
                       onTap: (() {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: ((ctx) => SettingsScreen()),
+                            builder: ((ctx) => const SettingsScreen()),
                           ),
                         );
                       }),
@@ -184,36 +205,36 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
             ),
-            SizedBox(height: 20),
-            ProfileSmallContainer(
+            const SizedBox(height: 20),
+            const ProfileSmallContainer(
               head: "Health Records",
               des:
                   "Health Records are organized collections of a person's medical and health-related information, including details like medical history, diagnoses, treatments, test results, medications, and immunizations. These records help healthcare providers monitor patient progress, ensure accurate diagnoses, and deliver personalized care. Health records can be in paper form or digital, such as Electronic Health Records (EHR), providing quick access for both patients and doctors to manage health effectively.",
             ),
-            SizedBox(height: 15),
-            ProfileSmallContainer(
+            const SizedBox(height: 15),
+            const ProfileSmallContainer(
               head: "Help",
               des: "Sure! What do you need help with?",
             ),
-            SizedBox(height: 15),
-            ProfileSmallContainer(
+            const SizedBox(height: 15),
+            const ProfileSmallContainer(
               head: "Patient Records",
               des:
                   "Patient Records are comprehensive documents that contain detailed information about a patient's medical history, diagnoses, treatments, and ongoing health conditions. These records typically include personal details, physician notes, lab results, medications, and treatment plans. Maintaining accurate patient records is essential for effective healthcare management, allowing doctors to track patient progress, make informed decisions, and provide continuity of care. In modern healthcare systems, digital formats like Electronic Health Records (EHR) are widely used for better accessibility, security, and organization of patient data.",
             ),
-            SizedBox(height: 15),
-            ProfileSmallContainer(
+            const SizedBox(height: 15),
+            const ProfileSmallContainer(
               head: "Address Book",
               des:
                   "An Address Book is a digital or physical tool used to store and manage contact information for individuals or organizations. It typically includes details such as names, phone numbers, email addresses, and physical addresses. Address books help users keep track of important contacts, making it easy to access and organize personal or professional connections. Digital versions often offer advanced features like search, grouping, and integration with other apps for seamless communication and contact management.",
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             ProfileSmallContainer(
               head: "About",
               child: Column(
                 children: [
                   ListTile(
-                    title: Text(
+                    title: const Text(
                       "About Us",
                       style: TextStyle(
                         color: AppColors.black,
@@ -232,7 +253,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     }),
                   ),
                   ListTile(
-                    title: Text(
+                    title: const Text(
                       "Return Policy",
                       style: TextStyle(
                         color: AppColors.black,
@@ -285,7 +306,8 @@ class _ProfileSmallContainerState extends State<ProfileSmallContainer> {
       children: [
         if (expanded)
           Container(
-            padding: EdgeInsets.only(left: 15, right: 15, top: 70, bottom: 10),
+            padding:
+                const EdgeInsets.only(left: 15, right: 15, top: 70, bottom: 10),
             alignment: Alignment.centerLeft,
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
@@ -296,7 +318,7 @@ class _ProfileSmallContainerState extends State<ProfileSmallContainer> {
             child: (widget.child == null && widget.des != null)
                 ? Text(
                     widget.des!,
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: AppColors.black,
                     ),
                   )
@@ -309,7 +331,7 @@ class _ProfileSmallContainerState extends State<ProfileSmallContainer> {
             });
           }),
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
             alignment: Alignment.centerLeft,
             width: MediaQuery.of(context).size.width,
             height: 55,
@@ -323,11 +345,11 @@ class _ProfileSmallContainerState extends State<ProfileSmallContainer> {
               children: [
                 Text(
                   widget.head,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: AppColors.black,
                   ),
                 ),
-                Icon(
+                const Icon(
                   Icons.keyboard_arrow_down_outlined,
                   color: AppColors.black,
                 ),
@@ -370,10 +392,10 @@ class CustomProfileContainer extends StatelessWidget {
               color: AppColors.black,
               size: 40,
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             Text(
               head,
-              style: TextStyle(
+              style: const TextStyle(
                 color: AppColors.black,
                 fontSize: 20,
               ),

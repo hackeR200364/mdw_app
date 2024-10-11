@@ -41,7 +41,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 height: 400,
                 child: PageView(
                   controller: _pageController,
-                  children: [
+                  children: const [
                     OnboardingContainer(
                       image: "assets/onboarding/onboard-screen-1.png",
                       text: "Delivering Medicines in\n20 mins!",
@@ -58,11 +58,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 45,
               ),
               SmoothPageIndicator(
-                effect: ExpandingDotsEffect(
+                effect: const ExpandingDotsEffect(
                   dotHeight: 10,
                   dotWidth: 10,
                   activeDotColor: AppColors.green,
@@ -71,7 +71,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 controller: _pageController,
                 count: 3,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 25,
               ),
               CustomBtn(
@@ -80,13 +80,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: ((ctx) => LoginScreen()),
+                        builder: ((ctx) => const LoginScreen()),
                       ),
                     );
                   }
                   if (_pageController.page == 0 || _pageController.page == 1) {
                     _pageController.nextPage(
-                      duration: Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 200),
                       curve: Curves.linear,
                     );
                   }
@@ -96,23 +96,23 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 text: 'NEXT',
                 fontSize: 17,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
               GestureDetector(
                 onTap: (() {
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: ((ctx) => LoginScreen())),
+                    MaterialPageRoute(builder: ((ctx) => const LoginScreen())),
                   );
                 }),
                 child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 45),
-                  padding: EdgeInsets.symmetric(vertical: 15),
+                  margin: const EdgeInsets.symmetric(horizontal: 45),
+                  padding: const EdgeInsets.symmetric(vertical: 15),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
                   ),
-                  child: Center(
+                  child: const Center(
                     child: Text(
                       "SKIP",
                       style: TextStyle(
@@ -152,13 +152,13 @@ class OnboardingContainer extends StatelessWidget {
             child: Image.asset(image),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 15,
         ),
         Text(
           text,
           textAlign: TextAlign.center,
-          style: TextStyle(
+          style: const TextStyle(
             color: AppColors.green,
             fontWeight: FontWeight.bold,
             fontSize: 20,

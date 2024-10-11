@@ -91,7 +91,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
           onPressed: (() {
             Navigator.pop(context);
           }),
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_ios_rounded,
             color: AppColors.black,
             size: 20,
@@ -104,23 +104,23 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   .changeIndex(newIndex: 1);
               Navigator.pop(context, 1);
             }),
-            icon: Icon(
+            icon: const Icon(
               Icons.search_rounded,
               color: AppColors.black,
             ),
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
         ],
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   "Details",
                   style: TextStyle(
                     color: AppColors.black,
@@ -128,10 +128,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     fontSize: 25,
                   ),
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 if ((placemarks == null || addressModel == null) &&
                     addressLoading == true)
-                  Text(
+                  const Text(
                     "Loading your address",
                     style: TextStyle(
                       color: AppColors.black,
@@ -206,13 +206,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                           onPressed: (() {
                                             Navigator.pop(context);
                                           }),
-                                          icon: Icon(
+                                          icon: const Icon(
                                             Icons.close,
                                             size: 20,
                                             color: AppColors.black,
                                           ),
                                         ),
-                                        title: Text(
+                                        title: const Text(
                                           "Update Address",
                                           style: TextStyle(
                                             color: AppColors.black,
@@ -261,21 +261,21 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                                 );
                                               }
                                             }),
-                                            icon: Icon(
+                                            icon: const Icon(
                                               Icons.check,
                                               color: AppColors.green,
                                               size: 20,
                                             ),
                                           ),
-                                          SizedBox(width: 10),
+                                          const SizedBox(width: 10),
                                         ],
                                       ),
-                                      SliverToBoxAdapter(
+                                      const SliverToBoxAdapter(
                                         child: SizedBox(height: 20),
                                       ),
                                       SliverToBoxAdapter(
                                         child: Container(
-                                          padding: EdgeInsets.symmetric(
+                                          padding: const EdgeInsets.symmetric(
                                               horizontal: 10),
                                           decoration: BoxDecoration(
                                             color: AppColors.white,
@@ -285,13 +285,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                           ),
                                           child: DropdownButtonFormField(
                                             value: country,
-                                            decoration: InputDecoration(
+                                            decoration: const InputDecoration(
                                               border: InputBorder.none,
                                             ),
                                             items: const [
                                               DropdownMenuItem(
-                                                child: Text("India"),
                                                 value: "India",
+                                                child: Text("India"),
                                               ),
                                             ],
                                             onChanged: ((val) {
@@ -304,7 +304,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                           ),
                                         ),
                                       ),
-                                      SliverToBoxAdapter(
+                                      const SliverToBoxAdapter(
                                           child: SizedBox(height: 20)),
                                       SliverToBoxAdapter(
                                         child: CustomTextField(
@@ -315,7 +315,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                           textEditingController: nameController,
                                         ),
                                       ),
-                                      SliverToBoxAdapter(
+                                      const SliverToBoxAdapter(
                                           child: SizedBox(height: 20)),
                                       SliverToBoxAdapter(
                                         child: CustomTextField(
@@ -326,7 +326,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                               phoneController,
                                         ),
                                       ),
-                                      SliverToBoxAdapter(
+                                      const SliverToBoxAdapter(
                                           child: SizedBox(height: 20)),
                                       SliverToBoxAdapter(
                                         child: CustomMultilineTextField(
@@ -338,7 +338,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                               addressController,
                                         ),
                                       ),
-                                      SliverToBoxAdapter(
+                                      const SliverToBoxAdapter(
                                           child: SizedBox(height: 20)),
                                       SliverToBoxAdapter(
                                         child: CustomMultilineTextField(
@@ -350,7 +350,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                               aaddressController,
                                         ),
                                       ),
-                                      SliverToBoxAdapter(
+                                      const SliverToBoxAdapter(
                                           child: SizedBox(height: 20)),
                                       SliverToBoxAdapter(
                                         child: CustomTextField(
@@ -360,7 +360,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                           textEditingController: pinController,
                                         ),
                                       ),
-                                      SliverToBoxAdapter(
+                                      const SliverToBoxAdapter(
                                           child: SizedBox(height: 20)),
                                       SliverToBoxAdapter(
                                         child: CustomTextField(
@@ -370,7 +370,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                           textEditingController: cityController,
                                         ),
                                       ),
-                                      SliverToBoxAdapter(
+                                      const SliverToBoxAdapter(
                                           child: SizedBox(height: 10)),
                                       SliverToBoxAdapter(
                                         child: Row(
@@ -386,7 +386,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                               }),
                                               activeColor: AppColors.green,
                                             ),
-                                            Text(
+                                            const Text(
                                                 "Make this my default address"),
                                           ],
                                         ),
@@ -445,13 +445,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                           onPressed: (() {
                                             Navigator.pop(context);
                                           }),
-                                          icon: Icon(
+                                          icon: const Icon(
                                             Icons.close,
                                             size: 20,
                                             color: AppColors.black,
                                           ),
                                         ),
-                                        title: Text(
+                                        title: const Text(
                                           "Update Address",
                                           style: TextStyle(
                                             color: AppColors.black,
@@ -500,20 +500,20 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                                 );
                                               }
                                             }),
-                                            icon: Icon(
+                                            icon: const Icon(
                                               Icons.check,
                                               color: AppColors.green,
                                               size: 20,
                                             ),
                                           ),
-                                          SizedBox(width: 10),
+                                          const SizedBox(width: 10),
                                         ],
                                       ),
-                                      SliverToBoxAdapter(
+                                      const SliverToBoxAdapter(
                                           child: SizedBox(height: 20)),
                                       SliverToBoxAdapter(
                                         child: Container(
-                                          padding: EdgeInsets.symmetric(
+                                          padding: const EdgeInsets.symmetric(
                                               horizontal: 10),
                                           decoration: BoxDecoration(
                                             color: AppColors.white,
@@ -523,13 +523,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                           ),
                                           child: DropdownButtonFormField(
                                             value: country,
-                                            decoration: InputDecoration(
+                                            decoration: const InputDecoration(
                                               border: InputBorder.none,
                                             ),
                                             items: const [
                                               DropdownMenuItem(
-                                                child: Text("India"),
                                                 value: "India",
+                                                child: Text("India"),
                                               ),
                                             ],
                                             onChanged: ((val) {
@@ -542,7 +542,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                           ),
                                         ),
                                       ),
-                                      SliverToBoxAdapter(
+                                      const SliverToBoxAdapter(
                                           child: SizedBox(height: 20)),
                                       SliverToBoxAdapter(
                                         child: CustomTextField(
@@ -553,7 +553,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                           textEditingController: nameController,
                                         ),
                                       ),
-                                      SliverToBoxAdapter(
+                                      const SliverToBoxAdapter(
                                           child: SizedBox(height: 20)),
                                       SliverToBoxAdapter(
                                         child: CustomTextField(
@@ -564,7 +564,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                               phoneController,
                                         ),
                                       ),
-                                      SliverToBoxAdapter(
+                                      const SliverToBoxAdapter(
                                           child: SizedBox(height: 20)),
                                       SliverToBoxAdapter(
                                         child: CustomMultilineTextField(
@@ -576,7 +576,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                               addressController,
                                         ),
                                       ),
-                                      SliverToBoxAdapter(
+                                      const SliverToBoxAdapter(
                                           child: SizedBox(height: 20)),
                                       SliverToBoxAdapter(
                                         child: CustomMultilineTextField(
@@ -588,7 +588,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                               aaddressController,
                                         ),
                                       ),
-                                      SliverToBoxAdapter(
+                                      const SliverToBoxAdapter(
                                           child: SizedBox(height: 20)),
                                       SliverToBoxAdapter(
                                         child: CustomTextField(
@@ -598,7 +598,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                           textEditingController: pinController,
                                         ),
                                       ),
-                                      SliverToBoxAdapter(
+                                      const SliverToBoxAdapter(
                                           child: SizedBox(height: 20)),
                                       SliverToBoxAdapter(
                                         child: CustomTextField(
@@ -608,7 +608,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                           textEditingController: cityController,
                                         ),
                                       ),
-                                      SliverToBoxAdapter(
+                                      const SliverToBoxAdapter(
                                           child: SizedBox(height: 10)),
                                       SliverToBoxAdapter(
                                         child: Row(
@@ -624,7 +624,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                               }),
                                               activeColor: AppColors.green,
                                             ),
-                                            Text(
+                                            const Text(
                                                 "Make this my default address"),
                                           ],
                                         ),
@@ -641,7 +641,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     }),
                   ),
                 if (phoneLoading == true && phone.isEmpty)
-                  Text(
+                  const Text(
                     "Loading your phone number...",
                     style: TextStyle(
                       color: AppColors.black,
@@ -678,13 +678,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                       onPressed: (() {
                                         Navigator.pop(context);
                                       }),
-                                      icon: Icon(
+                                      icon: const Icon(
                                         Icons.close,
                                         size: 20,
                                         color: AppColors.black,
                                       ),
                                     ),
-                                    title: Text(
+                                    title: const Text(
                                       "Update Phone Number",
                                       style: TextStyle(
                                         color: AppColors.black,
@@ -703,21 +703,21 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                             );
                                           }
                                         }),
-                                        icon: Icon(
+                                        icon: const Icon(
                                           Icons.check,
                                           color: AppColors.green,
                                           size: 20,
                                         ),
                                       ),
-                                      SizedBox(width: 10),
+                                      const SizedBox(width: 10),
                                     ],
                                   ),
-                                  SliverToBoxAdapter(
+                                  const SliverToBoxAdapter(
                                       child: SizedBox(height: 20)),
                                   SliverToBoxAdapter(
                                     child: Container(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 10),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
                                       decoration: BoxDecoration(
                                         color: AppColors.white,
                                         borderRadius: BorderRadius.circular(15),
@@ -725,13 +725,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                       ),
                                       child: DropdownButtonFormField(
                                         value: country,
-                                        decoration: InputDecoration(
+                                        decoration: const InputDecoration(
                                           border: InputBorder.none,
                                         ),
                                         items: const [
                                           DropdownMenuItem(
-                                            child: Text("India"),
                                             value: "India",
+                                            child: Text("India"),
                                           ),
                                         ],
                                         onChanged: ((val) {
@@ -744,7 +744,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                       ),
                                     ),
                                   ),
-                                  SliverToBoxAdapter(
+                                  const SliverToBoxAdapter(
                                       child: SizedBox(height: 20)),
                                   SliverToBoxAdapter(
                                     child: CustomTextField(
@@ -754,7 +754,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                       textEditingController: phoneController,
                                     ),
                                   ),
-                                  SliverToBoxAdapter(
+                                  const SliverToBoxAdapter(
                                       child: SizedBox(height: 20)),
                                 ],
                               ),
@@ -798,13 +798,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                       onPressed: (() {
                                         Navigator.pop(context);
                                       }),
-                                      icon: Icon(
+                                      icon: const Icon(
                                         Icons.close,
                                         size: 20,
                                         color: AppColors.black,
                                       ),
                                     ),
-                                    title: Text(
+                                    title: const Text(
                                       "Update Phone Number",
                                       style: TextStyle(
                                         color: AppColors.black,
@@ -823,21 +823,21 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                             );
                                           }
                                         }),
-                                        icon: Icon(
+                                        icon: const Icon(
                                           Icons.check,
                                           color: AppColors.green,
                                           size: 20,
                                         ),
                                       ),
-                                      SizedBox(width: 10),
+                                      const SizedBox(width: 10),
                                     ],
                                   ),
-                                  SliverToBoxAdapter(
+                                  const SliverToBoxAdapter(
                                       child: SizedBox(height: 20)),
                                   SliverToBoxAdapter(
                                     child: Container(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 10),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
                                       decoration: BoxDecoration(
                                         color: AppColors.white,
                                         borderRadius: BorderRadius.circular(15),
@@ -845,13 +845,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                       ),
                                       child: DropdownButtonFormField(
                                         value: country,
-                                        decoration: InputDecoration(
+                                        decoration: const InputDecoration(
                                           border: InputBorder.none,
                                         ),
                                         items: const [
                                           DropdownMenuItem(
-                                            child: Text("India"),
                                             value: "India",
+                                            child: Text("India"),
                                           ),
                                         ],
                                         onChanged: ((val) {
@@ -864,7 +864,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                       ),
                                     ),
                                   ),
-                                  SliverToBoxAdapter(
+                                  const SliverToBoxAdapter(
                                       child: SizedBox(height: 20)),
                                   SliverToBoxAdapter(
                                     child: CustomTextField(
@@ -874,7 +874,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                                       textEditingController: phoneController,
                                     ),
                                   ),
-                                  SliverToBoxAdapter(
+                                  const SliverToBoxAdapter(
                                       child: SizedBox(height: 20)),
                                 ],
                               ),
@@ -886,7 +886,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       setState(() {});
                     }),
                   ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
               ],
             ),
             Column(
@@ -900,9 +900,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     });
                   }),
                 ),
-                SizedBox(height: 15),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                const SizedBox(height: 15),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 30),
                   child: Text(
                     "Pay with Cash/Card/UPI",
                     style: TextStyle(
@@ -913,9 +913,9 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 ),
               ],
             ),
-            SizedBox(height: 15),
+            const SizedBox(height: 15),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
               decoration: BoxDecoration(
                 color: AppColors.backgroundColor,
                 borderRadius: BorderRadius.circular(15),
@@ -946,7 +946,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       color: AppColors.black.withOpacity(0.5),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 5,
                   ),
                   IndividualCosts(
@@ -957,7 +957,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 ],
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             GestureDetector(
               onTap: (() async {
                 await Navigator.push(
@@ -968,11 +968,11 @@ class _PaymentScreenState extends State<PaymentScreen> {
                       image: "assets/order-success.png",
                       head: "Your order has been successfully placed",
                       des:
-                          "Sit and relax while your orders is being worked on . It’ll take 5min before you get it",
+                          "Sit and relax while your orders is being worked on. It’ll take 5min before you get it",
                       btnOnPressed: (() {
                         Navigator.pop(context, 1);
                       }),
-                      btnText: "Go back to home",
+                      btnText: "Home",
                     ),
                   ),
                 ).then((res) {
@@ -988,7 +988,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                   color: AppColors.cartPayBtnColor,
                   borderRadius: BorderRadius.circular(15),
                 ),
-                child: Center(
+                child: const Center(
                   child: Text(
                     "Proceed to Pay",
                     style: TextStyle(
@@ -1022,7 +1022,7 @@ class CustomCheckBoxContainer extends StatelessWidget {
       onTap: onTap,
       child: Container(
         height: 60,
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         decoration: BoxDecoration(
           color: AppColors.white,
           boxShadow: AppColors.customBoxShadow,
@@ -1031,8 +1031,8 @@ class CustomCheckBoxContainer extends StatelessWidget {
         child: Row(
           children: [
             CustomCheckBox(isChecked: isChecked),
-            SizedBox(width: 15),
-            Text(
+            const SizedBox(width: 15),
+            const Text(
               "Pay on arrival",
               style: TextStyle(
                 color: AppColors.black,
@@ -1057,8 +1057,8 @@ class CustomCheckBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
-      duration: Duration(milliseconds: 200),
-      padding: isChecked ? EdgeInsets.all(1.5) : null,
+      duration: const Duration(milliseconds: 200),
+      padding: isChecked ? const EdgeInsets.all(1.5) : null,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: isChecked ? AppColors.green : AppColors.white,
@@ -1069,7 +1069,7 @@ class CustomCheckBox extends StatelessWidget {
                 color: AppColors.black,
               ),
       ),
-      child: Center(
+      child: const Center(
         child: Icon(
           Icons.check_rounded,
           color: AppColors.white,
@@ -1099,16 +1099,16 @@ class UserDetailsRow extends StatelessWidget {
           Expanded(
             child: Text(
               data,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 15,
                 color: AppColors.black,
               ),
             ),
           ),
-          SizedBox(width: 15),
+          const SizedBox(width: 15),
           TextButton(
             onPressed: onPressed,
-            child: Text(
+            child: const Text(
               "Change",
               style: TextStyle(
                 color: AppColors.green,
