@@ -233,13 +233,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               head: "About",
               child: Column(
                 children: [
-                  ListTile(
-                    title: const Text(
-                      "About Us",
-                      style: TextStyle(
-                        color: AppColors.black,
-                      ),
-                    ),
+                  GestureDetector(
                     onTap: (() {
                       Navigator.push(
                         context,
@@ -251,14 +245,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                       );
                     }),
+                    child: CustomListTile(head: "About Us"),
                   ),
-                  ListTile(
-                    title: const Text(
-                      "Return Policy",
-                      style: TextStyle(
-                        color: AppColors.black,
-                      ),
-                    ),
+                  GestureDetector(
+                    child: CustomListTile(head: "Return Policy"),
                     onTap: (() {
                       Navigator.push(
                         context,
@@ -275,6 +265,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class CustomListTile extends StatelessWidget {
+  const CustomListTile({
+    super.key,
+    required this.head,
+  });
+
+  final String head;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.only(left: 5, top: 5, bottom: 5),
+      alignment: Alignment.centerLeft,
+      child: Text(
+        head,
+        style: const TextStyle(
+          color: AppColors.black,
         ),
       ),
     );
