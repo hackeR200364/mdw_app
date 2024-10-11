@@ -27,6 +27,9 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     searchController = TextEditingController();
+    searchController.addListener(() {
+      setState(() {});
+    });
     super.initState();
   }
 

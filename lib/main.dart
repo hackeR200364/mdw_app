@@ -12,6 +12,12 @@ import 'package:provider/provider.dart';
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  Future.delayed(
+    const Duration(seconds: 3),
+    (() {
+      FlutterNativeSplash.remove();
+    }),
+  );
   runApp(
     MultiProvider(
       providers: [
@@ -20,12 +26,6 @@ void main() {
       ],
       child: const MyApp(),
     ),
-  );
-  Future.delayed(
-    const Duration(seconds: 3),
-    (() {
-      FlutterNativeSplash.remove();
-    }),
   );
 }
 

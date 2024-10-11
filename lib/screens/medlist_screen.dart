@@ -163,6 +163,7 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                                       "assets/dettol.png",
                                       1,
                                       MedicineCategory.ay));
+                                  setState(() {});
                                 }),
                                 child: Container(
                                   padding: EdgeInsets.symmetric(

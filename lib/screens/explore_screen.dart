@@ -71,6 +71,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   return GestureDetector(
                     onTap: (() {
                       widget.searchController.text = idx.toString();
+                      setState(() {});
                     }),
                     child: Container(
                       padding: const EdgeInsets.symmetric(
@@ -109,12 +110,12 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 crossAxisSpacing: 15,
               ),
             ),
-          if (widget.searchController.text.isNotEmpty)
-            const SliverToBoxAdapter(
-              child: SizedBox(
-                height: 10,
-              ),
-            ),
+          // if (widget.searchController.text.isNotEmpty)
+          //   const SliverToBoxAdapter(
+          //     child: SizedBox(
+          //       height: 10,
+          //     ),
+          //   ),
           if (widget.searchController.text.isNotEmpty)
             SliverAppBar(
               backgroundColor: AppColors.white,
@@ -133,12 +134,12 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 ],
               ),
             ),
-          if (widget.searchController.text.isNotEmpty)
-            const SliverToBoxAdapter(
-              child: SizedBox(
-                height: 10,
-              ),
-            ),
+          // if (widget.searchController.text.isNotEmpty)
+          //   const SliverToBoxAdapter(
+          //     child: SizedBox(
+          //       height: 10,
+          //     ),
+          //   ),
           if (widget.searchController.text.isNotEmpty)
             SliverGrid(
               delegate: SliverChildBuilderDelegate(
@@ -170,6 +171,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                             });
                           } else if (product.qnt == 1) {
                             cartModel.removeAt(res["index"]);
+                            setState(() {});
                           }
                         }),
                         onTapPlus: (() {
@@ -191,6 +193,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                             "assets/dettol.png",
                             1,
                             MedicineCategory.ay));
+                        setState(() {});
                       }),
                       onTapProduct: (() async {
                         final index = await Navigator.push(
