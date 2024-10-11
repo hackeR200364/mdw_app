@@ -8,6 +8,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:mdw_app/services/storage_services.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../models/cart_product_model.dart';
@@ -310,20 +311,29 @@ class AppFunctions {
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
+      final val = await openAppSettings();
+      if (!val) {
+        return Future.error('Location services are disabled.');
+      }
     }
 
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
+        final val = await openAppSettings();
+        if (!val) {
+          return Future.error('Location permissions are denied');
+        }
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
+      final val = await openAppSettings();
+      if (!val) {
+        return Future.error(
+            'Location permissions are permanently denied, we cannot request permissions.');
+      }
     }
 
     return await Geolocator.getCurrentPosition();

@@ -39,6 +39,7 @@ class _ShopScreenState extends State<ShopScreen> {
     if (position != null) {
       placemarks = await AppFunctions.determineAddress(position!);
     }
+    setState(() {});
   }
 
   @override
