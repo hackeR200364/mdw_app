@@ -31,28 +31,29 @@ class LocationService {
     }
 
     // When permissions are granted, you can get the location
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-    print('Location: ${position.latitude}, ${position.longitude}');
+    // Position position = await Geolocator.getCurrentPosition(
+    //     desiredAccuracy: LocationAccuracy.high);
+    // print('Location: ${position.latitude}, ${position.longitude}');
   }
 
   void showLocationServiceDialog(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Location Services Disabled'),
-        content: Text('Please enable location services to use this feature.'),
+        title: const Text('Location Services Disabled'),
+        content:
+            const Text('Please enable location services to use this feature.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: Text('Cancel'),
+            child: const Text('Cancel'),
           ),
           TextButton(
             onPressed: () {
               Geolocator.openLocationSettings();
               Navigator.of(context).pop();
             },
-            child: Text('Settings'),
+            child: const Text('Settings'),
           ),
         ],
       ),
@@ -63,16 +64,17 @@ class LocationService {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Location Permission Denied'),
-        content: Text('Location permission is required to use this feature.'),
+        title: const Text('Location Permission Denied'),
+        content:
+            const Text('Location permission is required to use this feature.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: Text('Cancel'),
+            child: const Text('Cancel'),
           ),
           TextButton(
             onPressed: () => Geolocator.openAppSettings(),
-            child: Text('Settings'),
+            child: const Text('Settings'),
           ),
         ],
       ),
@@ -83,17 +85,17 @@ class LocationService {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Location Permission Permanently Denied'),
-        content: Text(
+        title: const Text('Location Permission Permanently Denied'),
+        content: const Text(
             'Location permission is permanently denied. Please enable it in the app settings.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: Text('Cancel'),
+            child: const Text('Cancel'),
           ),
           TextButton(
             onPressed: () => Geolocator.openAppSettings(),
-            child: Text('Settings'),
+            child: const Text('Settings'),
           ),
         ],
       ),

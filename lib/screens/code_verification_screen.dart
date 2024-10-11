@@ -38,7 +38,7 @@ class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.only(top: 15, left: 20, right: 20),
+          padding: const EdgeInsets.only(top: 15, left: 20, right: 20),
           child: Column(
             children: [
               CustomUpperPortion(
@@ -55,7 +55,7 @@ class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
                   });
                 },
               ),
-              SizedBox(
+              const SizedBox(
                 height: 30,
               ),
               if (!loading)
@@ -78,7 +78,7 @@ class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: ((ctx) => MainScreen()),
+                              builder: ((ctx) => const MainScreen()),
                             ),
                           );
                         });
@@ -92,7 +92,7 @@ class _CodeVerificationScreenState extends State<CodeVerificationScreen> {
                   }),
                   text: widget.btnText,
                 ),
-              if (loading) CustomLoadingIndicator(),
+              if (loading) const CustomLoadingIndicator(),
             ],
           ),
         ),
@@ -141,7 +141,7 @@ class CustomPinputField extends StatelessWidget {
     final defaultPinTheme = PinTheme(
       width: 50,
       height: 50,
-      textStyle: TextStyle(fontSize: 20, color: Colors.black),
+      textStyle: const TextStyle(fontSize: 20, color: Colors.black),
       decoration: BoxDecoration(
         color: AppColors.green.withOpacity(0.1),
         borderRadius: BorderRadius.circular(20),
@@ -205,7 +205,7 @@ class CustomUpperPortion extends StatelessWidget {
       child: Text(
         head,
         textAlign: TextAlign.center,
-        style: TextStyle(
+        style: const TextStyle(
           color: AppColors.black,
         ),
       ),

@@ -21,7 +21,14 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  late TextEditingController searchController;
+
+  @override
+  void initState() {
+    searchController = TextEditingController();
+    super.initState();
+  }
 
   // int index = 0;
 
@@ -70,13 +77,13 @@ class _MainScreenState extends State<MainScreen> {
                           });
                         }
                       },
-                      icon: Icon(
+                      icon: const Icon(
                         CupertinoIcons.shopping_cart,
                         color: AppColors.black,
                       ),
                     ),
                   if (provider.index == 0)
-                    SizedBox(
+                    const SizedBox(
                       width: 10,
                     ),
                 ],
@@ -90,8 +97,8 @@ class _MainScreenState extends State<MainScreen> {
                 Container(
                   height: 55,
                   width: MediaQuery.of(context).size.width,
-                  margin: EdgeInsets.only(left: 10, right: 10, top: 10),
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  margin: const EdgeInsets.only(left: 10, right: 10, top: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
                     gradient: LinearGradient(
@@ -109,7 +116,7 @@ class _MainScreenState extends State<MainScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
+                      const Text(
                         "CALL US TO ORDER",
                         style: TextStyle(
                           color: AppColors.black,
@@ -126,13 +133,13 @@ class _MainScreenState extends State<MainScreen> {
                           }
                         }),
                         child: Container(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 5),
                           decoration: BoxDecoration(
                             color: AppColors.black,
                             borderRadius: BorderRadius.circular(40),
                           ),
-                          child: Text(
+                          child: const Text(
                             "CALL US",
                             style: TextStyle(
                               color: AppColors.white,
@@ -146,8 +153,8 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                 ),
               Container(
-                padding:
-                    EdgeInsets.only(top: 15, bottom: 15, left: 10, right: 10),
+                padding: const EdgeInsets.only(
+                    top: 15, bottom: 15, left: 10, right: 10),
                 height: 80,
                 width: MediaQuery.of(context).size.width,
                 child: Row(
@@ -228,9 +235,22 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ),
         body: PopScope(
-          canPop: provider.index == 0 ? true : false,
+          canPop: provider.index == 0
+              ? true
+              : (provider.index == 1 && searchController.text.trim().isEmpty)
+                  ? false
+                  : false,
           onPopInvoked: ((val) {
-            if (provider.index != 0) {
+            // log((provider.index == 1 && searchController.text.trim().isEmpty)
+            //         .toString() +
+            //     "Bug is here");
+            if (provider.index != 0 && provider.index != 1) {
+              provider.changeIndex(newIndex: 0);
+            } else if (provider.index == 1 &&
+                searchController.text.trim().isNotEmpty) {
+              searchController.clear();
+            } else if (provider.index == 1 &&
+                searchController.text.trim().isEmpty) {
               provider.changeIndex(newIndex: 0);
             } else {
               return;
@@ -239,13 +259,13 @@ class _MainScreenState extends State<MainScreen> {
           child: Builder(builder: ((ctx) {
             switch (provider.index) {
               case 0:
-                return ShopScreen();
+                return const ShopScreen();
               case 1:
-                return ExploreScreen();
+                return ExploreScreen(searchController: searchController);
               case 2:
-                return BookmarksScreen();
+                return const BookmarksScreen();
               case 3:
-                return ProfileScreen();
+                return const ProfileScreen();
             }
             return Container();
           })),

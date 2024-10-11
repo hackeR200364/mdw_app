@@ -40,11 +40,11 @@ class _LoginScreenState extends State<LoginScreen> {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: ((ctx) => MainScreen()),
+                  builder: ((ctx) => const MainScreen()),
                 ),
               );
             }),
-            child: Text(
+            child: const Text(
               "Skip",
               style: TextStyle(
                 color: AppColors.green,
@@ -53,16 +53,16 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ),
-          SizedBox(width: 10),
+          const SizedBox(width: 10),
         ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.only(top: 15, left: 20, right: 20),
+          padding: const EdgeInsets.only(top: 15, left: 20, right: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Center(
+              const Center(
                 child: Text(
                   "Login to your account",
                   style: TextStyle(
@@ -72,8 +72,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
-              SizedBox(height: 10),
-              Center(
+              const SizedBox(height: 10),
+              const Center(
                 child: Text(
                   "Good to see you again, enter your details\nbelow to continue.",
                   textAlign: TextAlign.center,
@@ -93,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     hint: "Enter email",
                     keyboard: TextInputType.emailAddress,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   CustomTextField(
@@ -149,7 +149,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: ((ctx) => MainScreen()),
+                              builder: ((ctx) => const MainScreen()),
                             ),
                           );
                         } else {
@@ -219,10 +219,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   }),
                   text: "Login to my account",
                 ),
-              if (loading) CustomLoadingIndicator(),
+              if (loading) const CustomLoadingIndicator(),
               if (!loading)
                 Container(
-                  margin: EdgeInsets.symmetric(horizontal: 45),
+                  margin: const EdgeInsets.symmetric(horizontal: 45),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
                   ),
@@ -231,11 +231,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: ((ctx) => SignUpScreen()),
+                          builder: ((ctx) => const SignUpScreen()),
                         ),
                       );
                     }),
-                    child: Text(
+                    child: const Text(
                       "Create an account",
                       style: TextStyle(
                         color: AppColors.green,
@@ -259,7 +259,7 @@ class CustomLoadingIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: CircularProgressIndicator(
         color: AppColors.green,
       ),
@@ -305,13 +305,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
           padding: const EdgeInsets.only(left: 14),
           child: Text(
             widget.head,
-            style: TextStyle(
+            style: const TextStyle(
               color: AppColors.black,
               fontSize: 13,
             ),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         TextFormField(
@@ -321,19 +321,19 @@ class _CustomTextFieldState extends State<CustomTextField> {
             formFieldKey.currentState!.validate();
           }),
           controller: widget.textEditingController,
-          style: TextStyle(color: AppColors.black, fontSize: 15),
+          style: const TextStyle(color: AppColors.black, fontSize: 15),
           validator: widget.validator,
           keyboardType: widget.keyboard,
           cursorColor: AppColors.green,
           // maxLines: widget.maxLines,
           decoration: InputDecoration(
-            hintStyle: TextStyle(
+            hintStyle: const TextStyle(
               color: AppColors.grey,
               fontSize: 14,
             ),
             suffixIcon: widget.suffix,
             prefixIcon: widget.prefix,
-            contentPadding: EdgeInsets.all(15),
+            contentPadding: const EdgeInsets.all(15),
             hintText: widget.hint,
             border: OutlineInputBorder(
               borderSide: BorderSide(
@@ -354,7 +354,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
               borderRadius: BorderRadius.circular(15),
             ),
             errorBorder: OutlineInputBorder(
-              borderSide: BorderSide(
+              borderSide: const BorderSide(
                 color: AppColors.red,
               ),
               borderRadius: BorderRadius.circular(15),
@@ -403,13 +403,13 @@ class _CustomMultilineTextFieldState extends State<CustomMultilineTextField> {
           padding: const EdgeInsets.only(left: 14),
           child: Text(
             widget.head,
-            style: TextStyle(
+            style: const TextStyle(
               color: AppColors.black,
               fontSize: 13,
             ),
           ),
         ),
-        SizedBox(
+        const SizedBox(
           height: 10,
         ),
         TextFormField(
@@ -418,20 +418,20 @@ class _CustomMultilineTextFieldState extends State<CustomMultilineTextField> {
             formFieldKey.currentState!.validate();
           }),
           controller: widget.textEditingController,
-          style: TextStyle(color: AppColors.black, fontSize: 15),
+          style: const TextStyle(color: AppColors.black, fontSize: 15),
           validator: widget.validator,
           keyboardType: widget.keyboard,
           cursorColor: AppColors.green,
           maxLines: widget.maxLines ?? 1,
           // Default is 1 if not specified
           decoration: InputDecoration(
-            hintStyle: TextStyle(
+            hintStyle: const TextStyle(
               color: AppColors.grey,
               fontSize: 14,
             ),
             suffixIcon: widget.suffix,
             prefixIcon: widget.prefix,
-            contentPadding: EdgeInsets.all(15),
+            contentPadding: const EdgeInsets.all(15),
             hintText: widget.hint,
             border: OutlineInputBorder(
               borderSide: BorderSide(
@@ -452,7 +452,7 @@ class _CustomMultilineTextFieldState extends State<CustomMultilineTextField> {
               borderRadius: BorderRadius.circular(15),
             ),
             errorBorder: OutlineInputBorder(
-              borderSide: BorderSide(
+              borderSide: const BorderSide(
                 color: AppColors.red,
               ),
               borderRadius: BorderRadius.circular(15),

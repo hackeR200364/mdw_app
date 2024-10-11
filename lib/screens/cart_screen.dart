@@ -52,15 +52,15 @@ class _CartScreenState extends State<CartScreen> {
         MedicineCategory.ay,
       ),
     ];
-    updateTotalCostModel(cartItems!);
+    updateTotalCostModel(cartItems);
     super.initState();
   }
 
   void updateTotalCostModel(List<CartProductModel> items) {
     totalCostModel = TotalCostModel(
         5,
-        AppFunctions.calculateTotalTax(cartItems!).toInt(),
-        AppFunctions.calculateTotalCost(cartItems!).toInt(),
+        AppFunctions.calculateTotalTax(cartItems).toInt(),
+        AppFunctions.calculateTotalCost(cartItems).toInt(),
         20);
   }
 
@@ -75,13 +75,13 @@ class _CartScreenState extends State<CartScreen> {
           onPressed: (() {
             Navigator.pop(context);
           }),
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_ios_rounded,
             color: AppColors.black,
             size: 20,
           ),
         ),
-        title: Text(
+        title: const Text(
           "CART",
           style: TextStyle(
             color: AppColors.black,
@@ -94,23 +94,23 @@ class _CartScreenState extends State<CartScreen> {
               onPressed: (() {
                 Navigator.pop(context, 1);
               }),
-              icon: Icon(
+              icon: const Icon(
                 Icons.search_rounded,
                 color: AppColors.black,
               ),
             ),
-          SizedBox(
+          const SizedBox(
             width: 5,
           ),
         ],
       ),
       body: cartItems.isNotEmpty
           ? SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
               child: Column(
                 children: [
                   Container(
-                    padding: EdgeInsets.only(top: 10),
+                    padding: const EdgeInsets.only(top: 10),
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
                       boxShadow: AppColors.customBoxShadow,
@@ -118,10 +118,10 @@ class _CartScreenState extends State<CartScreen> {
                       borderRadius: BorderRadius.circular(15),
                     ),
                     child: Column(
-                      children: cartItems!.map((e) {
+                      children: cartItems.map((e) {
                         return Container(
-                          margin:
-                              EdgeInsets.only(bottom: 10, left: 10, right: 10),
+                          margin: const EdgeInsets.only(
+                              bottom: 10, left: 10, right: 10),
                           child: Row(
                             children: [
                               Expanded(
@@ -130,14 +130,14 @@ class _CartScreenState extends State<CartScreen> {
                                     Container(
                                       width: 70,
                                       height: 65,
-                                      padding: EdgeInsets.all(7),
+                                      padding: const EdgeInsets.all(7),
                                       decoration: BoxDecoration(
                                         color: AppColors.backgroundColor,
                                         borderRadius: BorderRadius.circular(15),
                                       ),
                                       child: Image.network(e.img),
                                     ),
-                                    SizedBox(width: 10),
+                                    const SizedBox(width: 10),
                                     Expanded(
                                       child: Column(
                                         mainAxisAlignment:
@@ -147,18 +147,18 @@ class _CartScreenState extends State<CartScreen> {
                                         children: [
                                           Text(
                                             e.pname,
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               color: AppColors.black,
                                               fontSize: 17,
                                               fontWeight: FontWeight.w500,
                                             ),
                                           ),
-                                          SizedBox(
+                                          const SizedBox(
                                             height: 5,
                                           ),
                                           Text(
                                             "MRP ${e.pmrp}",
-                                            style: TextStyle(
+                                            style: const TextStyle(
                                               color: AppColors.black,
                                               fontSize: 12,
                                               fontWeight: FontWeight.w500,
@@ -170,10 +170,10 @@ class _CartScreenState extends State<CartScreen> {
                                   ],
                                 ),
                               ),
-                              SizedBox(width: 10),
+                              const SizedBox(width: 10),
                               Container(
                                 width: 80,
-                                padding: EdgeInsets.symmetric(
+                                padding: const EdgeInsets.symmetric(
                                     horizontal: 5, vertical: 3),
                                 decoration: BoxDecoration(
                                   color: AppColors.addContainerColor,
@@ -197,23 +197,23 @@ class _CartScreenState extends State<CartScreen> {
                                           });
                                         }
                                       }),
-                                      child: Icon(
+                                      child: const Icon(
                                         Icons.remove,
                                         color: AppColors.white,
                                         size: 20,
                                       ),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 5,
                                     ),
                                     Text(
                                       e.qnt == 0 ? "ADD" : e.qnt.toString(),
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: AppColors.white,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    SizedBox(
+                                    const SizedBox(
                                       width: 5,
                                     ),
                                     InkWell(
@@ -225,7 +225,7 @@ class _CartScreenState extends State<CartScreen> {
                                           });
                                         }
                                       }),
-                                      child: Icon(
+                                      child: const Icon(
                                         Icons.add,
                                         color: AppColors.white,
                                         size: 20,
@@ -240,11 +240,11 @@ class _CartScreenState extends State<CartScreen> {
                       }).toList(),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   if (totalCostModel != null || cartItems.isNotEmpty)
                     Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 10),
                       decoration: BoxDecoration(
                         color: AppColors.backgroundColor,
                         borderRadius: BorderRadius.circular(15),
@@ -275,7 +275,7 @@ class _CartScreenState extends State<CartScreen> {
                               color: AppColors.black.withOpacity(0.5),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 5,
                           ),
                           IndividualCosts(
@@ -286,7 +286,7 @@ class _CartScreenState extends State<CartScreen> {
                         ],
                       ),
                     ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   GestureDetector(
                     onTap: (() async {
                       if (totalCostModel != null) {
@@ -311,7 +311,7 @@ class _CartScreenState extends State<CartScreen> {
                         color: AppColors.cartPayBtnColor,
                         borderRadius: BorderRadius.circular(15),
                       ),
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           "Proceed to Checkout",
                           style: TextStyle(
@@ -333,8 +333,8 @@ class _CartScreenState extends State<CartScreen> {
                   Image.asset(
                     "assets/empty-cart.png",
                   ),
-                  SizedBox(height: 30),
-                  Text(
+                  const SizedBox(height: 30),
+                  const Text(
                     "Cart is Empty",
                     style: TextStyle(
                       color: AppColors.black,
@@ -367,13 +367,13 @@ class IndividualCosts extends StatelessWidget {
         children: [
           Text(
             head,
-            style: TextStyle(
+            style: const TextStyle(
               color: AppColors.black,
             ),
           ),
           Text(
             "₹ $cost",
-            style: TextStyle(
+            style: const TextStyle(
               color: AppColors.black,
             ),
           ),

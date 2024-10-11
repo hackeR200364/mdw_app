@@ -35,7 +35,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
           onPressed: (() {
             Navigator.pop(context);
           }),
-          icon: Icon(
+          icon: const Icon(
             Icons.arrow_back_ios_new_rounded,
             size: 20,
           ),
@@ -43,7 +43,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
         centerTitle: false,
         title: Text(
           title,
-          style: TextStyle(
+          style: const TextStyle(
             color: AppColors.black,
             fontSize: 20,
           ),
@@ -62,7 +62,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
               size: 35,
             ),
           ),
-          SizedBox(width: 15),
+          const SizedBox(width: 15),
         ],
       ),
       body: SafeArea(
@@ -74,7 +74,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                 child: Container(
                   height: typesOpened ? 120 : 0,
                   width: MediaQuery.of(context).size.width,
-                  margin: EdgeInsets.symmetric(horizontal: 5),
+                  margin: const EdgeInsets.symmetric(horizontal: 5),
                   decoration: BoxDecoration(
                     color: AppColors.white,
                     border: Border.all(
@@ -101,7 +101,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                             children: [
                               Text(
                                 e.type,
-                                style: TextStyle(
+                                style: const TextStyle(
                                   color: AppColors.black,
                                   fontSize: 17,
                                 ),
@@ -125,14 +125,14 @@ class _OrdersScreenState extends State<OrdersScreen> {
                   ),
                 ),
               ),
-              SliverToBoxAdapter(child: SizedBox(height: 15)),
+              const SliverToBoxAdapter(child: SizedBox(height: 15)),
               SliverList(
                 delegate: SliverChildBuilderDelegate(
                   (ctx, idx) {
                     return Container(
                       margin: EdgeInsets.only(
                           top: idx != 0 ? 5 : 0, bottom: 7, left: 7, right: 7),
-                      padding: EdgeInsets.only(top: 10, bottom: 5),
+                      padding: const EdgeInsets.only(top: 10, bottom: 5),
                       decoration: BoxDecoration(
                         color: AppColors.white,
                         borderRadius: BorderRadius.circular(15),
@@ -150,8 +150,8 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                     return Container(
                                       height: 70,
                                       width: 70,
-                                      margin:
-                                          EdgeInsets.only(left: 3, right: 3),
+                                      margin: const EdgeInsets.only(
+                                          left: 3, right: 3),
                                       decoration: BoxDecoration(
                                         color: AppColors.white,
                                         borderRadius: BorderRadius.circular(15),
@@ -164,7 +164,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                     );
                                   }).toList(),
                                 ),
-                                Padding(
+                                const Padding(
                                   padding: EdgeInsets.only(right: 15),
                                   child: Text("+13\nmore"),
                                 ),
@@ -173,9 +173,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
                           ),
                           Container(
                             height: 2,
-                            margin: EdgeInsets.only(top: 15),
+                            margin: const EdgeInsets.only(top: 15),
                             width: MediaQuery.of(context).size.width,
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               color: AppColors.profileSpacerColor,
                             ),
                           ),
@@ -191,7 +191,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                 ),
                                 Container(
                                   width: 2,
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                     color: AppColors.profileSpacerColor,
                                   ),
                                 ),
@@ -235,7 +235,7 @@ class OrdersContainerBtn extends StatelessWidget {
         child: Center(
           child: Text(
             head,
-            style: TextStyle(
+            style: const TextStyle(
               fontSize: 16,
               color: AppColors.black,
             ),

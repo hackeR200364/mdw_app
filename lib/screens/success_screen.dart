@@ -32,14 +32,14 @@ class SuccessScreen extends StatelessWidget {
                 onPressed: (() {
                   Navigator.pop(context);
                 }),
-                icon: Icon(
+                icon: const Icon(
                   Icons.keyboard_arrow_left_rounded,
                   size: 30,
                 ),
               ),
               title: Text(
                 appBarTitle ?? "",
-                style: TextStyle(
+                style: const TextStyle(
                   color: AppColors.black,
                   fontSize: 22,
                 ),
@@ -54,7 +54,7 @@ class SuccessScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Image.asset(image),
-            SizedBox(height: 25),
+            const SizedBox(height: 25),
             Text(
               head,
               textAlign: TextAlign.center,
@@ -64,16 +64,16 @@ class SuccessScreen extends StatelessWidget {
                 color: headTextColor ?? AppColors.black,
               ),
             ),
-            SizedBox(height: 25),
+            const SizedBox(height: 25),
             Text(
               des,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 15,
                 color: AppColors.black,
               ),
             ),
-            SizedBox(height: 25),
+            const SizedBox(height: 25),
             CustomBtn(
               onTap: btnOnPressed,
               text: btnText,

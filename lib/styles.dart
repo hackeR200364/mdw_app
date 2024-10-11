@@ -32,7 +32,7 @@ class AppColors {
   static List<BoxShadow> customBoxShadow = [
     BoxShadow(
       color: Colors.black.withOpacity(0.5),
-      offset: Offset(2, 2),
+      offset: const Offset(2, 2),
       blurRadius: 5,
     ),
   ];

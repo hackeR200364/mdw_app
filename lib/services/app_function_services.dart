@@ -72,7 +72,6 @@ class AppFunctions {
     } else {
       return null;
     }
-    ; // Return null if validation passes
   }
 
   static String? confirmPasswordValidator(String? value1, String? value2) {

@@ -26,7 +26,7 @@ class _ShopScreenState extends State<ShopScreen> {
   List<OrdersTypeModel> category = [];
   Position? position;
   List<Placemark> placemarks = [];
-  final LocationSettings locationSettings = LocationSettings(
+  final LocationSettings locationSettings = const LocationSettings(
     accuracy: LocationAccuracy.high,
     distanceFilter: 100,
   );
@@ -81,7 +81,7 @@ class _ShopScreenState extends State<ShopScreen> {
           },
           child: CustomScrollView(
             slivers: [
-              SliverToBoxAdapter(
+              const SliverToBoxAdapter(
                 child: SizedBox(
                   height: 15,
                 ),
@@ -103,11 +103,12 @@ class _ShopScreenState extends State<ShopScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: ((ctx) => CartScreen(searchEnabled: true)),
+                            builder: ((ctx) =>
+                                const CartScreen(searchEnabled: true)),
                           ),
                         );
                       }),
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.shopping_cart_outlined,
                         size: 25,
                         color: AppColors.black,
@@ -122,7 +123,7 @@ class _ShopScreenState extends State<ShopScreen> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          Text(
+                          const Text(
                             "Prasenjit",
                             style: TextStyle(
                               color: AppColors.black,
@@ -132,16 +133,16 @@ class _ShopScreenState extends State<ShopScreen> {
                           ),
                           Row(
                             children: [
-                              Icon(
+                              const Icon(
                                 CupertinoIcons.location,
                                 size: 15,
                               ),
-                              SizedBox(width: 5),
+                              const SizedBox(width: 5),
                               Text(
                                 placemarks.isEmpty
                                     ? "Loading..."
                                     : "${placemarks.first.name}, ${placemarks.first.locality}",
-                                style: TextStyle(
+                                style: const TextStyle(
                                     color: AppColors.black,
                                     overflow: TextOverflow.ellipsis),
                               ),
@@ -149,7 +150,7 @@ class _ShopScreenState extends State<ShopScreen> {
                           ),
                         ],
                       ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     GestureDetector(
                       onTap: (() {
                         Provider.of<MainScreenIndexProvider>(context,
@@ -157,11 +158,11 @@ class _ShopScreenState extends State<ShopScreen> {
                             .changeIndex(newIndex: 1);
                       }),
                       child: AnimatedContainer(
-                        duration: Duration(milliseconds: 200),
+                        duration: const Duration(milliseconds: 200),
                         width: _isExpanded
                             ? MediaQuery.of(context).size.width
                             : MediaQuery.of(context).size.width - 75,
-                        padding: EdgeInsets.symmetric(
+                        padding: const EdgeInsets.symmetric(
                           horizontal: 15,
                           vertical: 15,
                         ),
@@ -169,7 +170,7 @@ class _ShopScreenState extends State<ShopScreen> {
                           color: AppColors.searchBarColor,
                           borderRadius: BorderRadius.circular(15),
                         ),
-                        child: Row(
+                        child: const Row(
                           children: [
                             Icon(
                               CupertinoIcons.search,
@@ -192,7 +193,7 @@ class _ShopScreenState extends State<ShopScreen> {
                   ],
                 ),
               ),
-              SliverToBoxAdapter(
+              const SliverToBoxAdapter(
                 child: SizedBox(
                   height: 25,
                 ),
@@ -201,7 +202,7 @@ class _ShopScreenState extends State<ShopScreen> {
                 child: CarouselSlider.builder(
                   options: CarouselOptions(
                     autoPlay: false,
-                    autoPlayInterval: Duration(seconds: 2),
+                    autoPlayInterval: const Duration(seconds: 2),
                     viewportFraction: 0.98,
                     enlargeCenterPage: true,
                     aspectRatio: 2.1,
@@ -210,7 +211,7 @@ class _ShopScreenState extends State<ShopScreen> {
                   itemBuilder:
                       (BuildContext context, int index, int realIndex) {
                     return Container(
-                      padding: EdgeInsets.only(
+                      padding: const EdgeInsets.only(
                           left: 15, top: 15, bottom: 15, right: 45),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(15),
@@ -233,7 +234,7 @@ class _ShopScreenState extends State<ShopScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Column(
+                              const Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
@@ -255,13 +256,13 @@ class _ShopScreenState extends State<ShopScreen> {
                                 ],
                               ),
                               Container(
-                                padding: EdgeInsets.symmetric(
+                                padding: const EdgeInsets.symmetric(
                                     horizontal: 15, vertical: 5),
                                 decoration: BoxDecoration(
                                   color: AppColors.homeAdLinkBtnColor,
                                   borderRadius: BorderRadius.circular(15),
                                 ),
-                                child: Text(
+                                child: const Text(
                                   "ORDER NOW",
                                   style: TextStyle(
                                     color: AppColors.white,
@@ -280,12 +281,12 @@ class _ShopScreenState extends State<ShopScreen> {
                   },
                 ),
               ),
-              SliverToBoxAdapter(
+              const SliverToBoxAdapter(
                 child: SizedBox(
                   height: 20,
                 ),
               ),
-              SliverToBoxAdapter(
+              const SliverToBoxAdapter(
                 child: Text(
                   "Category",
                   style: TextStyle(
@@ -294,7 +295,7 @@ class _ShopScreenState extends State<ShopScreen> {
                   ),
                 ),
               ),
-              SliverToBoxAdapter(
+              const SliverToBoxAdapter(
                 child: SizedBox(
                   height: 10,
                 ),
@@ -312,8 +313,8 @@ class _ShopScreenState extends State<ShopScreen> {
                           });
                         }),
                         child: AnimatedContainer(
-                          duration: Duration(milliseconds: 300),
-                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          duration: const Duration(milliseconds: 300),
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
                           decoration: BoxDecoration(
                             color: selectedIdx == idx
                                 ? AppColors.selectedCatContainerColor
@@ -337,13 +338,13 @@ class _ShopScreenState extends State<ShopScreen> {
                     }),
                     scrollDirection: Axis.horizontal,
                     separatorBuilder: (BuildContext context, int index) {
-                      return SizedBox(width: 20);
+                      return const SizedBox(width: 20);
                     },
                     itemCount: category.length,
                   ),
                 ),
               ),
-              SliverToBoxAdapter(
+              const SliverToBoxAdapter(
                 child: SizedBox(
                   height: 25,
                 ),
@@ -363,7 +364,7 @@ class _ShopScreenState extends State<ShopScreen> {
                             final index = await Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (ctx) => ProductDetailsScreen(),
+                                builder: (ctx) => const ProductDetailsScreen(),
                               ),
                             );
                             if (index == 1) {}
@@ -384,7 +385,7 @@ class _ShopScreenState extends State<ShopScreen> {
                               }
                             }),
                             onTapPlus: (() {
-                              if (product.qnt <= 9) {
+                              if (product.qnt <= 4) {
                                 setState(() {
                                   product.qnt++;
                                 });
@@ -407,7 +408,7 @@ class _ShopScreenState extends State<ShopScreen> {
                             final index = await Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (ctx) => ProductDetailsScreen(),
+                                builder: (ctx) => const ProductDetailsScreen(),
                               ),
                             );
 
@@ -422,18 +423,18 @@ class _ShopScreenState extends State<ShopScreen> {
                     }),
                     scrollDirection: Axis.horizontal,
                     separatorBuilder: (BuildContext context, int index) {
-                      return SizedBox(width: 20);
+                      return const SizedBox(width: 20);
                     },
                     itemCount: 10,
                   ),
                 ),
               ),
-              SliverToBoxAdapter(
+              const SliverToBoxAdapter(
                 child: SizedBox(
                   height: 20,
                 ),
               ),
-              SliverToBoxAdapter(
+              const SliverToBoxAdapter(
                 child: Text(
                   "Top-Selling Medicines",
                   style: TextStyle(
@@ -442,7 +443,7 @@ class _ShopScreenState extends State<ShopScreen> {
                   ),
                 ),
               ),
-              SliverToBoxAdapter(
+              const SliverToBoxAdapter(
                 child: SizedBox(
                   height: 10,
                 ),
@@ -464,7 +465,7 @@ class _ShopScreenState extends State<ShopScreen> {
                             final index = await Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (ctx) => ProductDetailsScreen(),
+                                builder: (ctx) => const ProductDetailsScreen(),
                               ),
                             );
 
@@ -486,7 +487,7 @@ class _ShopScreenState extends State<ShopScreen> {
                               }
                             }),
                             onTapPlus: (() {
-                              if (product.qnt <= 9) {
+                              if (product.qnt <= 4) {
                                 setState(() {
                                   product.qnt++;
                                 });
@@ -509,7 +510,7 @@ class _ShopScreenState extends State<ShopScreen> {
                             final index = await Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (ctx) => ProductDetailsScreen(),
+                                builder: (ctx) => const ProductDetailsScreen(),
                               ),
                             );
 
@@ -524,13 +525,13 @@ class _ShopScreenState extends State<ShopScreen> {
                     }),
                     scrollDirection: Axis.horizontal,
                     separatorBuilder: (BuildContext context, int index) {
-                      return SizedBox(width: 20);
+                      return const SizedBox(width: 20);
                     },
                     itemCount: 10,
                   ),
                 ),
               ),
-              SliverToBoxAdapter(
+              const SliverToBoxAdapter(
                 child: SizedBox(
                   height: 20,
                 ),
@@ -539,8 +540,8 @@ class _ShopScreenState extends State<ShopScreen> {
                 child: Container(
                   height: 170,
                   width: MediaQuery.of(context).size.width,
-                  padding:
-                      EdgeInsets.only(left: 15, right: 25, top: 15, bottom: 15),
+                  padding: const EdgeInsets.only(
+                      left: 15, right: 25, top: 15, bottom: 15),
                   decoration: BoxDecoration(
                     color: AppColors.imageUploadContainerColor,
                     borderRadius: BorderRadius.circular(15),
@@ -551,7 +552,7 @@ class _ShopScreenState extends State<ShopScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [
-                            Expanded(
+                            const Expanded(
                               child: Text(
                                 "Can’t figure which medicine to order?",
                                 style: TextStyle(
@@ -573,13 +574,13 @@ class _ShopScreenState extends State<ShopScreen> {
                                     // );
                                   }),
                                   child: Container(
-                                    padding: EdgeInsets.symmetric(
+                                    padding: const EdgeInsets.symmetric(
                                         horizontal: 15, vertical: 5),
                                     decoration: BoxDecoration(
                                       color: AppColors.homeAdLinkBtnColor,
                                       borderRadius: BorderRadius.circular(15),
                                     ),
-                                    child: Text(
+                                    child: const Text(
                                       "UPLOAD",
                                       style: TextStyle(
                                         color: AppColors.white,
@@ -589,10 +590,10 @@ class _ShopScreenState extends State<ShopScreen> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 5,
                                 ),
-                                Text(
+                                const Text(
                                   "SEND US YOUR PRESCRIPTION",
                                   style: TextStyle(
                                     fontWeight: FontWeight.w900,
@@ -604,7 +605,7 @@ class _ShopScreenState extends State<ShopScreen> {
                           ],
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 15,
                       ),
                       Image.asset("assets/image-upload.png"),
@@ -612,12 +613,12 @@ class _ShopScreenState extends State<ShopScreen> {
                   ),
                 ),
               ),
-              SliverToBoxAdapter(
+              const SliverToBoxAdapter(
                 child: SizedBox(
                   height: 20,
                 ),
               ),
-              SliverToBoxAdapter(
+              const SliverToBoxAdapter(
                 child: Text(
                   "New Arrivals",
                   style: TextStyle(
@@ -626,7 +627,7 @@ class _ShopScreenState extends State<ShopScreen> {
                   ),
                 ),
               ),
-              SliverToBoxAdapter(
+              const SliverToBoxAdapter(
                 child: SizedBox(
                   height: 10,
                 ),
@@ -648,7 +649,7 @@ class _ShopScreenState extends State<ShopScreen> {
                             final index = await Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (ctx) => ProductDetailsScreen(),
+                                builder: (ctx) => const ProductDetailsScreen(),
                               ),
                             );
 
@@ -670,7 +671,7 @@ class _ShopScreenState extends State<ShopScreen> {
                               }
                             }),
                             onTapPlus: (() {
-                              if (product.qnt <= 9) {
+                              if (product.qnt <= 4) {
                                 setState(() {
                                   product.qnt++;
                                 });
@@ -693,7 +694,7 @@ class _ShopScreenState extends State<ShopScreen> {
                             final index = await Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (ctx) => ProductDetailsScreen(),
+                                builder: (ctx) => const ProductDetailsScreen(),
                               ),
                             );
 
@@ -708,13 +709,13 @@ class _ShopScreenState extends State<ShopScreen> {
                     }),
                     scrollDirection: Axis.horizontal,
                     separatorBuilder: (BuildContext context, int index) {
-                      return SizedBox(width: 20);
+                      return const SizedBox(width: 20);
                     },
                     itemCount: 10,
                   ),
                 ),
               ),
-              SliverToBoxAdapter(
+              const SliverToBoxAdapter(
                 child: SizedBox(
                   height: 25,
                 ),
@@ -750,9 +751,10 @@ class CustomProductContainer extends StatelessWidget {
       onTap: onTapProduct,
       child: AnimatedContainer(
         width: 150,
-        duration: Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 300),
         // margin: EdgeInsets.only(bottom: 20),
-        padding: EdgeInsets.only(left: 10, right: 10, bottom: 10, top: 20),
+        padding:
+            const EdgeInsets.only(left: 10, right: 10, bottom: 10, top: 20),
         decoration: BoxDecoration(
           color: AppColors.black.withOpacity(0.04),
           borderRadius: BorderRadius.circular(12),
@@ -778,24 +780,24 @@ class CustomProductContainer extends StatelessWidget {
               children: [
                 Text(
                   name,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: AppColors.black,
                     fontWeight: FontWeight.w600,
                     fontSize: 12,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 5,
                 ),
                 Text(
                   "MRP ₹$mrp",
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: AppColors.grey,
                     fontWeight: FontWeight.w600,
                     fontSize: 12,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 if (child == null)
@@ -808,7 +810,7 @@ class CustomProductContainer extends StatelessWidget {
                         color: AppColors.individualAddBtnColor,
                         borderRadius: BorderRadius.circular(14),
                       ),
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           "ADD",
                         ),
