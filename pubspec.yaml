@@ -52,7 +52,6 @@ dependencies:
   permission_handler:
   share_plus:
   flutter_native_splash:
-  webview_flutter:
 
 flutter_native_splash:
   android: true
