@@ -1,0 +1,2 @@
+/Users/rupamkarmakar/Documents/Development/mdw_app/android/app/.cxx/Debug/5h6sl3d2/x86/CMakeFiles/rebuild_cache.dir
+/Users/rupamkarmakar/Documents/Development/mdw_app/android/app/.cxx/Debug/5h6sl3d2/x86/CMakeFiles/edit_cache.dir

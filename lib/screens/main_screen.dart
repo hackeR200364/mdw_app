@@ -8,8 +8,8 @@ import 'package:mdw_app/screens/profile_screen.dart';
 import 'package:mdw_app/screens/shop_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-import '../services/app_function_services.dart';
 import '../styles.dart';
 import 'code_verification_screen.dart';
 
@@ -30,7 +30,15 @@ class _MainScreenState extends State<MainScreen> {
     searchController.addListener(() {
       setState(() {});
     });
+
     super.initState();
+  }
+
+  Future<void> _launchCal() async {
+    final url = Uri.parse('https://cal.com/mdwtherapy/session');
+    if (!await launchUrl(url, mode: LaunchMode.inAppWebView)) {
+      throw Exception('Could not launch $url');
+    }
   }
 
   // int index = 0;
@@ -130,7 +138,7 @@ class _MainScreenState extends State<MainScreen> {
                       GestureDetector(
                         onTap: (() async {
                           if (await Permission.phone.serviceStatus.isEnabled) {
-                            await AppFunctions.callNumber("+919230976362");
+                            // await AppFunctions.callNumber("+919230976362");
                           } else {
                             Permission.phone.request();
                           }
@@ -195,6 +203,41 @@ class _MainScreenState extends State<MainScreen> {
                         textColor: provider.index == 1
                             ? AppColors.selectedNavTextColor
                             : AppColors.black,
+                      ),
+                    ),
+                    //add here
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: (() async {
+                          await _launchCal();
+                        }),
+                        child: Column(
+                          children: [
+                            Container(
+                              height: 28,
+                              padding: EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                border: Border.all(color: AppColors.green),
+                                image: const DecorationImage(
+                                  fit: BoxFit.scaleDown,
+                                  image: AssetImage(
+                                    "assets/bottom-bar-icons/injury.png",
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 3,
+                            ),
+                            const Text(
+                              "Wellness",
+                              style: TextStyle(
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     Expanded(

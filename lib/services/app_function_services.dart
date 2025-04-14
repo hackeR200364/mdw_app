@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+// import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
@@ -114,8 +114,6 @@ class AppFunctions {
         return 'Bad';
       case FeedbackType.worst:
         return 'Worst';
-      default:
-        return 'Unknown';
     }
   }
 
@@ -137,9 +135,9 @@ class AppFunctions {
     }
   }
 
-  static Future<bool?> callNumber(String number) async {
-    return await FlutterPhoneDirectCaller.callNumber(number);
-  }
+  // static Future<bool?> callNumber(String number) async {
+  //   return await FlutterPhoneDirectCaller.callNumber(number);
+  // }
 
   static bool shouldShowAttendanceScreen() {
     DateTime now = DateTime.now();
@@ -269,8 +267,6 @@ class AppFunctions {
       case MedicineCategory.ay: // Ayurvedic medicines
         taxRate = 0.12;
         break;
-      default:
-        throw Exception('Unknown category code');
     }
 
     return price * taxRate;

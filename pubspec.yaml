@@ -39,7 +39,6 @@ dependencies:
   smooth_page_indicator:
   shared_preferences:
   pinput:
-  flutter_phone_direct_caller:
   image_picker:
   intl:
   url_launcher:
@@ -53,6 +52,7 @@ dependencies:
   permission_handler:
   share_plus:
   flutter_native_splash:
+  webview_flutter:
 
 flutter_native_splash:
   android: true
@@ -95,6 +95,7 @@ flutter:
   assets:
     - assets/
     - assets/onboarding/
+    - assets/bottom-bar-icons/
     - assets/bottom-bar-icons/non-coloured/
     - assets/bottom-bar-icons/coloured/
 
