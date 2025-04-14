@@ -1,0 +1,2 @@
+/Users/rupamkarmakar/Documents/Development/mdw_app/android/app/.cxx/RelWithDebInfo/18lb6z5d/x86/CMakeFiles/edit_cache.dir
+/Users/rupamkarmakar/Documents/Development/mdw_app/android/app/.cxx/RelWithDebInfo/18lb6z5d/x86/CMakeFiles/rebuild_cache.dir

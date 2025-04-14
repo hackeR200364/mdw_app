@@ -30,8 +30,6 @@ class CartProductModel {
         return 'Non-Essential';
       case MedicineCategory.ay:
         return 'Ayurvedic';
-      default:
-        return 'Unknown';
     }
   }
 }

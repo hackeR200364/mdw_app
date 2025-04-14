@@ -272,7 +272,8 @@ class _CartScreenState extends State<CartScreen> {
                             width: MediaQuery.of(context).size.width,
                             height: 0.5,
                             decoration: BoxDecoration(
-                              color: AppColors.black.withOpacity(0.5),
+                              color: AppColors.black
+                                  .withAlpha((0.5 * 255).toInt()),
                             ),
                           ),
                           const SizedBox(
