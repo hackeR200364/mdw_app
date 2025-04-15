@@ -210,6 +210,12 @@ class _MainScreenState extends State<MainScreen> {
                       child: GestureDetector(
                         onTap: (() async {
                           await _launchCal();
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: ((_) => const CalBookingPage()),
+                          //   ),
+                          // );
                         }),
                         child: Column(
                           children: [
