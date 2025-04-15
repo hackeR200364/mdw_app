@@ -220,12 +220,12 @@ class _MainScreenState extends State<MainScreen> {
                         child: Column(
                           children: [
                             Container(
-                              height: 28,
+                              height: 29,
                               padding: EdgeInsets.all(20),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(color: AppColors.green),
-                                image: const DecorationImage(
+                              decoration: const BoxDecoration(
+                                // shape: BoxShape.circle,
+                                // border: Border.all(color: AppColors.green),
+                                image: DecorationImage(
                                   fit: BoxFit.scaleDown,
                                   image: AssetImage(
                                     "assets/bottom-bar-icons/injury.png",
