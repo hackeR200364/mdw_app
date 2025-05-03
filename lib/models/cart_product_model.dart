@@ -1,9 +1,11 @@
+import 'package:mdw_app/models/all_products_model.dart';
+
 enum MedicineCategory { es, nes, ay }
 
 class CartProductModel {
   final String pid, pname, pmrp, img;
   int qnt;
-  final MedicineCategory category;
+  final Category category;
 
   CartProductModel(
     this.pid,
@@ -20,16 +22,5 @@ class CartProductModel {
 
   void updateQuantity(int newQuantity) {
     qnt = newQuantity;
-  }
-
-  String getCategoryAsString() {
-    switch (category) {
-      case MedicineCategory.es:
-        return 'Essential';
-      case MedicineCategory.nes:
-        return 'Non-Essential';
-      case MedicineCategory.ay:
-        return 'Ayurvedic';
-    }
   }
 }

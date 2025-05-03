@@ -1,14 +1,14 @@
 import 'dart:io';
 
 import 'package:email_validator/email_validator.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 // import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:mdw_app/models/all_products_model.dart';
 import 'package:mdw_app/services/storage_services.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../models/cart_product_model.dart';
@@ -254,22 +254,17 @@ class AppFunctions {
     return totalCost;
   }
 
-  static double calculateTax(double price, MedicineCategory categoryCode) {
-    double taxRate;
+  static const Map<Category, double> categoryTaxRates = {
+    Category.AYURVEDIC: 5.0,
+    Category.COSMETIC: 18.0,
+    Category.DRUG: 12.0,
+    Category.GENERIC: 5.0,
+    Category.NONE: 0.0,
+    Category.OTC: 12.0,
+  };
 
-    switch (categoryCode) {
-      case MedicineCategory.es: // Essential medicines
-        taxRate = 0.05;
-        break;
-      case MedicineCategory.nes: // Non-essential medicines
-        taxRate = 0.12;
-        break;
-      case MedicineCategory.ay: // Ayurvedic medicines
-        taxRate = 0.12;
-        break;
-    }
-
-    return price * taxRate;
+  static double calculateTax(double price, Category categoryCode) {
+    return price * (categoryTaxRates[categoryCode] ?? 0);
   }
 
   static double calculateTotalTax(List<CartProductModel> cartItems) {
@@ -299,40 +294,6 @@ class AppFunctions {
     selected.removeWhere((file) => newSelectedPaths.contains(file.path));
 
     return selected;
-  }
-
-  static Future<Position> determinePosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      final val = await openAppSettings();
-      if (!val) {
-        return Future.error('Location services are disabled.');
-      }
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        final val = await openAppSettings();
-        if (!val) {
-          return Future.error('Location permissions are denied');
-        }
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      final val = await openAppSettings();
-      if (!val) {
-        return Future.error(
-            'Location permissions are permanently denied, we cannot request permissions.');
-      }
-    }
-
-    return await Geolocator.getCurrentPosition();
   }
 
   static Future<List<Placemark>> determineAddress(Position pos) async =>

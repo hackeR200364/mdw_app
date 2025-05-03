@@ -21,8 +21,8 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
   void initState() {
     _searchController = TextEditingController();
     cartModel = [
-      CartProductModel("1", "Medicine Name of 2", "1000", "assets/dettol.png",
-          3, MedicineCategory.es),
+      // CartProductModel("1", "Medicine Name of 2", "1000", "assets/dettol.png",
+      //     3, MedicineCategory.es),
     ];
 
     super.initState();
@@ -156,13 +156,13 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                               ),
                               GestureDetector(
                                 onTap: (() {
-                                  cartModel.add(CartProductModel(
-                                      "$idx",
-                                      "Medicine Name of $idx",
-                                      "2600",
-                                      "assets/dettol.png",
-                                      1,
-                                      MedicineCategory.ay));
+                                  // cartModel.add(CartProductModel(
+                                  //     "$idx",
+                                  //     "Medicine Name of $idx",
+                                  //     "2600",
+                                  //     "assets/dettol.png",
+                                  //     1,
+                                  //     MedicineCategory.ay));
                                   setState(() {});
                                 }),
                                 child: Container(

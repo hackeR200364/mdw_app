@@ -1,11 +1,16 @@
-import 'package:flutter/material.dart';
-import 'package:mdw_app/screens/sign_up_screen.dart';
+import 'dart:convert';
+import 'dart:developer';
 
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:mdw_app/screens/sign_up_screen.dart';
+import 'package:mdw_app/services/app_keys.dart';
+
+import '../models/user_login_model.dart';
 import '../services/app_function_services.dart';
 import '../services/storage_services.dart';
 import '../styles.dart';
 import '../utils/snack_bar_utils.dart';
-import 'code_verification_screen.dart';
 import 'main_screen.dart';
 import 'onboarding_screen.dart';
 
@@ -89,8 +94,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   CustomTextField(
                     textEditingController: _emailTextController,
-                    head: "Email Address",
-                    hint: "Enter email",
+                    head: "Email or Phone",
+                    hint: "Enter email or phone",
                     keyboard: TextInputType.emailAddress,
                   ),
                   const SizedBox(
@@ -130,9 +135,15 @@ class _LoginScreenState extends State<LoginScreen> {
                     setState(() {
                       loading = true;
                     });
-                    if (AppFunctions.passwordValidator(
-                            _passwordTextController.text.trim()) !=
-                        null) {
+                    if ((AppFunctions.emailValidator(
+                                    _emailTextController.text.trim()) !=
+                                null ||
+                            AppFunctions.phoneNumberValidator(
+                                    _emailTextController.text.trim()) !=
+                                null) &&
+                        AppFunctions.passwordValidator(
+                                _passwordTextController.text.trim()) !=
+                            null) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         AppSnackBar().customizedAppSnackBar(
                             message: AppFunctions.passwordValidator(
@@ -141,78 +152,52 @@ class _LoginScreenState extends State<LoginScreen> {
                             context: context),
                       );
                     } else {
-                      await StorageServices.setSignInStatus(true)
-                          .whenComplete(() async {
-                        bool attendanceStatus =
-                            await AppFunctions.getAttendanceStatus();
-                        if (attendanceStatus) {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: ((ctx) => const MainScreen()),
-                            ),
-                          );
+                      await http.post(
+                          Uri.parse(AppKeys.baseUrlKey +
+                              AppKeys.apiUrlKey +
+                              AppKeys.userKey +
+                              AppKeys.loginKey),
+                          body: {
+                            "userEmailOrPhone":
+                                _emailTextController.text.trim(),
+                            "userPassword": _passwordTextController.text.trim(),
+                          }).then((res) async {
+                        log(res.body);
+                        log(res.statusCode.toString());
+
+                        Map<String, dynamic> resJson = jsonDecode(res.body);
+                        if (res.statusCode == 200) {
+                          try {
+                            await StorageServices.setSignInStatus(true)
+                                .whenComplete(() async {
+                              await StorageServices.setUser(
+                                      UserLoginModel.fromJson(resJson))
+                                  .whenComplete(() async {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => const MainScreen()),
+                                );
+                              });
+                            });
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                AppSnackBar().customizedAppSnackBar(
+                              message: resJson["message"] +
+                                  "\n" +
+                                  "Something went wrong",
+                              context: context,
+                            ));
+                          }
                         } else {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: ((ctx) => const CodeVerificationScreen(
-                                    head: "Attendance",
-                                    upperText:
-                                        "Ask your admin to enter his code to confirm your attendance.",
-                                    type: 0,
-                                    btnText: "Confirm Attendance",
-                                  )),
-                            ),
-                          );
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(AppSnackBar().customizedAppSnackBar(
+                            message: resJson["message"],
+                            context: context,
+                          ));
                         }
                       });
                     }
-                    // if (!EmailValidator.validate(
-                    //     _emailTextController.text.trim())) {
-                    //   ScaffoldMessenger.of(context).showSnackBar(
-                    //     AppSnackBar().customizedAppSnackBar(
-                    //         message: "Please enter a valid email.",
-                    //         context: context),
-                    //   );
-                    // } else if (AppFunctions.passwordValidator(
-                    //         _passwordTextController.text.trim()) !=
-                    //     null) {
-                    //   ScaffoldMessenger.of(context).showSnackBar(
-                    //     AppSnackBar().customizedAppSnackBar(
-                    //         message: AppFunctions.passwordValidator(
-                    //                 _passwordTextController.text.trim()) ??
-                    //             "",
-                    //         context: context),
-                    //   );
-                    // } else {
-                    //   await StorageServices.setSignInStatus(true)
-                    //       .whenComplete(() async {
-                    //     bool attendanceStatus =
-                    //         await AppFunctions.getAttendanceStatus();
-                    //     if (attendanceStatus) {
-                    //       Navigator.pushReplacement(
-                    //         context,
-                    //         MaterialPageRoute(
-                    //           builder: ((ctx) => MainScreen()),
-                    //         ),
-                    //       );
-                    //     } else {
-                    //       Navigator.pushReplacement(
-                    //         context,
-                    //         MaterialPageRoute(
-                    //           builder: ((ctx) => const CodeVerificationScreen(
-                    //                 head: "Attendance",
-                    //                 upperText:
-                    //                     "Ask your admin to enter his code to confirm your attendance.",
-                    //                 type: 0,
-                    //                 btnText: "Confirm Attendance",
-                    //               )),
-                    //         ),
-                    //       );
-                    //     }
-                    //   });
-                    // }
                     setState(() {
                       loading = false;
                     });

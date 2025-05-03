@@ -52,6 +52,9 @@ dependencies:
   permission_handler:
   share_plus:
   flutter_native_splash:
+  webview_flutter:
+  http:
+  cached_network_image:
 
 flutter_native_splash:
   android: true
