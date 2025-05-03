@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:mdw_app/models/address_model.dart';
 import 'package:mdw_app/models/total_cost_model.dart';
 import 'package:mdw_app/screens/success_screen.dart';
@@ -26,7 +25,8 @@ class PaymentScreen extends StatefulWidget {
 class _PaymentScreenState extends State<PaymentScreen> {
   String address = "", phone = "";
   bool addressLoading = false, isChecked = false, phoneLoading = false;
-  Position? position;
+
+  // Position? position;
   List<Placemark>? placemarks;
   AddressModel? addressModel;
 
@@ -58,12 +58,12 @@ class _PaymentScreenState extends State<PaymentScreen> {
     if (addressModel != null) {
       phone = formatPhone(addressModel!.country, addressModel!.phone);
     }
-    if (addressModel == null) {
-      position = await AppFunctions.determinePosition();
-      if (position != null) {
-        placemarks = await AppFunctions.determineAddress(position!);
-      }
-    }
+    // if (addressModel == null) {
+    //   position = await AppFunctions.determinePosition(context);
+    //   if (position != null) {
+    //     placemarks = await AppFunctions.determineAddress(position!);
+    //   }
+    // }
     setState(() {
       addressLoading = false;
       phoneLoading = false;
@@ -144,14 +144,15 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     data: "Please give the location permission",
                     onPressed: (() async {
                       final permission = await openAppSettings();
-                      if (permission) {
-                        position = await AppFunctions.determinePosition();
-                        if (position != null) {
-                          placemarks =
-                              await AppFunctions.determineAddress(position!);
-                          setState(() {});
-                        }
-                      }
+                      // if (permission) {
+                      //   position =
+                      //       await AppFunctions.determinePosition(context);
+                      //   if (position != null) {
+                      //     placemarks =
+                      //         await AppFunctions.determineAddress(position!);
+                      //     setState(() {});
+                      //   }
+                      // }
                     }),
                   ),
                 if (placemarks != null && addressModel == null)

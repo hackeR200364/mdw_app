@@ -20,10 +20,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   @override
   void initState() {
-    cartModel = [
-      CartProductModel("2", "Medicine Name of 2", "1000", "assets/dettol.png",
-          2, MedicineCategory.es),
-    ];
+    cartModel = [];
     super.initState();
   }
 
@@ -186,13 +183,13 @@ class _ExploreScreenState extends State<ExploreScreen> {
                   } else {
                     return CustomProductContainer(
                       onTapAdd: (() {
-                        cartModel.add(CartProductModel(
-                            "$idx",
-                            "Medicine Name of $idx",
-                            "2600",
-                            "assets/dettol.png",
-                            1,
-                            MedicineCategory.ay));
+                        // cartModel.add(CartProductModel(
+                        //     "$idx",
+                        //     "Medicine Name of $idx",
+                        //     "2600",
+                        //     "assets/dettol.png",
+                        //     1,
+                        //     MedicineCategory.ay));
                         setState(() {});
                       }),
                       onTapProduct: (() async {

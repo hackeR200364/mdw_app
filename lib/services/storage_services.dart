@@ -1,4 +1,5 @@
 import 'package:mdw_app/models/address_model.dart';
+import 'package:mdw_app/models/user_login_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'app_keys.dart';
@@ -20,12 +21,26 @@ class StorageServices {
         AppKeys.addressKey, AddressModel.addressModelToJson(address));
   }
 
+  static Future<void> setUser(UserLoginModel user) async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    pref.setString(AppKeys.userKey, user.toRawJson());
+  }
+
   static Future<void> updatePhoneNumber(String phone, String country) async {
     AddressModel? address = await getAddress();
     if (address != null) {
       address = address.copyWith(phone: phone, country: country);
       await setAddress(address);
     }
+  }
+
+  static Future<UserLoginModel?> getUser() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    final String? user = pref.getString(AppKeys.userKey);
+    if (user != null) {
+      return UserLoginModel.fromRawJson(user);
+    }
+    return null;
   }
 
   static Future<AddressModel?> getAddress() async {

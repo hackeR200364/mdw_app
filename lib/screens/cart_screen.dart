@@ -26,32 +26,7 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   void initState() {
-    cartItems = [
-      CartProductModel(
-        'P001',
-        'Product 1',
-        '₹500',
-        'https://images.pexels.com/photos/2565761/pexels-photo-2565761.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-        2,
-        MedicineCategory.es,
-      ),
-      CartProductModel(
-        'P002',
-        'Product 2',
-        '₹1000',
-        'https://images.pexels.com/photos/3786154/pexels-photo-3786154.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-        1,
-        MedicineCategory.nes,
-      ),
-      CartProductModel(
-        'P003',
-        'Product 3',
-        '₹1500',
-        'https://images.pexels.com/photos/208518/pexels-photo-208518.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2',
-        3,
-        MedicineCategory.ay,
-      ),
-    ];
+    cartItems = [];
     updateTotalCostModel(cartItems);
     super.initState();
   }

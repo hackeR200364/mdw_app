@@ -1,8 +1,12 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:mdw_app/screens/main_screen.dart';
+import 'package:mdw_app/services/app_keys.dart';
 
 import '../services/app_function_services.dart';
-import '../services/storage_services.dart';
 import '../styles.dart';
 import '../utils/snack_bar_utils.dart';
 import 'login_screen.dart';
@@ -21,12 +25,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
   late TextEditingController _emailTextController,
       _passwordTextController,
       _phoneNumberController,
-      _nameController,
+      _firstNameController,
+      _lastNameController,
       _confirmPasswordController;
 
   @override
   void initState() {
-    _nameController = TextEditingController();
+    _firstNameController = TextEditingController();
+    _lastNameController = TextEditingController();
     _emailTextController = TextEditingController();
     _phoneNumberController = TextEditingController();
     _passwordTextController = TextEditingController();
@@ -95,9 +101,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
               Column(
                 children: [
                   CustomTextField(
-                    textEditingController: _nameController,
-                    head: "Name",
-                    hint: "Enter name",
+                    textEditingController: _firstNameController,
+                    head: "First Name",
+                    hint: "Enter first name",
+                    keyboard: TextInputType.name,
+                    validator: ((value) => AppFunctions.nameValidator(value)),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  CustomTextField(
+                    textEditingController: _lastNameController,
+                    head: "Last Name",
+                    hint: "Enter last name",
                     keyboard: TextInputType.name,
                     validator: ((value) => AppFunctions.nameValidator(value)),
                   ),
@@ -191,12 +207,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     setState(() {
                       loading = true;
                     });
-                    // log((AppFunctions.confirmPasswordValidator(
-                    //         _confirmPasswordController.text.trim(),
-                    //         _passwordTextController.text.trim()))
-                    //     .toString());
+
                     if (AppFunctions.nameValidator(
-                                _nameController.text.trim()) !=
+                                _firstNameController.text.trim()) !=
+                            null &&
+                        AppFunctions.nameValidator(
+                                _lastNameController.text.trim()) !=
                             null &&
                         AppFunctions.emailValidator(
                                 _emailTextController.text.trim()) !=
@@ -217,61 +233,54 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             context: context),
                       );
                     } else {
-                      await StorageServices.setSignInStatus(true)
-                          .whenComplete(() async {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (ctx) => const MainScreen(),
-                          ),
-                        );
+                      //SIGN-UP
+                      await http.post(
+                          Uri.parse(AppKeys.baseUrlKey +
+                              AppKeys.apiUrlKey +
+                              AppKeys.userKey +
+                              AppKeys.registerKey),
+                          body: {
+                            "userfName": _firstNameController.text.trim(),
+                            "userlName": _lastNameController.text.trim(),
+                            "userEmail": _emailTextController.text.trim(),
+                            "userPhone": _phoneNumberController.text.trim(),
+                            "userPassword": _passwordTextController.text.trim(),
+                          }).then((res) async {
+                        if (res.statusCode == 201) {
+                          Map<String, dynamic> resJson = jsonDecode(res.body);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            AppSnackBar().customizedAppSnackBar(
+                              message: resJson["message"],
+                              context: context,
+                            ),
+                          );
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (ctx) => const LoginScreen(),
+                            ),
+                          );
+                        } else if (res.statusCode == 400) {
+                          Map<String, dynamic> resJson = jsonDecode(res.body);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            AppSnackBar().customizedAppSnackBar(
+                              message: resJson["message"],
+                              context: context,
+                            ),
+                          );
+                        } else {
+                          log(res.statusCode.toString());
+                          log(res.body.toString());
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            AppSnackBar().customizedAppSnackBar(
+                              message: "Something went wrong",
+                              context: context,
+                            ),
+                          );
+                        }
                       });
                     }
-                    // if (!EmailValidator.validate(
-                    //     _emailTextController.text.trim())) {
-                    //   ScaffoldMessenger.of(context).showSnackBar(
-                    //     AppSnackBar().customizedAppSnackBar(
-                    //         message: "Please enter a valid email.",
-                    //         context: context),
-                    //   );
-                    // } else if (AppFunctions.passwordValidator(
-                    //         _passwordTextController.text.trim()) !=
-                    //     null) {
-                    //   ScaffoldMessenger.of(context).showSnackBar(
-                    //     AppSnackBar().customizedAppSnackBar(
-                    //         message: AppFunctions.passwordValidator(
-                    //                 _passwordTextController.text.trim()) ??
-                    //             "",
-                    //         context: context),
-                    //   );
-                    // } else {
-                    //   await StorageServices.setSignInStatus(true)
-                    //       .whenComplete(() async {
-                    //     bool attendanceStatus =
-                    //         await AppFunctions.getAttendanceStatus();
-                    //     if (attendanceStatus) {
-                    //       Navigator.pushReplacement(
-                    //         context,
-                    //         MaterialPageRoute(
-                    //           builder: ((ctx) => MainScreen()),
-                    //         ),
-                    //       );
-                    //     } else {
-                    //       Navigator.pushReplacement(
-                    //         context,
-                    //         MaterialPageRoute(
-                    //           builder: ((ctx) => const CodeVerificationScreen(
-                    //                 head: "Attendance",
-                    //                 upperText:
-                    //                     "Ask your admin to enter his code to confirm your attendance.",
-                    //                 type: 0,
-                    //                 btnText: "Confirm Attendance",
-                    //               )),
-                    //         ),
-                    //       );
-                    //     }
-                    //   });
-                    // }
+
                     setState(() {
                       loading = false;
                     });

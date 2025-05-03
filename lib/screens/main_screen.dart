@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mdw_app/providers/main_screen_index_provider.dart';
+import 'package:mdw_app/screens/cal_booking_screen.dart';
 import 'package:mdw_app/screens/cart_screen.dart';
 import 'package:mdw_app/screens/explore_screen.dart';
 import 'package:mdw_app/screens/medlist_screen.dart';
@@ -8,7 +9,6 @@ import 'package:mdw_app/screens/profile_screen.dart';
 import 'package:mdw_app/screens/shop_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../styles.dart';
 import 'code_verification_screen.dart';
@@ -34,12 +34,12 @@ class _MainScreenState extends State<MainScreen> {
     super.initState();
   }
 
-  Future<void> _launchCal() async {
-    final url = Uri.parse('https://cal.com/mdwtherapy/session');
-    if (!await launchUrl(url, mode: LaunchMode.inAppWebView)) {
-      throw Exception('Could not launch $url');
-    }
-  }
+  // Future<void> _launchCal() async {
+  //   final url = Uri.parse('https://cal.com/mdwtherapy/session');
+  //   if (!await launchUrl(url, mode: LaunchMode.inAppWebView)) {
+  //     throw Exception('Could not launch $url');
+  //   }
+  // }
 
   // int index = 0;
 
@@ -68,8 +68,10 @@ class _MainScreenState extends State<MainScreen> {
                             : provider.index == 1
                                 ? "BROWSE BY CATEGORIES"
                                 : provider.index == 2
-                                    ? "MedList"
-                                    : "ACCOUNT",
+                                    ? "Book Session"
+                                    : provider.index == 3
+                                        ? "MedList"
+                                        : "ACCOUNT",
                       ),
                 actions: [
                   if (provider.index == 0)
@@ -206,59 +208,101 @@ class _MainScreenState extends State<MainScreen> {
                       ),
                     ),
                     //add here
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: (() async {
-                          await _launchCal();
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //     builder: ((_) => const CalBookingPage()),
-                          //   ),
-                          // );
-                        }),
-                        child: Column(
-                          children: [
-                            Container(
-                              height: 29,
-                              padding: EdgeInsets.all(20),
-                              decoration: const BoxDecoration(
-                                // shape: BoxShape.circle,
-                                // border: Border.all(color: AppColors.green),
-                                image: DecorationImage(
-                                  fit: BoxFit.scaleDown,
-                                  image: AssetImage(
-                                    "assets/bottom-bar-icons/injury.png",
-                                  ),
+                    GestureDetector(
+                      onTap: (() {
+                        setState(() {
+                          provider.changeIndex(newIndex: 2);
+                        });
+                      }),
+                      child: Column(
+                        children: [
+                          // SizedBox(
+                          //   height: upperExtraSpaceHeight,
+                          // ),
+                          Container(
+                            height: 29,
+                            padding: const EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                              // shape: BoxShape.circle,
+                              // border: Border.all(color: AppColors.green),
+                              image: DecorationImage(
+                                fit: BoxFit.scaleDown,
+                                image: AssetImage(
+                                  provider.index == 2
+                                      ? "assets/bottom-bar-icons/coloured/injury.png"
+                                      : "assets/bottom-bar-icons/non-coloured/injury.png",
                                 ),
                               ),
                             ),
-                            const SizedBox(
-                              height: 3,
+                          ),
+                          const SizedBox(
+                            height: 3,
+                          ),
+                          Text(
+                            "Wellness",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: provider.index == 2
+                                  ? AppColors.selectedNavTextColor
+                                  : AppColors.black,
                             ),
-                            const Text(
-                              "Wellness",
-                              style: TextStyle(
-                                fontSize: 12,
-                              ),
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
+                    // Expanded(
+                    //   child: GestureDetector(
+                    //     onTap: (() async {
+                    //       // await _launchCal();
+                    //       Navigator.push(
+                    //         context,
+                    //         MaterialPageRoute(
+                    //           builder: ((_) => const CalSessionScreen()),
+                    //         ),
+                    //       );
+                    //     }),
+                    //     child: Column(
+                    //       children: [
+                    //         Container(
+                    //           height: 29,
+                    //           padding: const EdgeInsets.all(20),
+                    //           decoration: const BoxDecoration(
+                    //             // shape: BoxShape.circle,
+                    //             // border: Border.all(color: AppColors.green),
+                    //             image: DecorationImage(
+                    //               fit: BoxFit.scaleDown,
+                    //               image: AssetImage(
+                    //                 "assets/bottom-bar-icons/injury.png",
+                    //               ),
+                    //             ),
+                    //           ),
+                    //         ),
+                    //         const SizedBox(
+                    //           height: 3,
+                    //         ),
+                    //         const Text(
+                    //           "Wellness",
+                    //           style: TextStyle(
+                    //             fontSize: 12,
+                    //           ),
+                    //         ),
+                    //       ],
+                    //     ),
+                    //   ),
+                    // ),
                     Expanded(
                       child: BottomNavBarIcon(
                         onTap: (() {
                           setState(() {
-                            provider.changeIndex(newIndex: 2);
+                            provider.changeIndex(newIndex: 3);
                           });
                         }),
                         icon: Icons.bookmark_border_rounded,
                         text: "MedList",
-                        iconColor: provider.index == 2
+                        iconColor: provider.index == 3
                             ? AppColors.selectedIconColor
                             : AppColors.black,
-                        textColor: provider.index == 2
+                        textColor: provider.index == 3
                             ? AppColors.selectedNavTextColor
                             : AppColors.black,
                       ),
@@ -267,15 +311,15 @@ class _MainScreenState extends State<MainScreen> {
                       child: BottomNavBarIcon(
                         onTap: (() {
                           setState(() {
-                            provider.changeIndex(newIndex: 3);
+                            provider.changeIndex(newIndex: 4);
                           });
                         }),
                         icon: Icons.person_outline_rounded,
                         text: "Account",
-                        iconColor: provider.index == 3
+                        iconColor: provider.index == 4
                             ? AppColors.selectedIconColor
                             : AppColors.black,
-                        textColor: provider.index == 3
+                        textColor: provider.index == 4
                             ? AppColors.selectedNavTextColor
                             : AppColors.black,
                       ),
@@ -315,8 +359,10 @@ class _MainScreenState extends State<MainScreen> {
               case 1:
                 return ExploreScreen(searchController: searchController);
               case 2:
-                return const BookmarksScreen();
+                return const CalSessionScreen();
               case 3:
+                return const BookmarksScreen();
+              case 4:
                 return const ProfileScreen();
             }
             return Container();
