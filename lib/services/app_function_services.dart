@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:email_validator/email_validator.dart';
@@ -5,15 +6,20 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:mdw_app/models/all_products_model.dart';
 import 'package:mdw_app/services/storage_services.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../models/cart_items_model.dart';
 import '../models/cart_product_model.dart';
 import '../models/feedback_model.dart';
 import '../models/total_cost_model.dart';
+import '../models/user_login_model.dart';
+import '../utils/snack_bar_utils.dart';
+import 'app_keys.dart';
 
 class AppFunctions {
   static String? passwordValidator(String? value) {
@@ -304,4 +310,228 @@ class AppFunctions {
     int index = cartProducts.indexWhere((product) => product.pid == productId);
     return {'exists': index != -1, 'index': index};
   }
+
+  static CartItemWithProduct? findCartContainingProduct({
+    required CartListResponse? cartList,
+    required String productName,
+  }) {
+    // Early return for invalid cases
+    if (cartList == null || cartList.carts.isEmpty || productName.isEmpty) {
+      return null;
+    }
+
+    try {
+      // Search through all carts and items
+      for (final cart in cartList.carts) {
+        try {
+          final matchingItem = cart.items.firstWhere(
+            (item) => item.productName == productName,
+          );
+          return CartItemWithProduct(cart: cart, item: matchingItem);
+        } catch (e) {
+          // Continue searching other carts if not found in this one
+          continue;
+        }
+      }
+    } catch (e) {
+      debugPrint('Error finding product in cart: $e');
+    }
+
+    return null;
+  }
+
+  static void dismissAllSnackBars(BuildContext context) {
+    ScaffoldMessenger.of(context).removeCurrentSnackBar();
+  }
+
+  static Future<void> addToCart(AllProductsModel product, UserLoginModel? user,
+      BuildContext context) async {
+    if (user != null) {
+      int taxRate = int.parse(product.taxRate);
+      http.Response response = await http.post(
+          Uri.parse(AppKeys.baseUrlKey +
+              AppKeys.apiUrlKey +
+              AppKeys.cartKey +
+              AppKeys.addToCartKey),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ${user!.token}',
+          },
+          body: jsonEncode({
+            "items": [
+              {
+                "productName": product.name,
+                "quantity": 1,
+                "amount": product.amount,
+                "taxRate": product.taxRate,
+              }
+            ]
+          }));
+
+      // log(response.statusCode.toString());
+      // log(response.body.toString());
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(AppSnackBar().customizedAppSnackBar(
+            message: "Product added to cart",
+            context: context,
+          ));
+      } else {
+        Map<String, dynamic> resJson = jsonDecode(response.body);
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(AppSnackBar().customizedAppSnackBar(
+            message: resJson["message"] ?? "Something went wrong",
+            context: context,
+          ));
+      }
+    } else {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(AppSnackBar().customizedAppSnackBar(
+          message: "User not logged in",
+          context: context,
+        ));
+    }
+  }
+
+  static Future<void> removeFromCart(String cartId, String productId,
+      UserLoginModel? user, BuildContext context) async {
+    if (user == null) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          AppSnackBar().customizedAppSnackBar(
+            message: "User not logged in",
+            context: context,
+          ),
+        );
+      return;
+    }
+
+    try {
+      final response = await http.delete(
+        Uri.parse(
+          "${AppKeys.baseUrlKey}${AppKeys.apiUrlKey}${AppKeys.cartKey}${AppKeys.deleteCartKey}/$cartId",
+        ),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${user!.token}',
+        },
+      );
+
+      // log('Remove from cart status: ${response.statusCode}');
+      // log('Response: ${response.body}');
+
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(
+            AppSnackBar().customizedAppSnackBar(
+              message: "Cart deleted successfully",
+              context: context,
+            ),
+          );
+      } else {
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(
+            AppSnackBar().customizedAppSnackBar(
+              message: "Failed to remove item",
+              context: context,
+            ),
+          );
+      }
+    } catch (e) {
+      // log('Error removing from cart: $e');
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          AppSnackBar().customizedAppSnackBar(
+            message: "Error removing item",
+            context: context,
+          ),
+        );
+    }
+  }
+
+  static Future<void> updateCart(AllProductsModel product, int quantity,
+      String cartId, UserLoginModel? user, BuildContext context) async {
+    if (user == null) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          AppSnackBar().customizedAppSnackBar(
+            message: "User not logged in",
+            context: context,
+          ),
+        );
+      return;
+    }
+
+    try {
+      final response = await http.put(
+        Uri.parse(
+          "${AppKeys.baseUrlKey}${AppKeys.apiUrlKey}${AppKeys.cartKey}${AppKeys.updateCartKey}/$cartId",
+        ),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ${user!.token}',
+        },
+        body: jsonEncode({
+          "items": [
+            {
+              "productId": product.productId,
+              "productName": product.name,
+              "quantity": quantity,
+              "amount": product.amount,
+              "taxRate": product.taxRate,
+            }
+          ]
+        }),
+      );
+
+      // log('Update cart status: ${response.statusCode}');
+      // log('Response: ${response.body}');
+
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(
+            AppSnackBar().customizedAppSnackBar(
+              message: "Cart updated",
+              context: context,
+            ),
+          );
+      } else {
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(
+            AppSnackBar().customizedAppSnackBar(
+              message: "Failed to update cart",
+              context: context,
+            ),
+          );
+      }
+    } catch (e) {
+      // log('Error updating cart: $e');
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          AppSnackBar().customizedAppSnackBar(
+            message: "Error updating cart",
+            context: context,
+          ),
+        );
+    }
+  }
+}
+
+// Helper class to return both the cart and the specific item
+class CartItemWithProduct {
+  final CartItemsModel cart;
+  final Item item;
+
+  CartItemWithProduct({required this.cart, required this.item});
 }

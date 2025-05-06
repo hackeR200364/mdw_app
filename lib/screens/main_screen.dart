@@ -178,6 +178,7 @@ class _MainScreenState extends State<MainScreen> {
                         onTap: (() {
                           setState(() {
                             provider.changeIndex(newIndex: 0);
+                            searchController.clear();
                           });
                         }),
                         icon: Icons.storefront,
@@ -208,46 +209,49 @@ class _MainScreenState extends State<MainScreen> {
                       ),
                     ),
                     //add here
-                    GestureDetector(
-                      onTap: (() {
-                        setState(() {
-                          provider.changeIndex(newIndex: 2);
-                        });
-                      }),
-                      child: Column(
-                        children: [
-                          // SizedBox(
-                          //   height: upperExtraSpaceHeight,
-                          // ),
-                          Container(
-                            height: 29,
-                            padding: const EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                              // shape: BoxShape.circle,
-                              // border: Border.all(color: AppColors.green),
-                              image: DecorationImage(
-                                fit: BoxFit.scaleDown,
-                                image: AssetImage(
-                                  provider.index == 2
-                                      ? "assets/bottom-bar-icons/coloured/injury.png"
-                                      : "assets/bottom-bar-icons/non-coloured/injury.png",
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: (() {
+                          setState(() {
+                            provider.changeIndex(newIndex: 2);
+                            searchController.clear();
+                          });
+                        }),
+                        child: Column(
+                          children: [
+                            // SizedBox(
+                            //   height: upperExtraSpaceHeight,
+                            // ),
+                            Container(
+                              height: 29,
+                              padding: const EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                // shape: BoxShape.circle,
+                                // border: Border.all(color: AppColors.green),
+                                image: DecorationImage(
+                                  fit: BoxFit.scaleDown,
+                                  image: AssetImage(
+                                    provider.index == 2
+                                        ? "assets/bottom-bar-icons/coloured/injury.png"
+                                        : "assets/bottom-bar-icons/non-coloured/injury.png",
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 3,
-                          ),
-                          Text(
-                            "Wellness",
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: provider.index == 2
-                                  ? AppColors.selectedNavTextColor
-                                  : AppColors.black,
+                            const SizedBox(
+                              height: 3,
                             ),
-                          ),
-                        ],
+                            Text(
+                              "Wellness",
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: provider.index == 2
+                                    ? AppColors.selectedNavTextColor
+                                    : AppColors.black,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     // Expanded(
@@ -295,6 +299,7 @@ class _MainScreenState extends State<MainScreen> {
                         onTap: (() {
                           setState(() {
                             provider.changeIndex(newIndex: 3);
+                            searchController.clear();
                           });
                         }),
                         icon: Icons.bookmark_border_rounded,
@@ -312,6 +317,7 @@ class _MainScreenState extends State<MainScreen> {
                         onTap: (() {
                           setState(() {
                             provider.changeIndex(newIndex: 4);
+                            searchController.clear();
                           });
                         }),
                         icon: Icons.person_outline_rounded,

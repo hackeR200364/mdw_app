@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:badges/badges.dart' as badges;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
+import 'package:mdw_app/models/cart_items_model.dart';
 import 'package:mdw_app/models/orders_type_model.dart';
 import 'package:mdw_app/models/user_login_model.dart';
 import 'package:mdw_app/screens/cart_screen.dart';
@@ -49,6 +51,7 @@ class _ShopScreenState extends State<ShopScreen> {
   final ScrollController _productScrollController = ScrollController();
   List<AllProductsModel> filteredProducts = [];
   UserLoginModel? user;
+  CartListResponse? cartItems;
 
   Future<Position> determinePosition(BuildContext context) async {
     bool serviceEnabled;
@@ -151,6 +154,9 @@ class _ShopScreenState extends State<ShopScreen> {
 
   getUserData() async {
     user = await StorageServices.getUser();
+    if (user != null) {
+      log(user!.token.toString());
+    }
   }
 
   getData() async {
@@ -159,6 +165,7 @@ class _ShopScreenState extends State<ShopScreen> {
       placemarks = await AppFunctions.determineAddress(position!);
     }
     await getUserData();
+    await getCart();
     await getProducts();
 
     setState(() {});
@@ -205,13 +212,54 @@ class _ShopScreenState extends State<ShopScreen> {
           }
         } catch (e) {
           ScaffoldMessenger.of(context)
-              .showSnackBar(AppSnackBar().customizedAppSnackBar(
-            message: "Something went wrong \n $e",
-            context: context,
-          ));
+            ..hideCurrentSnackBar()
+            ..showSnackBar(AppSnackBar().customizedAppSnackBar(
+              message: "Something went wrong \n $e",
+              context: context,
+            ));
         }
       }
     });
+  }
+
+  Future<void> getCart() async {
+    if (user != null) {
+      http.Response res = await http.get(
+          Uri.parse(AppKeys.baseUrlKey +
+              AppKeys.apiUrlKey +
+              AppKeys.cartKey +
+              AppKeys.getCartKey),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ${user!.token}',
+          });
+
+      log(res.statusCode.toString());
+      log(res.body.toString());
+
+      if (res.statusCode == 200) {
+        cartItems = CartListResponse.fromRawJson(res.body);
+      } else if (res.statusCode == 401) {
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(AppSnackBar().customizedAppSnackBar(
+            message: "User not logged in",
+            context: context,
+          ));
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (ctx) => const LoginScreen(),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(AppSnackBar().customizedAppSnackBar(
+              message: 'Something went wrong', context: context));
+      }
+      setState(() {});
+    }
   }
 
   @override
@@ -229,9 +277,7 @@ class _ShopScreenState extends State<ShopScreen> {
       //     "assets/medicine-small.png", 3, MedicineCategory.es),
     ];
     catScrollController = ScrollController();
-
     getData();
-
     super.initState();
   }
 
@@ -263,6 +309,7 @@ class _ShopScreenState extends State<ShopScreen> {
                       scrolledUnderElevation: 0,
                       elevation: 0,
                       centerTitle: false,
+                      leading: Container(),
                       actions: [
                         Padding(
                           padding: EdgeInsets.only(top: 20),
@@ -276,10 +323,20 @@ class _ShopScreenState extends State<ShopScreen> {
                                 ),
                               );
                             },
-                            icon: const Icon(
-                              Icons.shopping_cart_outlined,
-                              size: 25,
-                              color: AppColors.black,
+                            icon: badges.Badge(
+                              badgeContent: Text(
+                                cartItems?.carts.length.toString() ?? "0",
+                                style: TextStyle(
+                                  color: AppColors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              position: badges.BadgePosition.topEnd(top: -20),
+                              child: Icon(
+                                Icons.shopping_cart_outlined,
+                                size: 25,
+                                color: AppColors.black,
+                              ),
                             ),
                           ),
                         ),
@@ -400,11 +457,6 @@ class _ShopScreenState extends State<ShopScreen> {
                         },
                       ),
                     ),
-                    // const SliverToBoxAdapter(
-                    //   child: SizedBox(
-                    //     height: 25,
-                    //   ),
-                    // ),
                     SliverToBoxAdapter(
                       child: CarouselSlider.builder(
                         options: CarouselOptions(
@@ -523,6 +575,12 @@ class _ShopScreenState extends State<ShopScreen> {
                                 setState(() {
                                   selectedIdx = idx;
                                 });
+                                filteredProducts =
+                                    allProducts!.data.where((element) {
+                                  return element.category.name ==
+                                      category[idx].type;
+                                }).toList();
+                                setState(() {});
                                 // Animate both category and product lists to start
                                 // if (catScrollController.hasClients) {
                                 //   catScrollController.animateTo(
@@ -532,6 +590,8 @@ class _ShopScreenState extends State<ShopScreen> {
                                 //     curve: Curves.linear,
                                 //   );
                                 // }
+                                log(filteredProducts.length.toString());
+
                                 if (_productScrollController.hasClients) {
                                   _productScrollController.animateTo(
                                     _productScrollController
@@ -584,43 +644,122 @@ class _ShopScreenState extends State<ShopScreen> {
                           width: MediaQuery.of(context).size.width,
                           child: ListView.separated(
                             controller: _productScrollController,
-                            // Use the new controller
-                            itemBuilder: ((ctx, idx) {
+                            scrollDirection: Axis.horizontal,
+                            separatorBuilder: (context, index) =>
+                                const SizedBox(width: 20),
+                            itemCount: allProducts!.data.length,
+                            itemBuilder: (ctx, idx) {
                               final product = allProducts!.data[idx];
+                              CartItemWithProduct? cartItem =
+                                  AppFunctions.findCartContainingProduct(
+                                cartList: cartItems,
+                                productName: product.name,
+                              );
+                              final item = cartItem?.item;
+                              bool loading = false;
+
                               return CustomProductContainer(
-                                onTapAdd: (() {
-                                  cartModel.add(CartProductModel(
-                                    product.productId,
-                                    product.name,
-                                    product.amount.toString(),
-                                    product.productImage,
-                                    1,
-                                    product.category,
-                                  ));
+                                onTapAdd: () async {
                                   setState(() {});
-                                }),
-                                onTapProduct: (() async {
-                                  final index = await Navigator.push(
+                                  // log(loading.toString());
+                                  try {
+                                    await AppFunctions.addToCart(
+                                        product, user, context);
+                                    await getCart();
+                                    cartItem =
+                                        AppFunctions.findCartContainingProduct(
+                                      cartList: cartItems,
+                                      productName: product.name,
+                                    );
+                                    log((cartItem == null).toString());
+                                  } catch (e) {
+                                    ScaffoldMessenger.of(context)
+                                      ..hideCurrentSnackBar()
+                                      ..showSnackBar(
+                                        SnackBar(
+                                            content:
+                                                Text('Error: ${e.toString()}')),
+                                      );
+                                  }
+                                  setState(() {});
+                                },
+                                onTapProduct: () async {
+                                  await Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                       builder: (ctx) =>
                                           const ProductDetailsScreen(),
                                     ),
                                   );
-                                  if (index == 1) {}
-                                }),
-                                btnHeight: 40,
+                                },
+                                btnHeight: 35,
                                 image: product.productImage,
                                 name: product.name,
                                 mrp: product.amount.toString(),
+                                child: (cartItem != null)
+                                    ? CustomAddQntBtn(
+                                        qnt: item!.quantity,
+                                        onTapMinu: () async {
+                                          if (item.quantity > 1) {
+                                            setState(() => item.quantity--);
+                                            await AppFunctions.updateCart(
+                                                product,
+                                                item.quantity,
+                                                cartItem!.cart.cartId,
+                                                user,
+                                                context);
+                                            await getCart();
+                                          } else {
+                                            await AppFunctions.removeFromCart(
+                                                cartItem!.cart.cartId,
+                                                product.productId,
+                                                user,
+                                                context);
+                                            await getCart();
+                                          }
+                                        },
+                                        onTapPlus: () async {
+                                          // Check if we haven't reached maximum available quantity
+                                          if (item.quantity <
+                                              product.quantity) {
+                                            // Assuming product has maxQuantity field
+                                            setState(() => item.quantity++);
+                                            try {
+                                              await AppFunctions.updateCart(
+                                                  product,
+                                                  item.quantity,
+                                                  cartItem!.cart.cartId,
+                                                  user,
+                                                  context);
+                                              await getCart();
+                                            } catch (e) {
+                                              // Revert if API call fails
+                                              setState(() => item.quantity--);
+                                              ScaffoldMessenger.of(context)
+                                                ..hideCurrentSnackBar()
+                                                ..showSnackBar(
+                                                  SnackBar(
+                                                      content: Text(
+                                                          'Failed to update quantity: ${e.toString()}')),
+                                                );
+                                            }
+                                          } else {
+                                            ScaffoldMessenger.of(context)
+                                              ..hideCurrentSnackBar()
+                                              ..showSnackBar(
+                                                AppSnackBar()
+                                                    .customizedAppSnackBar(
+                                                  message:
+                                                      'Maximum quantity reached (${product.quantity})',
+                                                  context: context,
+                                                ),
+                                              );
+                                          }
+                                        },
+                                      )
+                                    : null,
                               );
-                            }),
-                            scrollDirection: Axis.horizontal,
-                            separatorBuilder:
-                                (BuildContext context, int index) {
-                              return const SizedBox(width: 20);
                             },
-                            itemCount: allProducts!.data.length,
                           ),
                         ),
                       ),
@@ -630,28 +769,43 @@ class _ShopScreenState extends State<ShopScreen> {
                           height: 250,
                           width: MediaQuery.of(context).size.width,
                           child: Builder(builder: (ctx) {
-                            filteredProducts = allProducts!.data
-                                .where((product) =>
-                                    product.category.name ==
-                                    category[selectedIdx].type)
-                                .toList();
                             return ListView.separated(
                               controller: _productScrollController,
                               // Use the same controller
                               itemBuilder: ((ctx, idx) {
                                 final product = filteredProducts[idx];
+                                CartItemWithProduct? cartItem =
+                                    AppFunctions.findCartContainingProduct(
+                                  cartList: cartItems,
+                                  productName: product.name,
+                                );
+                                final item = cartItem?.item;
+
                                 return CustomProductContainer(
-                                  onTapAdd: (() {
-                                    cartModel.add(CartProductModel(
-                                      product.productId,
-                                      product.name,
-                                      product.amount.toString(),
-                                      product.productImage,
-                                      1,
-                                      product.category,
-                                    ));
+                                  onTapAdd: () async {
                                     setState(() {});
-                                  }),
+                                    // log(loading.toString());
+                                    try {
+                                      await AppFunctions.addToCart(
+                                          product, user, context);
+                                      await getCart();
+                                      cartItem = AppFunctions
+                                          .findCartContainingProduct(
+                                        cartList: cartItems,
+                                        productName: product.name,
+                                      );
+                                      log((cartItem == null).toString());
+                                    } catch (e) {
+                                      ScaffoldMessenger.of(context)
+                                        ..hideCurrentSnackBar()
+                                        ..showSnackBar(
+                                          SnackBar(
+                                              content: Text(
+                                                  'Error: ${e.toString()}')),
+                                        );
+                                    }
+                                    setState(() {});
+                                  },
                                   onTapProduct: (() async {
                                     final index = await Navigator.push(
                                       context,
@@ -662,10 +816,71 @@ class _ShopScreenState extends State<ShopScreen> {
                                     );
                                     if (index == 1) {}
                                   }),
-                                  btnHeight: 40,
+                                  btnHeight: 35,
                                   image: product.productImage,
                                   name: product.name,
                                   mrp: product.amount.toString(),
+                                  child: cartItem != null
+                                      ? CustomAddQntBtn(
+                                          qnt: item?.quantity ?? 0,
+                                          onTapMinu: () async {
+                                            if (item!.quantity > 1) {
+                                              setState(() => item.quantity--);
+                                              await AppFunctions.updateCart(
+                                                  product,
+                                                  item.quantity,
+                                                  cartItem!.cart.cartId,
+                                                  user,
+                                                  context);
+                                              await getCart();
+                                            } else {
+                                              await AppFunctions.removeFromCart(
+                                                  cartItem!.cart.cartId,
+                                                  product.productId,
+                                                  user,
+                                                  context);
+                                              await getCart();
+                                            }
+                                          },
+                                          onTapPlus: () async {
+                                            // Check if we haven't reached maximum available quantity
+                                            if (item!.quantity <
+                                                product.quantity) {
+                                              // Assuming product has maxQuantity field
+                                              setState(() => item.quantity++);
+                                              try {
+                                                await AppFunctions.updateCart(
+                                                    product,
+                                                    item.quantity,
+                                                    cartItem!.cart.cartId,
+                                                    user,
+                                                    context);
+                                                await getCart();
+                                              } catch (e) {
+                                                setState(() => item.quantity--);
+                                                ScaffoldMessenger.of(context)
+                                                  ..hideCurrentSnackBar()
+                                                  ..showSnackBar(
+                                                    SnackBar(
+                                                        content: Text(
+                                                            'Failed to update quantity: ${e.toString()}')),
+                                                  );
+                                              }
+                                            } else {
+                                              ScaffoldMessenger.of(context)
+                                                ..hideCurrentSnackBar()
+                                                ..showSnackBar(
+                                                  AppSnackBar()
+                                                      .customizedAppSnackBar(
+                                                    message:
+                                                        'Maximum quantity reached (${product.quantity})',
+                                                    context: context,
+                                                  ),
+                                                );
+                                            }
+                                          },
+                                        )
+                                      : null,
                                 );
                               }),
                               scrollDirection: Axis.horizontal,
@@ -713,17 +928,38 @@ class _ShopScreenState extends State<ShopScreen> {
                                   return ListView.separated(
                                     itemBuilder: ((ctx, idx) {
                                       final product = doseFilteredProducts[idx];
+                                      CartItemWithProduct? cartItem =
+                                          AppFunctions
+                                              .findCartContainingProduct(
+                                        cartList: cartItems,
+                                        productName: product.name,
+                                      );
+                                      final item = cartItem?.item;
                                       return CustomProductContainer(
-                                        onTapAdd: (() {
-                                          cartModel.add(CartProductModel(
-                                              product.productId,
-                                              product.name,
-                                              product.amount.toString(),
-                                              product.productImage,
-                                              1,
-                                              product.category));
+                                        onTapAdd: () async {
                                           setState(() {});
-                                        }),
+                                          // log(loading.toString());
+                                          try {
+                                            await AppFunctions.addToCart(
+                                                product, user, context);
+                                            await getCart();
+                                            cartItem = AppFunctions
+                                                .findCartContainingProduct(
+                                              cartList: cartItems,
+                                              productName: product.name,
+                                            );
+                                            log((cartItem == null).toString());
+                                          } catch (e) {
+                                            ScaffoldMessenger.of(context)
+                                              ..hideCurrentSnackBar()
+                                              ..showSnackBar(
+                                                SnackBar(
+                                                    content: Text(
+                                                        'Error: ${e.toString()}')),
+                                              );
+                                          }
+                                          setState(() {});
+                                        },
                                         onTapProduct: (() async {
                                           final index = await Navigator.push(
                                             context,
@@ -735,10 +971,82 @@ class _ShopScreenState extends State<ShopScreen> {
 
                                           if (index == 1) {}
                                         }),
-                                        btnHeight: 40,
+                                        btnHeight: 35,
                                         image: product.productImage,
                                         name: product.name,
                                         mrp: product.amount.toString(),
+                                        child: cartItem != null
+                                            ? CustomAddQntBtn(
+                                                qnt: item!.quantity,
+                                                onTapMinu: () async {
+                                                  if (item!.quantity > 1) {
+                                                    setState(
+                                                        () => item.quantity--);
+                                                    await AppFunctions
+                                                        .updateCart(
+                                                            product,
+                                                            item.quantity,
+                                                            cartItem!
+                                                                .cart.cartId,
+                                                            user,
+                                                            context);
+                                                    await getCart();
+                                                  } else {
+                                                    await AppFunctions
+                                                        .removeFromCart(
+                                                            cartItem!
+                                                                .cart.cartId,
+                                                            product.productId,
+                                                            user,
+                                                            context);
+                                                    await getCart();
+                                                  }
+                                                },
+                                                onTapPlus: () async {
+                                                  // Check if we haven't reached maximum available quantity
+                                                  if (item!.quantity <
+                                                      product.quantity) {
+                                                    // Assuming product has maxQuantity field
+                                                    setState(
+                                                        () => item.quantity++);
+                                                    try {
+                                                      await AppFunctions
+                                                          .updateCart(
+                                                              product,
+                                                              item.quantity,
+                                                              cartItem!
+                                                                  .cart.cartId,
+                                                              user,
+                                                              context);
+                                                      await getCart();
+                                                    } catch (e) {
+                                                      setState(() =>
+                                                          item.quantity--);
+                                                      ScaffoldMessenger.of(
+                                                          context)
+                                                        ..hideCurrentSnackBar()
+                                                        ..showSnackBar(
+                                                          SnackBar(
+                                                              content: Text(
+                                                                  'Failed to update quantity: ${e.toString()}')),
+                                                        );
+                                                    }
+                                                  } else {
+                                                    ScaffoldMessenger.of(
+                                                        context)
+                                                      ..hideCurrentSnackBar()
+                                                      ..showSnackBar(
+                                                        AppSnackBar()
+                                                            .customizedAppSnackBar(
+                                                          message:
+                                                              'Maximum quantity reached (${product.quantity})',
+                                                          context: context,
+                                                        ),
+                                                      );
+                                                  }
+                                                },
+                                              )
+                                            : null,
                                       );
                                     }),
                                     scrollDirection: Axis.horizontal,
