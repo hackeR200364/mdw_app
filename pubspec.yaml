@@ -55,6 +55,8 @@ dependencies:
   webview_flutter:
   http:
   cached_network_image:
+  textfield_tags:
+  badges:
 
 flutter_native_splash:
   android: true
