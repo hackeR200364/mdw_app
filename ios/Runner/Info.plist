@@ -2,8 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 	<dict>
+        <key>NSLocalNetworkUsageDescription</key>
+        <string>This app requires access to the local network for debugging purposes.</string>
 		<key>NSLocationWhenInUseUsageDescription</key>
-		<string>This app needs access to location to get your current location.</string>
+        <string>This app needs location access to function properly.</string>
+        <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+        <string>This app needs background location access.</string>
 		<key>CFBundleDevelopmentRegion</key>
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
 		<key>CFBundleDisplayName</key>

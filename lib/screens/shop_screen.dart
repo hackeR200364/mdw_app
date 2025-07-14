@@ -34,7 +34,6 @@ class ShopScreen extends StatefulWidget {
 
 class _ShopScreenState extends State<ShopScreen> {
   int selectedIdx = 0;
-  bool _isExpanded = true;
   List<OrdersTypeModel> category = [], doseTypes = [];
   Position? position;
   List<Placemark> placemarks = [];
@@ -58,6 +57,7 @@ class _ShopScreenState extends State<ShopScreen> {
     LocationPermission permission;
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
+
     if (!serviceEnabled) {
       await showDialog(
         context: context,
@@ -81,6 +81,9 @@ class _ShopScreenState extends State<ShopScreen> {
     }
 
     permission = await Geolocator.checkPermission();
+
+    // log(permission.toString());
+
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
@@ -135,9 +138,15 @@ class _ShopScreenState extends State<ShopScreen> {
       );
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
-    }
+    } else {
+      log("position.accuracy".toString());
+      var position = await Geolocator.getCurrentPosition().timeout(
+        const Duration(seconds: 5),
+      );
+      log(position.accuracy.toString());
 
-    return await Geolocator.getCurrentPosition();
+      return position;
+    }
   }
 
   void removeDuplicatesByProductId(AllProductsListModel allProductsList) {
@@ -154,18 +163,23 @@ class _ShopScreenState extends State<ShopScreen> {
 
   getUserData() async {
     user = await StorageServices.getUser();
+    log((user == null).toString());
     if (user != null) {
       log(user!.token.toString());
     }
   }
 
   getData() async {
+    log("Calling determinePosition");
+
     position = await determinePosition(context);
+    log((position != null).toString());
     if (position != null) {
       placemarks = await AppFunctions.determineAddress(position!);
     }
+
     await getUserData();
-    await getCart();
+    // await getCart();
     await getProducts();
 
     setState(() {});
@@ -304,8 +318,11 @@ class _ShopScreenState extends State<ShopScreen> {
                       backgroundColor: AppColors.white,
                       expandedHeight:
                           110.0 + MediaQuery.of(context).padding.top,
-                      collapsedHeight:
-                          kToolbarHeight + MediaQuery.of(context).padding.top,
+                      collapsedHeight: kToolbarHeight +
+                          MediaQuery.of(context).padding.top -
+                          (MediaQuery.of(context).size.height /
+                              MediaQuery.of(context).size.width) -
+                          20,
                       scrolledUnderElevation: 0,
                       elevation: 0,
                       centerTitle: false,
